@@ -1,0 +1,11 @@
+.filterContainer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    border: solid black 1px;
+    min-height: 225px;
+    min-width: 600px;
+    max-width: 800px;
+    width: 32vw;
+    background-color: white;
+}

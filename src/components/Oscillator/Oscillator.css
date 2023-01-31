@@ -1,0 +1,19 @@
+.oscillatorContainer, .lfoContainer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+  border: solid black 1px;
+  min-height: 225px;
+  min-width: 400px;
+  max-width: 600px;
+  width: 32vw;
+  background-color: white;
+}
+
+.waveSelectContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+}/*# sourceMappingURL=Oscillator.css.map */

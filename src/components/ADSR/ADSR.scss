@@ -1,0 +1,11 @@
+.adsrContainer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    border: solid black 1px;
+    min-height: 225px;
+    min-width: 300px;
+    max-width: 500px;
+    width: 32vw;
+    background-color: white;
+}
