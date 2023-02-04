@@ -40,15 +40,29 @@ const Oscillator = ({ oscNum }) => {
                 />
             </div>
             <div className="sliderContainer">
-                <label className="sliderLabel"><p>FM AMOUNT</p></label>
-                <p>{oscSettings[selectedOscSettings].oscFMIntensity.value}</p>
+                <label className="sliderLabel"><p>GLIDE</p></label>
+                <p>{(oscSettings[selectedOscSettings].glide).toFixed(2)}</p>
+                <input
+                className="glideSlider slider"
+                id="glide"
+                type="range" 
+                min={0.0001} 
+                max={2}
+                step={0.001} 
+                value={oscSettings[selectedOscSettings].glide} 
+                onChange={change}
+                />
+            </div>
+            <div className="sliderContainer">
+                <label className="sliderLabel"><p>FM DEPTH</p></label>
+                <p>{(oscSettings[selectedOscSettings].oscFMIntensity / 1000).toFixed(2)}</p>
                 <input
                 className="fmIntensitySlider slider"
                 id="oscFMIntensity"
                 type="range" 
                 min={0} 
                 max={10000} 
-                value={oscSettings[selectedOscSettings].oscFMIntensity.value} 
+                value={oscSettings[selectedOscSettings].oscFMIntensity} 
                 onChange={change}
                 />
             </div>

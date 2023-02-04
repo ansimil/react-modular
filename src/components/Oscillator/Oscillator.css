@@ -16,4 +16,8 @@
   align-items: center;
   flex: 1;
   width: 100%;
+}
+
+.startSelectContainer {
+  justify-content: center;
 }/*# sourceMappingURL=Oscillator.css.map */

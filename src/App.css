@@ -21,7 +21,7 @@
   flex-wrap: wrap;
   column-gap: 1vw;
   row-gap: 2vh;
-  background-color: black;
+  background-color: rgb(47, 47, 47);
   min-height: 100vh
 }
 
@@ -34,6 +34,13 @@
   min-width: 50px;
   max-width: 50px;
   text-align: center
+}
+
+.startBtn {
+  min-width: 75px;
+  max-width: 75px;
+  padding: 1.5rem 1rem;
+  border-radius: 0;
 }
 
 .btn:hover {
@@ -131,17 +138,50 @@
   border-radius: 2px;
 }
 
-.matrixContainer {
+.matrixContainer, .keyboardContainer {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    flex-direction: column;
-    border: solid black 1px;
     min-height: 225px;
     min-width: 400px;
     max-width: 600px;
     width: 32vw;
     background-color: white;
+}
+
+.matrixContainer {
+  align-items: stretch;
+}
+
+.matrixContainer .moduleInfo {
+  border-bottom: none;
+  background-color: rgb(250, 253, 209);
+}
+
+.matrixContainer h2 {
+  text-align: center;
+  padding: 1.1rem 0.7rem;
+}
+
+.matrixContainerInner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: solid black 1px;
+    padding: 1rem;
+}
+
+.startBtnContainer {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  border: solid black 1px;
+  min-height: 225px;
+  min-width: 150px;
+  max-width: 250px;
+  width: 32vw;
+  background-color: white;
 }
 
 #nexus-ui-sequencer-1 {
