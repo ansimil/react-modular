@@ -65,10 +65,10 @@ let outputVca = actx.createGain()
 let outputGain = actx.createGain()
 
 let adsr = new Tone.Envelope({
-    attack: 0.1,
+    attack: 0.01,
     decay: 0.2,
     sustain: 0.5,
-    release: 0.8
+    release: 0.2,
 })
 
 
