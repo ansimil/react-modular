@@ -9,10 +9,10 @@ export const ADSR = () => {
     const [appState, updateState] = stateHook
     const { adsrSettings } = appState
     const adsrArr = [
-        [5, 0.001, adsrSettings.attack], 
-        [5, 0.001, adsrSettings.decay], 
-        [1, 0.001, adsrSettings.sustain], 
-        [5, 0.001, adsrSettings.release]
+        [5, 0.001, adsrSettings.attack, "attack"], 
+        [5, 0.001, adsrSettings.decay, "decay"], 
+        [1, 0.001, adsrSettings.sustain, "sustain"], 
+        [5, 0.001, adsrSettings.release, "release"]
     ]
 
     useEffect(()=>{
@@ -22,9 +22,9 @@ export const ADSR = () => {
             })
         }
         let multsliderArr = []
-        adsrArr.forEach((attr,i) => {
-            let multislider = new Nexus.Multislider(`#multislider${i+1}`, {
-                'size': [50,225],
+        adsrArr.forEach((attr) => {
+            let multislider = new Nexus.Multislider(`#${attr[3]}`, {
+                'size': [60,150],
                 'numberOfSliders': 1,
                 'min': 0,
                 'max': attr[0],
@@ -33,8 +33,9 @@ export const ADSR = () => {
                 'smoothing': 0,
                 'mode': 'bar'
             }) 
+
             multislider.setSlider(0, attr[2])
-            multislider.on("change", (e)=>{console.log(e)})
+            multislider.on("change", (e)=>{change(e, multislider.settings.target.split("#")[1])})
             multislider.bars[0].attributes[5].value = "#dedede"
             multislider.caps[0].attributes[4].value = "#000"
             multislider.element.attributes[2].value = "background-color: rgb(255, 255, 255); cursor: pointer;"
@@ -44,75 +45,37 @@ export const ADSR = () => {
     },[])
     
 
-    const change = e => {
-        let { id, value } = e.target;
+    const change = (e, stage) => {
+        let [ value ] = e;
+        let id = stage
+        console.log(adsrRef.current)
         updateState({type: ACTIONS.ADSR.CHANGE_ADSR, payload: { id, value }})
     }
   return (
     <div className='adsrContainer'>
-        <div className="sliderContainer">
-            <label className="sliderLabel"><p>A</p></label>
-            <p>{adsrSettings.attack}</p>
-            <input
-            className="adsrSlider slider"
-            id="attack"
-            type="range" 
-            min={0.0001} 
-            max={5} 
-            step={0.001}
-            value={adsrSettings.attack} 
-            onChange={change}
-            />
+        <div className="adsrContainerInner">
+            <div className='adsrLabels'>
+            <div><p>A</p></div>
+            <div><p>D</p></div>
+            <div><p>S</p></div>
+            <div><p>R</p></div>
+            </div>
+            <div className='adsrLabels'>
+            <div><p>{(appState.adsrSettings.attack).toFixed(2)}</p></div>
+            <div><p>{(appState.adsrSettings.decay).toFixed(2)}</p></div>
+            <div><p>{(appState.adsrSettings.sustain).toFixed(2)}</p></div>
+            <div><p>{(appState.adsrSettings.release).toFixed(2)}</p></div>
+            </div>
+            <div className="adsrContainerLeft">
+                <div id="attack" className="adsrSlider"></div>
+                <div id="decay" className="adsrSlider"></div>
+                <div id="sustain" className="adsrSlider"></div>
+                <div id="release" className="adsrSlider"></div>
+            </div>
         </div>
-
-        <div className="sliderContainer">
-            <label className="sliderLabel"><p>D</p></label>
-            <p>{adsrSettings.decay}</p>
-            <input
-            className="adsrSlider slider"
-            id="decay"
-            type="range" 
-            min={0.00001} 
-            max={5} 
-            step={0.001}
-            value={adsrSettings.decay} 
-            onChange={change}
-            />
+        <div className="moduleInfo">
+            <h2>ENV_1</h2>
         </div>
-
-        <div className="sliderContainer">
-            <label className="sliderLabel"><p>S</p></label>  
-            <p>{adsrSettings.sustain}</p>
-            <input
-            className="adsrSlider slider"
-            id="sustain"
-            type="range" 
-            min={0.00001} 
-            max={1} 
-            step={0.001}
-            value={adsrSettings.sustain} 
-            onChange={change}
-            />
-        </div>
-
-        <div className="sliderContainer">
-            <label className="sliderLabel"><p>R</p></label>
-            <p>{adsrSettings.release}</p>
-            <input
-            className="adsrSlider slider"
-            id="release"
-            type="range" 
-            min={0.00001} 
-            max={5} 
-            step={0.001}
-            value={adsrSettings.release} 
-            onChange={change}
-            />
-        </div>
-       <div id="multislider1"></div>
-       <div id="multislider2"></div>
-       <div id="multislider3"></div>
-       <div id="multislider4"></div>
     </div>
   )
 }
