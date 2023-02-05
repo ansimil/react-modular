@@ -9,8 +9,6 @@ const Sequencer = () => {
 
 
   useEffect(()=>{
-    let sequencer = new Nexus.Sequencer('#sequencer')
-    console.log(sequencer)
   },[])
 
   return (

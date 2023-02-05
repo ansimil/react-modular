@@ -1,8 +1,6 @@
 import { createContext, useReducer, useRef } from "react";
-
+import * as Tone from 'tone'
 const ModularBusContext = createContext()
-
-
 
 export const ACTIONS = {
     SYNTH: {
@@ -53,6 +51,7 @@ let midiToFreqArr = {}
 
 const actx = new AudioContext() 
 const out = actx.destination
+Tone.setContext(actx)
 let oscillator1 = actx.createOscillator()
 let oscillator2 = actx.createOscillator()
 let lfo1 = actx.createOscillator()
@@ -64,8 +63,14 @@ let osc1FMIntensity = actx.createGain()
 let osc2FMIntensity = actx.createGain()
 let outputVca = actx.createGain()
 let outputGain = actx.createGain()
-let dcSource = actx.createConstantSource()
-dcSource.offset.value = -1
+
+let adsr = new Tone.Envelope({
+    attack: 0.1,
+    decay: 0.2,
+    sustain: 0.5,
+    release: 0.8
+})
+
 
 
 osc1ADSRGain.gain.setValueAtTime(0.00001, actx.currentTime)
@@ -82,12 +87,12 @@ osc2FMIntensity.gain.value = 0.0001
 oscillator1.start()
 oscillator2.start()
 lfo1.start()
-dcSource.start()
 osc1ADSRGain.gain.setValueAtTime(0.0001, actx.currentTime)
 lfo1.connect(osc1FMIntensity)
 osc1FMIntensity.connect(oscillator1.detune)
 oscillator1.connect(osc1ADSRGain)
 // dcSource.connect(osc1ADSRGain)
+adsr.connect(osc1ADSRGain.gain)
 osc1ADSRGain.connect(filter)    
 filter.connect(outputGain)
 outputGain.connect(outputVca)
@@ -132,24 +137,14 @@ export function reducer(state, action){
         case ACTIONS.OSCILLATOR.CHANGE_OSC1.oscADSRGain:
             const { note, stateKey } = action.payload
             if (stateKey) {
-                let attack = (actx.currentTime + state.adsrSettings.attack)
-                let decay = (attack + state.adsrSettings.decay)
-                let sustain = state.adsrSettings.sustain
                 let glide = actx.currentTime + state.oscSettings.osc1.glide
                 oscillator1.frequency.cancelScheduledValues(actx.currentTime)
                 oscillator1.frequency.setValueAtTime(oscillator1.frequency.value, actx.currentTime)
                 oscillator1.frequency.linearRampToValueAtTime(midiToFreqArr[note], glide)
-                
-                osc1ADSRGain.gain.cancelScheduledValues(actx.currentTime)
-                osc1ADSRGain.gain.setValueAtTime(0.0001, actx.currentTime)
-                osc1ADSRGain.gain.exponentialRampToValueAtTime(1.00, attack)
-                osc1ADSRGain.gain.cancelScheduledValues(decay)
-                osc1ADSRGain.gain.exponentialRampToValueAtTime(sustain, decay)
+                adsr.triggerAttack(actx.currentTime, 1)
             }
             if (!stateKey) {
-                let release = (actx.currentTime + state.adsrSettings.release)
-                osc1ADSRGain.gain.setValueAtTime(osc1ADSRGain.gain.value, actx.currentTime)
-                osc1ADSRGain.gain.exponentialRampToValueAtTime(0.0001, release+0.05)
+                adsr.triggerRelease(actx.currentTime, 0.0001)
             }
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note], oscADSRGain: osc1ADSRGain.gain.value}}};
 
@@ -195,6 +190,7 @@ export function reducer(state, action){
         
         case ACTIONS.ADSR.CHANGE_ADSR:
             state.adsrSettings[id] = value
+            adsr[id] = value
             return {...state, adsrSettings: {...state.adsrSettings, [id]: Number(value)}};
 
         default:
@@ -218,7 +214,7 @@ function ModularBus (props) {
 
 
     const connectToOscilloscope = () => {
-        oscilloscopeRef.current.connect(outputGain)
+        oscilloscopeRef.current.connect(osc1ADSRGain)
         
     }
 
@@ -273,7 +269,7 @@ function ModularBus (props) {
     })
 
     return (
-        <ModularBusContext.Provider value={{stateHook, sequencerRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef}}>
+        <ModularBusContext.Provider value={{stateHook, sequencerRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr}}>
         {props.children}
         </ModularBusContext.Provider>
     )

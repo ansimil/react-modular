@@ -10,19 +10,19 @@ import Oscilloscope from './components/Oscilloscope/Oscilloscope';
 import Sequencer from './components/Sequencer/Sequencer';
 
 
-function App() {
 
+function App() {
   return (
     <div className="App">
       <StartBtn />
       <Matrix/>
+      <Keyboard />
       <Oscillator oscNum={1} />
-      <Oscillator oscNum={2} />
+      {/* <Oscillator oscNum={2} /> */}
       <LFO lfoNum={1} />
       <LFO lfoNum={2} />
       <Filter />
       <ADSR />
-      <Keyboard />
       <Oscilloscope />
       <Sequencer />
     </div>
