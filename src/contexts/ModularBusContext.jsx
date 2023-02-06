@@ -65,6 +65,7 @@ let smoothing = 1.0
 const actx = new AudioContext() 
 const out = actx.destination
 Tone.setContext(actx)
+
 let lfo1 = new Tone.LFO({
     frequency: 2,
     min: 0.5,
@@ -82,11 +83,11 @@ let filter = new Tone.Filter({
 })
 
 let osc1ADSRGain = new Tone.Gain()
-let osc2ADSRGain = actx.createGain()
+let osc2ADSRGain = new Tone.Gain()
 let osc1FMDepth = new Tone.Gain()
-let osc2FMDepth = actx.createGain()
-let output = actx.createGain()
-let outputGain = actx.createGain()
+let osc2FMDepth = new Tone.Gain()
+let output = new Tone.Gain()
+let outputGain = new Tone.Gain()
 
 let osc1 = new Tone.OmniOscillator({
     type:"sine",
