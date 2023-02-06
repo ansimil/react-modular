@@ -1,6 +1,6 @@
 @font-face {
   font-family: "mainFont";
-  src: url('../src/assets/fonts/rubik/static/Rubik-Medium.ttf');
+  src: url('../../assets/fonts/rubik/static/Rubik-Medium.ttf');
 }
 
 .App-header {
@@ -147,6 +147,10 @@
     max-width: 600px;
     width: 32vw;
     background-color: white;
+}
+
+.keyboardContainer {
+  align-items: stretch;
 }
 
 .matrixContainer {

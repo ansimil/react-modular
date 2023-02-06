@@ -28,14 +28,29 @@ const Oscillator = ({ oscNum }) => {
         <div className={`oscillatorContainer oscillatorContainer${oscNum}`}>
             <div className="sliderContainer">
                 <label className="sliderLabel"><p>FINE</p></label>
-                <p>{oscSettings[selectedOscSettings].detune}</p>
+                <p>{(oscSettings[selectedOscSettings].detune).toFixed(2)}</p>
                 <input
                 className="detuneSlider slider"
                 id="detune"
                 type="range" 
                 min={0} 
                 max={100} 
+                step={0.001}
                 value={oscSettings[selectedOscSettings].detune} 
+                onChange={change}
+                />
+            </div>
+            <div className="sliderContainer">
+                <label className="sliderLabel"><p>PWM</p></label>
+                <p>{(oscSettings[selectedOscSettings].pwm).toFixed(2)}</p>
+                <input
+                className="pwmSlider slider"
+                id="pwm"
+                type="range" 
+                min={0} 
+                max={40} 
+                step={0.001}
+                value={oscSettings[selectedOscSettings].pwm} 
                 onChange={change}
                 />
             </div>
@@ -88,11 +103,11 @@ const Oscillator = ({ oscNum }) => {
                     </button>
 
                     <button
-                    id="square"
-                    className={activeType === 'square' ? "btn activeBtn": "btn"}
+                    id="pwm"
+                    className={activeType === 'pulse' ? "btn activeBtn": "btn"}
                     onClick={changeType}
                     >
-                    SQR
+                    PULS
                     </button>
 
                     <button 
