@@ -21,7 +21,7 @@ const StartBtn = () => {
             onClick={change}
             className={synthSettings.start ? "btn startBtn activeBtn": "btn startBtn"}
             >
-            Start
+            ON
             </button>
             
             <button
@@ -29,7 +29,7 @@ const StartBtn = () => {
             onClick={change}
             className={!synthSettings.start ? "btn startBtn activeBtn": "btn startBtn"}
             >
-            Stop
+            OFF
             </button>
         </div>
         <div className="sliderContainer">

@@ -23,13 +23,13 @@ const Filter = () => {
     <div className='filterContainer'>
         <div className="sliderContainer">
             <label className="sliderLabel"><p>CUTOFF</p></label>
-            <p>{filterSettings.frequency}</p>
+            <p>{(filterSettings.frequency).toFixed(2)}</p>
             <input
             className="freqSlider slider"
             id="frequency"
             type="range" 
             min={10} 
-            max={12000} 
+            max={10000} 
             step={0.001}
             value={filterSettings.frequency} 
             onChange={change}

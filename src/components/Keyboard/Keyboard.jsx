@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import { ACTIONS } from '../../contexts/ModularBusContext'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
 import Nexus from 'nexusui'
+import './Keyboard.css'
 
 
 const Keyboard = () => {
@@ -96,28 +97,32 @@ const Keyboard = () => {
 
     const handleKeyboard = (e) => {  
         const { note, state } = e
-        updateState({type: ACTIONS.OSCILLATOR.CHANGE_OSC1.oscADSRGain, payload: {note, stateKey: state}})
+        updateState({type: ACTIONS.OSCILLATOR.OSC1.oscADSRGain, payload: {note, stateKey: state}})
     }
 
   return (
     <div className='keyboardContainer'>
+        <div className="keyboardContainerInner">
+            <div id='keyboard'></div>
+        </div>
+        <div className="octaveInfo">
+            <p>Octave: {noteState+1}</p>
+            <div className="octaveBtns">
+                <button disabled={noteState<=4 ? "" : "true"} className="btn" onClick={()=> {
+                    setNoteState(noteState+1)
+                    }}
+                >
+                +
+                </button>
 
-        <div id='keyboard'></div>
-
-        {noteState <= 4  && <button className="btn" onClick={()=> {
-            setNoteState(noteState+1)
-            }}
-        >
-        +
-        </button>}
-
-        {noteState >= 1 && <button className="btn" onClick={()=> {
-            setNoteState(noteState-1)
-            }}
-        >
-        -
-        </button>}
-        <p>Octave: {noteState+1}</p>
+                <button disabled={noteState >= 1 ? "" : "true"} className="btn" onClick={()=> {
+                    setNoteState(noteState-1)
+                    }}
+                >
+                -
+                </button>
+            </div>
+        </div>
     </div>
   )
 }
