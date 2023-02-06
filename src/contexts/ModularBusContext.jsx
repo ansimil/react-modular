@@ -48,6 +48,7 @@ export const ACTIONS = {
 }
 
 let midiToFreqArr = {}
+let smoothing = 1.0
 
 const actx = new AudioContext() 
 const out = actx.destination
@@ -61,7 +62,7 @@ let osc1ADSRGain = actx.createGain()
 let osc2ADSRGain = actx.createGain()
 let osc1FMIntensity = actx.createGain()
 let osc2FMIntensity = actx.createGain()
-let outputVca = actx.createGain()
+let output = actx.createGain()
 let outputGain = actx.createGain()
 
 let adsr = new Tone.Envelope({
@@ -74,7 +75,7 @@ let adsr = new Tone.Envelope({
 
 
 osc1ADSRGain.gain.setValueAtTime(0.00001, actx.currentTime)
-outputVca.gain.setValueAtTime(0.00001, actx.currentTime)
+output.gain.setValueAtTime(0.00001, actx.currentTime)
 outputGain.gain.setValueAtTime(1.0, actx.currentTime)
 lfo1.frequency.value = 2
 lfo2.frequency.value = 2
@@ -95,24 +96,24 @@ oscillator1.connect(osc1ADSRGain)
 adsr.connect(osc1ADSRGain.gain)
 osc1ADSRGain.connect(filter)    
 filter.connect(outputGain)
-outputGain.connect(outputVca)
-outputVca.connect(out)
+outputGain.connect(output)
+output.connect(out)
 
 
-let smoothing = 1.0
+
 
 
 export function reducer(state, action){
     let { id, value } = action.payload
     switch (action.type) {
         case ACTIONS.SYNTH.start:
-            outputVca.gain.setValueAtTime(outputVca.gain.value, actx.currentTime)
-            outputVca.gain.linearRampToValueAtTime(0.2, actx.currentTime + smoothing)
+            output.gain.setValueAtTime(output.gain.value, actx.currentTime)
+            output.gain.linearRampToValueAtTime(0.2, actx.currentTime + smoothing)
             return {...state, synthSettings: {...state.synthSettings, start: true, startCount: 1}}
 
         case ACTIONS.SYNTH.stop:
-            outputVca.gain.setValueAtTime(outputVca.gain.value, actx.currentTime)
-            outputVca.gain.linearRampToValueAtTime(0.0001, actx.currentTime + smoothing)
+            output.gain.setValueAtTime(output.gain.value, actx.currentTime)
+            output.gain.linearRampToValueAtTime(0.0001, actx.currentTime + smoothing)
             return {...state, synthSettings: {...state.synthSettings, start: false}}
         
         case ACTIONS.SYNTH.outputGain:
