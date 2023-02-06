@@ -1,4 +1,5 @@
 import { createContext, useReducer, useRef } from "react";
+import { updateMatrix } from "../services/matrix.services";
 import * as Tone from 'tone'
 const ModularBusContext = createContext()
 
@@ -70,9 +71,10 @@ let adsr = new Tone.Envelope({
     decay: 0.2,
     sustain: 0.5,
     release: 0.2,
+    attackCurve: "exponential",
+    decayCurve: "linear",
+    releaseCurve: "exponential"
 })
-
-
 
 osc1ADSRGain.gain.setValueAtTime(0.00001, actx.currentTime)
 output.gain.setValueAtTime(0.00001, actx.currentTime)
@@ -92,14 +94,13 @@ osc1ADSRGain.gain.setValueAtTime(0.0001, actx.currentTime)
 lfo1.connect(osc1FMIntensity)
 osc1FMIntensity.connect(oscillator1.detune)
 oscillator1.connect(osc1ADSRGain)
-// dcSource.connect(osc1ADSRGain)
 adsr.connect(osc1ADSRGain.gain)
 osc1ADSRGain.connect(filter)    
 filter.connect(outputGain)
 outputGain.connect(output)
 output.connect(out)
 
-
+updateMatrix()
 
 
 
