@@ -15,16 +15,16 @@ function App() {
   return (
     <div className="App">
       <StartBtn />
-      <Matrix/>
+      {/* <Matrix/> */}
       <Keyboard />
       <Oscillator oscNum={1} />
       {/* <Oscillator oscNum={2} /> */}
       <LFO lfoNum={1} />
-      <LFO lfoNum={2} />
+      {/* <LFO lfoNum={2} /> */}
       <Filter />
       <ADSR />
       <Oscilloscope />
-      <Sequencer />
+      {/* <Sequencer /> */}
     </div>
   );
 }
