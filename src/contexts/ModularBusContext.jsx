@@ -271,7 +271,7 @@ function ModularBus (props) {
 
     let matrixRef = useRef(null)
     let keyboardRef = useRef(null)
-    let adsrRef = useRef(null)
+    let adsrRef = useRef([])
     let oscilloscopeRef = useRef(null)
     let sequencerRef = useRef(null)
     let seqSlidersRef = useRef(null)
