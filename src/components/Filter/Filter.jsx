@@ -21,9 +21,9 @@ const Filter = () => {
     }
   return (
     <div className='filterContainer'>
-        <div className="sliderContainer">
+        <div className="sliderContainer left">
             <label className="sliderLabel"><p>CUTOFF</p></label>
-            <p>{(filterSettings.frequency).toFixed(2)}</p>
+            <p className="valueIndicator">{(filterSettings.frequency).toFixed(2)}</p>
             <input
             className="freqSlider slider"
             id="frequency"
@@ -37,7 +37,7 @@ const Filter = () => {
         </div>
         <div className="sliderContainer">
             <label className="sliderLabel"><p>FINE</p></label>
-            <p>{filterSettings.detune}</p>
+            <p className="valueIndicator">{filterSettings.detune}</p>
             <input
             className="detuneSlider slider"
             id="detune"
@@ -51,7 +51,7 @@ const Filter = () => {
         </div>
         <div className="sliderContainer">
             <label className="sliderLabel"><p>RES</p></label>
-            <p>{filterSettings.Q}</p>
+            <p className="valueIndicator">{filterSettings.Q}</p>
             <input
             className="QSlider slider"
             id="Q"
@@ -70,7 +70,7 @@ const Filter = () => {
             <div className="waveSelectContainer">
                 <button 
                 id="lowpass"
-                className={activeType === 'lowpass' ? "btn activeBtn": "btn"}
+                className={activeType === 'lowpass' ? "btn activeBtn endBtnLeft": "btn endBtnLeft"}
                 onClick={changeType}
                 >
                 LP
@@ -78,7 +78,7 @@ const Filter = () => {
 
                 <button 
                 id="highpass"
-                className={activeType === 'highpass' ? "btn activeBtn": "btn"}
+                className={activeType === 'highpass' ? "btn activeBtn middleBtn": "btn middleBtn"}
                 onClick={changeType}
                 >
                 HP
@@ -86,7 +86,7 @@ const Filter = () => {
 
                 <button
                 id="bandpass"
-                className={activeType === 'bandpass' ? "btn activeBtn": "btn"}
+                className={activeType === 'bandpass' ? "btn activeBtn middleBtn": "btn middleBtn"}
                 onClick={changeType}
                 >
                 BP
@@ -94,7 +94,7 @@ const Filter = () => {
 
                 <button 
                 id="notch"
-                className={activeType === 'notch' ? "btn activeBtn": "btn"}
+                className={activeType === 'notch' ? "btn activeBtn endBtnRight": "btn endBtnRight"}
                 onClick={changeType}
                 >
                 N

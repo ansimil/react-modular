@@ -45,7 +45,7 @@ const Matrix = () => {
             </div>
         </div>
         <div className="moduleInfo">
-        <h2 >CNX Matrix</h2>
+        <h2 >CXN Matrix</h2>
         </div>
     </div>
   )

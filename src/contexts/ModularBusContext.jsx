@@ -50,11 +50,13 @@ export const ACTIONS = {
     LFO: {
         CHANGE_LFO1: {
             type: "change_lfo1_type",
-            frequency: "change_lfo1_detune"
+            frequency: "change_lfo1_detune",
+            lfoFMDepth: "change_lfo1_FMDepth"
         },
         CHANGE_LFO2: {
             type: "change_lfo2_type",
-            frequency: "change_lfo2_frequency"
+            frequency: "change_lfo2_frequency",
+            lfoFMDepth: "change_lfo2_FMDepth"
         }
     }
 }
@@ -62,10 +64,18 @@ export const ACTIONS = {
 let midiToFreqArr = {}
 let smoothing = 1.0
 
+
+
 const actx = new AudioContext() 
 const out = actx.destination
 Tone.setContext(actx)
 
+let osc1 = new Tone.OmniOscillator({
+    type:"sine",
+})
+let osc2 = new Tone.OmniOscillator({
+    type:"sine",
+})
 let lfo1 = new Tone.LFO({
     frequency: 2,
     min: 0.5,
@@ -79,23 +89,17 @@ let lfo2 = new Tone.LFO({
 let filter = new Tone.Filter({
     max: "10000",
     min: "0",
-    frequency: "10000"
+    frequency: "10000",
+    rolloff: -24
 })
-
 let osc1ADSRGain = new Tone.Gain()
 let osc2ADSRGain = new Tone.Gain()
 let osc1FMDepth = new Tone.Gain()
 let osc2FMDepth = new Tone.Gain()
+let lfo1FMDepth = new Tone.Gain()
+let lfo2FMDepth = new Tone.Gain()
 let output = new Tone.Gain()
 let outputGain = new Tone.Gain()
-
-let osc1 = new Tone.OmniOscillator({
-    type:"sine",
-})
-
-let osc2 = new Tone.OmniOscillator({
-    type:"sine",
-})
 
 let adsr = new Tone.Envelope({
     attack: 0.01,
@@ -106,6 +110,15 @@ let adsr = new Tone.Envelope({
     decayCurve: "linear",
     releaseCurve: "exponential"
 })
+const meter = new Tone.DCMeter();
+
+let transport = Tone.Transport
+
+Tone.Transport.scheduleRepeat((time) => {
+
+}, "8n");
+console.log(transport.get())
+
 
 osc1ADSRGain.gain.setValueAtTime(0.00001, actx.currentTime)
 output.gain.setValueAtTime(0.00001, actx.currentTime)
@@ -116,13 +129,17 @@ filter.frequency.value = 10000
 filter.Q.value = 0
 osc1FMDepth.gain.value = 0.0001
 osc2FMDepth.gain.value = 0.0001
+lfo1FMDepth.gain.value = 0.0001
+lfo2FMDepth.gain.value = 0.0001
 
 // Connection chain //
 osc1.start()
 osc2.start()
 lfo1.start()
+lfo2.start()
 osc1ADSRGain.gain.setValueAtTime(0.0001, actx.currentTime)
 osc2.connect(osc1FMDepth)
+lfo1.connect(osc1FMDepth)
 osc1FMDepth.connect(osc1.detune)
 osc1.connect(osc1ADSRGain)
 adsr.connect(osc1ADSRGain.gain)
@@ -130,7 +147,7 @@ osc1ADSRGain.connect(filter)
 filter.connect(outputGain)
 outputGain.connect(output)
 output.connect(out)
-
+lfo1.connect(meter)
 updateMatrix()
 
 
@@ -151,7 +168,7 @@ export function reducer(state, action){
         
         case ACTIONS.SYNTH.outputGain:
             outputGain.gain.linearRampToValueAtTime(value, actx.currentTime + 0.005)
-            return {...state, synthSettings: {...state.synthSettings, [id]: value}}
+            return {...state, synthSettings: {...state.synthSettings, [id]: Number(value)}}
 
         case ACTIONS.OSCILLATOR.OSC1.type: 
             updateOscType(id, osc1, state)
@@ -170,10 +187,10 @@ export function reducer(state, action){
         
         case ACTIONS.OSCILLATOR.OSC1.oscFMDepth:
             updateFMDepth(osc1FMDepth, value)
-            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, [id]: value}}};
+            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, [id]: Number(value)}}};
 
         case ACTIONS.OSCILLATOR.OSC1.oscADSRGain:
-            updateOscADSR(osc1, adsr, stateKey, actx.currentTime, state, midiToFreqArr, note)
+            updateOscADSR(osc1, adsr, stateKey, actx.currentTime, state, midiToFreqArr, note, meter, state)
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note], oscADSRGain: osc1ADSRGain.gain.value}}};
 
         case ACTIONS.OSCILLATOR.OSC2.type:
@@ -182,23 +199,35 @@ export function reducer(state, action){
 
         case ACTIONS.OSCILLATOR.OSC2.detune:
             updateOscDetune(osc2, value)
-            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: value}}};
+            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
 
         case ACTIONS.OSCILLATOR.OSC2.oscFMDepth:
             updateFMDepth(osc2FMDepth, value)
-            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: value}}};
+            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
         
         case ACTIONS.LFO.CHANGE_LFO1.frequency:
             updateOscFrequency(lfo1, value)
-            return {...state, lfoSettings: {...state.lfoSettings, lfo1: {...state.lfoSettings.lfo1, [id]: value}}}
+            return {...state, lfoSettings: {...state.lfoSettings, lfo1: {...state.lfoSettings.lfo1, [id]: Number(value)}}}
         
         case ACTIONS.LFO.CHANGE_LFO1.type:
             updateOscType(id, lfo1, state)
             return {...state, lfoSettings: {...state.lfoSettings, lfo1: {...state.lfoSettings.lfo1, type: id}}}
+
+        case ACTIONS.LFO.CHANGE_LFO1.lfoFMDepth:
+            updateFMDepth(lfo1FMDepth, value)
+            return {...state, lfoSettings: {...state.lfoSettings, lfo1: {...state.lfoSettings.lfo1, [id]: Number(value)}}};
         
         case ACTIONS.LFO.CHANGE_LFO2.frequency:
             updateOscFrequency(lfo2, value)
-            return {...state, lfoSettings: {...state.lfoSettings, lfo2: {...state.lfoSettings.lfo2, [id]: value}}}
+            return {...state, lfoSettings: {...state.lfoSettings, lfo2: {...state.lfoSettings.lfo2, [id]: Number(value)}}}
+
+        case ACTIONS.LFO.CHANGE_LFO2.type:
+            updateOscType(id, lfo2, state)
+            return {...state, lfoSettings: {...state.lfoSettings, lfo2: {...state.lfoSettings.lfo2, type: id}}}
+        
+        case ACTIONS.LFO.CHANGE_LFO2.lfoFMDepth:
+            updateFMDepth(lfo2FMDepth, value)
+            return {...state, lfoSettings: {...state.lfoSettings, lfo2: {...state.lfoSettings.lfo2, [id]: Number(value)}}};
         
         case ACTIONS.FILTER.CHANGE_FILTER.type:
             filter.type = id
@@ -239,11 +268,11 @@ function ModularBus (props) {
     let adsrRef = useRef(null)
     let oscilloscopeRef = useRef(null)
     let sequencerRef = useRef(null)
+    let seqSlidersRef = useRef(null)
 
 
     const connectToOscilloscope = () => {
         oscilloscopeRef.current.connect(outputGain)
-        
     }
 
     const stateHook = useReducer(reducer, {
@@ -257,7 +286,7 @@ function ModularBus (props) {
                 frequency: osc1.frequency.value,
                 detune: osc1.detune.value,
                 type: osc1.type,
-                oscFMIntensity: osc1FMDepth.gain.value,
+                oscFMDepth: osc1FMDepth.gain.value,
                 oscADSRGain: osc1ADSRGain.gain.value,
                 glide: 0.00,
                 pwm: 0
@@ -266,7 +295,7 @@ function ModularBus (props) {
                 frequency: osc2.frequency.value,
                 detune: osc2.detune.value,
                 type: osc2.type,
-                oscFMIntensity: osc2FMDepth.gain.value,
+                oscFMDepth: osc2FMDepth.gain.value,
                 oscADSRGain: osc2ADSRGain.gain.value,
                 glide: 0.00,
                 pwm: 0
@@ -287,17 +316,39 @@ function ModularBus (props) {
         lfoSettings: {
             lfo1: {
                 frequency: lfo1.frequency.value,
-                type: lfo1.type
+                type: lfo1.type,
+                lfoFMDepth: lfo1FMDepth.gain.value
             },
             lfo2: {
                 frequency: lfo2.frequency.value,
-                type: lfo2.type
+                type: lfo2.type,
+                lfoFMDepth: lfo2FMDepth.gain.value
             }
+        },
+        sequencerSettings: {
+            sliders: [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+            ]
         }
     })
 
     return (
-        <ModularBusContext.Provider value={{stateHook, sequencerRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr}}>
+        <ModularBusContext.Provider value={{stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr, transport}}>
         {props.children}
         </ModularBusContext.Provider>
     )

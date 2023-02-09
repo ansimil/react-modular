@@ -19,7 +19,7 @@ const StartBtn = () => {
             <button
             id="start"
             onClick={change}
-            className={synthSettings.start ? "btn startBtn activeBtn": "btn startBtn"}
+            className={synthSettings.start ? "btn startBtn activeBtn endBtnLeft": "btn startBtn endBtnLeft"}
             >
             ON
             </button>
@@ -27,7 +27,7 @@ const StartBtn = () => {
             <button
             id="stop"
             onClick={change}
-            className={!synthSettings.start ? "btn startBtn activeBtn": "btn startBtn"}
+            className={!synthSettings.start ? "btn startBtn activeBtn endBtnRight": "btn startBtn endBtnRight"}
             >
             OFF
             </button>

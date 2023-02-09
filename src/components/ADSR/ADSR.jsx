@@ -48,7 +48,6 @@ export const ADSR = () => {
     const change = (e, stage) => {
         let [ value ] = e;
         let id = stage
-        console.log(adsrRef.current)
         updateState({type: ACTIONS.ADSR.CHANGE_ADSR, payload: { id, value }})
     }
   return (

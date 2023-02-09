@@ -9,10 +9,10 @@ const Oscillator = ({ oscNum }) => {
 
     const [ activeType, setActiveType ] = useState('sine')
     const { oscSettings } = appState
+   
     
     const selectedOscAction = Object.keys(ACTIONS.OSCILLATOR)[oscNum-1]
     const selectedOscSettings = Object.keys(appState.oscSettings)[oscNum-1]
-
     
     const change = e => {
         let { id, value } = e.target;
@@ -26,9 +26,9 @@ const Oscillator = ({ oscNum }) => {
 
     return (
         <div className={`oscillatorContainer oscillatorContainer${oscNum}`}>
-            <div className="sliderContainer">
+            <div className="sliderContainer left">
                 <label className="sliderLabel"><p>FINE</p></label>
-                <p>{(oscSettings[selectedOscSettings].detune).toFixed(2)}</p>
+                <p className="valueIndicator">{(oscSettings[selectedOscSettings].detune).toFixed(2)}cts</p>
                 <input
                 className="detuneSlider slider"
                 id="detune"
@@ -42,7 +42,7 @@ const Oscillator = ({ oscNum }) => {
             </div>
             <div className="sliderContainer">
                 <label className="sliderLabel"><p>PWM</p></label>
-                <p>{(oscSettings[selectedOscSettings].pwm).toFixed(2)}</p>
+                <p className="valueIndicator">{(oscSettings[selectedOscSettings].pwm).toFixed(2)}Hz</p>
                 <input
                 className="pwmSlider slider"
                 id="pwm"
@@ -56,7 +56,7 @@ const Oscillator = ({ oscNum }) => {
             </div>
             <div className="sliderContainer">
                 <label className="sliderLabel"><p>GLIDE</p></label>
-                <p>{(oscSettings[selectedOscSettings].glide).toFixed(2)}</p>
+                <p className="valueIndicator">{(oscSettings[selectedOscSettings].glide).toFixed(2)}s</p>
                 <input
                 className="glideSlider slider"
                 id="glide"
@@ -70,14 +70,15 @@ const Oscillator = ({ oscNum }) => {
             </div>
             <div className="sliderContainer">
                 <label className="sliderLabel"><p>FM DEPTH</p></label>
-                <p>{(oscSettings[selectedOscSettings].oscFMIntensity / 1000).toFixed(2)}</p>
+                <p className="valueIndicator">{(oscSettings[selectedOscSettings].oscFMDepth / 1000).toFixed(2)}</p>
                 <input
                 className="fmIntensitySlider slider"
-                id="oscFMIntensity"
+                id="oscFMDepth"
                 type="range" 
                 min={0} 
-                max={10000} 
-                value={oscSettings[selectedOscSettings].oscFMIntensity} 
+                max={10000}
+                step={0.01}
+                value={oscSettings[selectedOscSettings].oscFMDepth} 
                 onChange={change}
                 />
             </div>
@@ -88,7 +89,7 @@ const Oscillator = ({ oscNum }) => {
                 <div className="waveSelectContainer">
                     <button 
                     id="sine"
-                    className={activeType === 'sine' ? "btn activeBtn": "btn"}
+                    className={activeType === 'sine' ? "btn activeBtn endBtnLeft": "btn endBtnLeft"}
                     onClick={changeType}
                     >
                     SINE
@@ -96,7 +97,7 @@ const Oscillator = ({ oscNum }) => {
 
                     <button 
                     id="triangle"
-                    className={activeType === 'triangle' ? "btn activeBtn": "btn"}
+                    className={activeType === 'triangle' ? "btn activeBtn middleBtn": "btn middleBtn"}
                     onClick={changeType}
                     >
                     TRI
@@ -104,7 +105,7 @@ const Oscillator = ({ oscNum }) => {
 
                     <button
                     id="pwm"
-                    className={activeType === 'pulse' ? "btn activeBtn": "btn"}
+                    className={activeType === 'pwm' ? "btn activeBtn middleBtn": "btn middleBtn"}
                     onClick={changeType}
                     >
                     PULS
@@ -112,7 +113,7 @@ const Oscillator = ({ oscNum }) => {
 
                     <button 
                     id="sawtooth"
-                    className={activeType === 'sawtooth' ? "btn activeBtn": "btn"}
+                    className={activeType === 'sawtooth' ? "btn activeBtn endBtnRight": "btn endBtnRight"}
                     onClick={changeType}
                     >
                     SAW

@@ -6,14 +6,14 @@ const Oscilloscope = () => {
     const { oscilloscopeRef, connectToOscilloscope } = useContext(ModularBusContext)
     useEffect(()=>{
         let oscilloscope = new Nexus.Oscilloscope("#oscilloscope", {
-            'size': [300,150],
+            'size': [500,225],
         })
         oscilloscope.colors.accent = "#000"
         oscilloscopeRef.current = oscilloscope
         connectToOscilloscope()
     },[])
   return (
-    <div>
+    <div className="oscilloscopeContainer">
         <div id="oscilloscope"></div>
     </div>
   )

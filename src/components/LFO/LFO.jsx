@@ -25,9 +25,9 @@ const LFO = ({ lfoNum }) => {
 
     return (
         <div className={`lfoContainer lfoContainer${lfoNum}`}>
-            <div className="sliderContainer">
+            <div className="sliderContainer left">
                 <label className="sliderLabel"><p>COARSE</p></label>
-                <p>{lfoSettings[selectedLfoSettings].frequency}</p>
+                <p className="valueIndicator">{(lfoSettings[selectedLfoSettings].frequency).toFixed(2)}Hz</p>
                 <input
                 className="frequencySlider slider"
                 id="frequency"
@@ -39,7 +39,20 @@ const LFO = ({ lfoNum }) => {
                 onChange={change}
                 />
             </div>
-            <div className="sliderContainer"></div>
+            <div className="sliderContainer">
+                <label className="sliderLabel"><p>FM DEPTH</p></label>
+                <p className="valueIndicator">{(lfoSettings[selectedLfoSettings].lfoFMDepth / 1000).toFixed(2)}</p>
+                <input
+                className="fmIntensitySlider slider"
+                id="lfoFMDepth"
+                type="range" 
+                min={0} 
+                max={10000}
+                step={0.01}
+                value={lfoSettings[selectedLfoSettings].lfoFMDepth} 
+                onChange={change}
+                />
+            </div>
             <div className="rightSideContainer">
                     <div className="moduleInfo">
                         <h2>{`LFO_${lfoNum}`}</h2>
@@ -47,7 +60,7 @@ const LFO = ({ lfoNum }) => {
                 <div className="waveSelectContainer">
                     <button 
                     id="sine"
-                    className={activeType === 'sine' ? "btn activeBtn": "btn"}
+                    className={activeType === 'sine' ? "btn activeBtn endBtnLeft": "btn endBtnLeft"}
                     onClick={changeType}
                     >
                     SINE
@@ -55,7 +68,7 @@ const LFO = ({ lfoNum }) => {
 
                     <button 
                     id="triangle"
-                    className={activeType === 'triangle' ? "btn activeBtn": "btn"}
+                    className={activeType === 'triangle' ? "btn activeBtn middleBtn": "btn middleBtn"}
                     onClick={changeType}
                     >
                     TRI
@@ -63,7 +76,7 @@ const LFO = ({ lfoNum }) => {
 
                     <button
                     id="square"
-                    className={activeType === 'square' ? "btn activeBtn": "btn"}
+                    className={activeType === 'square' ? "btn activeBtn middleBtn": "btn middleBtn"}
                     onClick={changeType}
                     >
                     SQR
@@ -71,7 +84,7 @@ const LFO = ({ lfoNum }) => {
 
                     <button 
                     id="sawtooth"
-                    className={activeType === 'sawtooth' ? "btn activeBtn": "btn"}
+                    className={activeType === 'sawtooth' ? "btn activeBtn endBtnRight": "btn endBtnRight"}
                     onClick={changeType}
                     >
                     SAW
