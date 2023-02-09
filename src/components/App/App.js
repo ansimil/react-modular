@@ -15,7 +15,7 @@ function App() {
   return (
     <div className="App">
       <StartBtn />
-      <Matrix/>
+      {/* <Matrix/> */}
       <Keyboard />
       <Oscillator oscNum={1} />
       {/* <Oscillator oscNum={2} /> */}
@@ -24,7 +24,7 @@ function App() {
       <Filter />
       <ADSR />
       <Oscilloscope />
-      <Sequencer />
+      {/* <Sequencer /> */}
     </div>
   );
 }
