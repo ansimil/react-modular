@@ -11,6 +11,7 @@ const Oscilloscope = () => {
         oscilloscope.colors.accent = "#000"
         oscilloscopeRef.current = oscilloscope
         connectToOscilloscope()
+    // eslint-disable-next-line     
     },[])
   return (
     <div className="oscilloscopeContainer">

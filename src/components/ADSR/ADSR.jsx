@@ -42,6 +42,7 @@ export const ADSR = () => {
             multsliderArr.push(multislider)
         })
         adsrRef.current = multsliderArr
+    // eslint-disable-next-line
     },[])
     
 

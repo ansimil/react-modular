@@ -1,13 +1,13 @@
-import { useContext, useState, useEffect } from 'react'
-import { ACTIONS } from '../../contexts/ModularBusContext'
+import { useContext, useEffect } from 'react'
+// import { ACTIONS } from '../../contexts/ModularBusContext'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
 import Nexus from 'nexusui'
 import './Sequencer.css'
 
 const Sequencer = () => {
   const { stateHook, sequencerRef, seqSlidersRef, transport } = useContext(ModularBusContext)
+  // eslint-disable-next-line
   const [appState, updateState] = stateHook
-  const counter = new Nexus.Counter(0,16)
   const arr = [
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
   ]
@@ -52,7 +52,7 @@ const Sequencer = () => {
     sequencer.colors.accent = "#000"
     sequencer.colors.mediumLight = "#000"
     sequencerRef.current = sequencer
-
+  // eslint-disable-next-line
   },[])
 
   return (

@@ -3,11 +3,11 @@ import Oscillator from '../Oscillator/Oscillator';
 import Filter from '../Filter/Filter';
 import { ADSR } from '../ADSR/ADSR';
 import LFO from '../LFO/LFO'
-import Matrix from '../Matrix/Matrix';
+// import Matrix from '../Matrix/Matrix';
 import StartBtn from '../StartBtn/StartBtn';
 import Keyboard from '../Keyboard/Keyboard';
 import Oscilloscope from '../Oscilloscope/Oscilloscope';
-import Sequencer from '../Sequencer/Sequencer';
+// import Sequencer from '../Sequencer/Sequencer';
 
 
 
