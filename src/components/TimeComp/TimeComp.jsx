@@ -32,7 +32,7 @@ const TimeComp = () => {
 
   return (
     <div className="timeCompContainer">
-        <p style={{"color": "rgb(222, 222, 222)", "margin-right": "2rem"}}>BPM</p>
+        <p style={{"color": "rgb(222, 222, 222)", "marginRight": "2rem"}}>BPM</p>
         <input id="bpm" onChange={handleChange} value={appState.synthSettings.bpm} type="number"/>
         <div className="bpmIncDecContainer">
             <button className="bpmBtn bpmTopBtn" id="bpm" onClick={handleInc}>
