@@ -7,4 +7,15 @@
   justify-content: flex-start;
   align-items: center;
   background-color: rgb(44, 44, 44);
+}
+
+.helpIconContainer {
+  width: 10vw;
+  margin-left: 2rem;
+}
+
+.helpIcon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
 }/*# sourceMappingURL=ControlBar.css.map */
