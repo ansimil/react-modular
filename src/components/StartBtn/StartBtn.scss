@@ -1,0 +1,28 @@
+.startBtnContainer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: inherit;
+    min-width: 150px;
+    max-width: 250px;
+    width: 15vw;
+}
+
+.startBtnInner {
+    margin-left: 2rem;
+}
+
+.startBtn {
+    width: 40px;
+    height: 40px;
+    padding: 0.8rem 0.3rem;
+}
+
+.activeStartBtn {
+    background-color: rgb(1, 169, 13);
+}
+
+.activeStopBtn {
+    background-color: black;
+    color: white
+}

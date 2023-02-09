@@ -16,7 +16,8 @@ export const ACTIONS = {
     SYNTH: {
         start: "start_synth",
         stop: "stop_synth",
-        outputGain: "change_synth_outputGain"
+        outputGain: "change_synth_outputGain",
+        bpm: "change_synth_bpm"
     },
     OSCILLATOR: {
         OSC1: {
@@ -63,7 +64,6 @@ export const ACTIONS = {
 
 let midiToFreqArr = {}
 let smoothing = 1.0
-
 
 
 const actx = new AudioContext() 
@@ -117,7 +117,6 @@ let transport = Tone.Transport
 Tone.Transport.scheduleRepeat((time) => {
 
 }, "8n");
-console.log(transport.get())
 
 
 osc1ADSRGain.gain.setValueAtTime(0.00001, actx.currentTime)
@@ -168,6 +167,10 @@ export function reducer(state, action){
         
         case ACTIONS.SYNTH.outputGain:
             outputGain.gain.linearRampToValueAtTime(value, actx.currentTime + 0.005)
+            return {...state, synthSettings: {...state.synthSettings, [id]: Number(value)}}
+
+        case ACTIONS.SYNTH.bpm:
+            state.synthSettings.bpm = value
             return {...state, synthSettings: {...state.synthSettings, [id]: Number(value)}}
 
         case ACTIONS.OSCILLATOR.OSC1.type: 
@@ -279,7 +282,8 @@ function ModularBus (props) {
         synthSettings: {
             start: false,
             startCount: 0,
-            outputGain: outputGain.gain.value
+            outputGain: outputGain.gain.value,
+            bpm: 120
         },
         oscSettings: {
             osc1: {

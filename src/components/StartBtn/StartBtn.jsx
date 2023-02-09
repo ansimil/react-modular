@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import { ACTIONS } from '../../contexts/ModularBusContext'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
+import './StartBtn.css'
 
 const StartBtn = () => {
     const { stateHook } = useContext(ModularBusContext)
@@ -15,11 +16,11 @@ const StartBtn = () => {
   return (
     <div className="startBtnContainer">
     
-        <div className="waveSelectContainer startSelectContainer">
+        <div className="startBtnInner">
             <button
             id="start"
             onClick={change}
-            className={synthSettings.start ? "btn startBtn activeBtn endBtnLeft": "btn startBtn endBtnLeft"}
+            className={synthSettings.start ? "startBtn activeStartBtn endBtnLeft": "startBtn endBtnLeft"}
             >
             ON
             </button>
@@ -27,12 +28,12 @@ const StartBtn = () => {
             <button
             id="stop"
             onClick={change}
-            className={!synthSettings.start ? "btn startBtn activeBtn endBtnRight": "btn startBtn endBtnRight"}
+            className={!synthSettings.start ? "startBtn activeStopBtn endBtnRight": "startBtn endBtnRight"}
             >
             OFF
             </button>
         </div>
-        <div className="sliderContainer">
+        {/* <div className="sliderContainer">
                 <label className="sliderLabel"><p>GAIN</p></label>
                 <p>{(Math.round(synthSettings.outputGain * 100) / 10)}</p>
                 <input
@@ -45,7 +46,7 @@ const StartBtn = () => {
                 value={synthSettings.outputGain} 
                 onChange={change}
                 />
-            </div>
+            </div> */}
     </div>
   )
 }

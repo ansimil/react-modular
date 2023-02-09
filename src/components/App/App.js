@@ -4,9 +4,9 @@ import Filter from '../Filter/Filter';
 import { ADSR } from '../ADSR/ADSR';
 import LFO from '../LFO/LFO'
 // import Matrix from '../Matrix/Matrix';
-import StartBtn from '../StartBtn/StartBtn';
 import Keyboard from '../Keyboard/Keyboard';
 import Oscilloscope from '../Oscilloscope/Oscilloscope';
+import ControlBar from '../ControlBar/ControlBar';
 // import Sequencer from '../Sequencer/Sequencer';
 
 
@@ -14,7 +14,7 @@ import Oscilloscope from '../Oscilloscope/Oscilloscope';
 function App() {
   return (
     <div className="App">
-      <StartBtn />
+      <ControlBar />
       {/* <Matrix/> */}
       <Keyboard />
       <Oscillator oscNum={1} />
