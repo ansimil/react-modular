@@ -7,7 +7,7 @@ import Matrix from '../Matrix/Matrix';
 import StartBtn from '../StartBtn/StartBtn';
 import Keyboard from '../Keyboard/Keyboard';
 import Oscilloscope from '../Oscilloscope/Oscilloscope';
-import Sequencer from '../Sequencer/Sequencer';
+import Sequencer from './Sequencer/Sequencer';
 
 
 
