@@ -8,6 +8,7 @@ import './Keyboard.css'
 const Keyboard = () => {
     const [ noteState, setNoteState ] = useState(3)
     const { stateHook } = useContext(ModularBusContext)
+    // eslint-disable-next-line
     const [appState, updateState] = stateHook
 
     let midiNoteArr = [[24, 36], [36, 48], [48, 60], [60, 72], [72, 84], [84, 96], [96, 108]]
