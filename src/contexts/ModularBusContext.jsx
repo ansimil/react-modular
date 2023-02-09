@@ -52,12 +52,14 @@ export const ACTIONS = {
         CHANGE_LFO1: {
             type: "change_lfo1_type",
             frequency: "change_lfo1_detune",
-            lfoFMDepth: "change_lfo1_FMDepth"
+            lfoFMDepth: "change_lfo1_FMDepth",
+            pwm: "change_lfo1_pwm"
         },
         CHANGE_LFO2: {
             type: "change_lfo2_type",
             frequency: "change_lfo2_frequency",
-            lfoFMDepth: "change_lfo2_FMDepth"
+            lfoFMDepth: "change_lfo2_FMDepth",
+            pwm: "change_lfo2_pwm"
         }
     }
 }
@@ -76,15 +78,13 @@ let osc1 = new Tone.OmniOscillator({
 let osc2 = new Tone.OmniOscillator({
     type:"sine",
 })
-let lfo1 = new Tone.LFO({
+let lfo1 = new Tone.OmniOscillator({
+    type: "sine",
     frequency: 2,
-    min: 0.5,
-    max: 40
 })
-let lfo2 = new Tone.LFO({
+let lfo2 = new Tone.OmniOscillator({
+    type: "sine",
     frequency: 2,
-    min: 0.5,
-    max: 40
 })
 let filter = new Tone.Filter({
     max: "10000",
@@ -112,12 +112,6 @@ let adsr = new Tone.Envelope({
 })
 const meter = new Tone.DCMeter();
 
-let transport = Tone.Transport
-
-Tone.Transport.scheduleRepeat((time) => {
-
-}, "8n");
-
 
 osc1ADSRGain.gain.setValueAtTime(0.00001, actx.currentTime)
 output.gain.setValueAtTime(0.00001, actx.currentTime)
@@ -137,8 +131,9 @@ osc2.start()
 lfo1.start()
 lfo2.start()
 osc1ADSRGain.gain.setValueAtTime(0.0001, actx.currentTime)
-osc2.connect(osc1FMDepth)
 lfo1.connect(osc1FMDepth)
+lfo2.connect(lfo1FMDepth)
+lfo1FMDepth.connect(lfo1.detune)
 osc1FMDepth.connect(osc1.detune)
 osc1.connect(osc1ADSRGain)
 adsr.connect(osc1ADSRGain.gain)
@@ -220,6 +215,10 @@ export function reducer(state, action){
             updateFMDepth(lfo1FMDepth, value)
             return {...state, lfoSettings: {...state.lfoSettings, lfo1: {...state.lfoSettings.lfo1, [id]: Number(value)}}};
         
+        case ACTIONS.LFO.CHANGE_LFO1.pwm:
+            updateOscPwm(lfo1, value)
+            return {...state, lfoSettings: {...state.lfoSettings, lfo1: {...state.lfoSettings.lfo1, [id]: Number(value)}}}    
+        
         case ACTIONS.LFO.CHANGE_LFO2.frequency:
             updateOscFrequency(lfo2, value)
             return {...state, lfoSettings: {...state.lfoSettings, lfo2: {...state.lfoSettings.lfo2, [id]: Number(value)}}}
@@ -231,6 +230,10 @@ export function reducer(state, action){
         case ACTIONS.LFO.CHANGE_LFO2.lfoFMDepth:
             updateFMDepth(lfo2FMDepth, value)
             return {...state, lfoSettings: {...state.lfoSettings, lfo2: {...state.lfoSettings.lfo2, [id]: Number(value)}}};
+        
+        case ACTIONS.LFO.CHANGE_LFO2.pwm:
+            updateOscPwm(lfo2, value)
+            return {...state, lfoSettings: {...state.lfoSettings, lfo1: {...state.lfoSettings.lfo1, [id]: Number(value)}}}
         
         case ACTIONS.FILTER.CHANGE_FILTER.type:
             filter.type = id
@@ -321,12 +324,14 @@ function ModularBus (props) {
             lfo1: {
                 frequency: lfo1.frequency.value,
                 type: lfo1.type,
-                lfoFMDepth: lfo1FMDepth.gain.value
+                lfoFMDepth: lfo1FMDepth.gain.value,
+                pwm: 0
             },
             lfo2: {
                 frequency: lfo2.frequency.value,
                 type: lfo2.type,
-                lfoFMDepth: lfo2FMDepth.gain.value
+                lfoFMDepth: lfo2FMDepth.gain.value,
+                pwm: 0
             }
         },
         sequencerSettings: {
@@ -352,7 +357,7 @@ function ModularBus (props) {
     })
 
     return (
-        <ModularBusContext.Provider value={{stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr, transport}}>
+        <ModularBusContext.Provider value={{stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr}}>
         {props.children}
         </ModularBusContext.Provider>
     )

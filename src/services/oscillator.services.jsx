@@ -15,8 +15,7 @@ const updateOscType = (id, osc, state) => {
 }
 
 const updateOscPwm = (osc, value) => {
-    if (value === "0" ) {
-        console.log('fire')
+    if (value === "0" && osc.width) {
         osc.width.value = 0.5
     }
     if (osc.type === "pwm") {
@@ -37,11 +36,9 @@ const updateOscADSR = (osc, adsr, stateKey, timeNow, state, midiToFreqArr, note,
         adsr.triggerAttack(timeNow, 1)
     }
     if (!stateKey) {
-        let multiplier = (meter.getValue() + 1) / 2
-        let currentRelease = adsrState.adsrSettings.release
-        let newRelease = currentRelease * multiplier
-        console.log(multiplier, currentRelease, newRelease)
-        adsr.release = newRelease
+        // let multiplier = (meter.getValue() + 1) / 2
+        // let currentRelease = adsrState.adsrSettings.release
+        // let newRelease = currentRelease * multiplier
         adsr.triggerRelease(timeNow+0.05, 0.0001)
     }
 }

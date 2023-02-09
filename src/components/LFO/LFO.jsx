@@ -75,11 +75,11 @@ const LFO = ({ lfoNum }) => {
                     </button>
 
                     <button
-                    id="square"
-                    className={activeType === 'square' ? "btn activeBtn middleBtn": "btn middleBtn"}
+                    id="pwm"
+                    className={activeType === 'pwm' ? "btn activeBtn middleBtn": "btn middleBtn"}
                     onClick={changeType}
                     >
-                    SQR
+                    PULS
                     </button>
 
                     <button 
