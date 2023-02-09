@@ -1,16 +1,17 @@
 import { useContext, useState } from 'react'
 import { ACTIONS } from '../../contexts/ModularBusContext'
 import {ModularBusContext} from '../../contexts/ModularBusContext'
+import Slider from '../Slider/Slider'
 import './Filter.css'
 
 const Filter = () => {
-    const { stateHook } = useContext(ModularBusContext)
+    const { stateHook, filterRef } = useContext(ModularBusContext)
     const [appState, updateState] = stateHook
     const [ activeType, setActiveType ] = useState('lowpass')
     const { filterSettings } = appState
 
-    const change = e => {
-        let { id, value } = e.target;
+    const change = (e, id) => {
+        let value = e;
         updateState({type: ACTIONS.FILTER.CHANGE_FILTER[id], payload: { id, value }})
     }
 
@@ -21,48 +22,9 @@ const Filter = () => {
     }
   return (
     <div className='filterContainer'>
-        <div className="sliderContainer left">
-            <label className="sliderLabel"><p>CUTOFF</p></label>
-            <p className="valueIndicator">{(filterSettings.frequency).toFixed(2)}</p>
-            <input
-            className="freqSlider slider"
-            id="frequency"
-            type="range" 
-            min={10} 
-            max={10000} 
-            step={0.001}
-            value={filterSettings.frequency} 
-            onChange={change}
-            />
-        </div>
-        <div className="sliderContainer">
-            <label className="sliderLabel"><p>FINE</p></label>
-            <p className="valueIndicator">{filterSettings.detune}</p>
-            <input
-            className="detuneSlider slider"
-            id="detune"
-            type="range" 
-            min={0} 
-            max={100}
-            step={0.01}
-            value={filterSettings.detune}
-            onChange={change}
-            />
-        </div>
-        <div className="sliderContainer">
-            <label className="sliderLabel"><p>RES</p></label>
-            <p className="valueIndicator">{filterSettings.Q}</p>
-            <input
-            className="QSlider slider"
-            id="Q"
-            type="range" 
-            min={0} 
-            max={10}
-            step={0.001}
-            value={filterSettings.Q} 
-            onChange={change}
-            />  
-        </div>
+        <Slider module={"filter"} label={"CUTOFF"} valueLabel={(filterSettings.frequency).toFixed(0)} unit={"Hz"} min={10} max={10000} step={0.001} values={filterSettings.frequency} sliderRef={filterRef} id={"frequency"} changeFunction={change}/>
+        <Slider module={"filter"} label={"FINE"} valueLabel={(filterSettings.detune).toFixed(2)} unit={"cts"} min={0} max={100} step={0.001} values={filterSettings.detune} sliderRef={filterRef} id={"detune"} changeFunction={change}/>
+        <Slider module={"filter"} label={"RES"} valueLabel={(filterSettings.Q).toFixed(2)} unit={""} min={0} max={10} step={0.001} values={filterSettings.Q} sliderRef={filterRef} id={"Q"} changeFunction={change}/>
         <div className="rightSideContainer">
             <div className="moduleInfo">
                 <h2>Filter</h2>
