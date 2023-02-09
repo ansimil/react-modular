@@ -1,10 +1,11 @@
 import { useContext, useState } from 'react'
 import { ACTIONS } from '../../contexts/ModularBusContext'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
+import Slider from '../Slider/Slider'
 import './Oscillator.css'
 
 const Oscillator = ({ oscNum }) => {
-    const { stateHook } = useContext(ModularBusContext)
+    const { stateHook, oscRef } = useContext(ModularBusContext)
     const [appState, updateState] = stateHook
 
     const [ activeType, setActiveType ] = useState('sine')
@@ -14,8 +15,8 @@ const Oscillator = ({ oscNum }) => {
     const selectedOscAction = Object.keys(ACTIONS.OSCILLATOR)[oscNum-1]
     const selectedOscSettings = Object.keys(appState.oscSettings)[oscNum-1]
     
-    const change = e => {
-        let { id, value } = e.target;
+    const change = (e, id) => {
+        let value = e;
         updateState({type: ACTIONS.OSCILLATOR[selectedOscAction][id], payload: {id, value}})
     }
     const changeType = e => {
@@ -26,62 +27,12 @@ const Oscillator = ({ oscNum }) => {
 
     return (
         <div className={`oscillatorContainer oscillatorContainer${oscNum}`}>
-            <div className="sliderContainer left">
-                <label className="sliderLabel"><p>FINE</p></label>
-                <p className="valueIndicator">{(oscSettings[selectedOscSettings].detune).toFixed(2)}cts</p>
-                <input
-                className="detuneSlider slider"
-                id="detune"
-                type="range" 
-                min={0} 
-                max={100} 
-                step={0.001}
-                value={oscSettings[selectedOscSettings].detune} 
-                onChange={change}
-                />
-            </div>
-            <div className="sliderContainer">
-                <label className="sliderLabel"><p>PWM</p></label>
-                <p className="valueIndicator">{(oscSettings[selectedOscSettings].pwm).toFixed(2)}Hz</p>
-                <input
-                className="pwmSlider slider"
-                id="pwm"
-                type="range" 
-                min={0} 
-                max={40} 
-                step={0.001}
-                value={oscSettings[selectedOscSettings].pwm} 
-                onChange={change}
-                />
-            </div>
-            <div className="sliderContainer">
-                <label className="sliderLabel"><p>GLIDE</p></label>
-                <p className="valueIndicator">{(oscSettings[selectedOscSettings].glide).toFixed(2)}s</p>
-                <input
-                className="glideSlider slider"
-                id="glide"
-                type="range" 
-                min={0.0001} 
-                max={2}
-                step={0.001} 
-                value={oscSettings[selectedOscSettings].glide} 
-                onChange={change}
-                />
-            </div>
-            <div className="sliderContainer">
-                <label className="sliderLabel"><p>FM DEPTH</p></label>
-                <p className="valueIndicator">{(oscSettings[selectedOscSettings].oscFMDepth / 1000).toFixed(2)}</p>
-                <input
-                className="fmIntensitySlider slider"
-                id="oscFMDepth"
-                type="range" 
-                min={0} 
-                max={10000}
-                step={0.01}
-                value={oscSettings[selectedOscSettings].oscFMDepth} 
-                onChange={change}
-                />
-            </div>
+            
+            <Slider module={selectedOscAction} label={"FINE"} valueLabel={(oscSettings[selectedOscSettings].detune).toFixed(2)} unit={"cts"} min={0} max={100} step={0.001} values={oscSettings[selectedOscSettings].detune} sliderRef={oscRef} id={"detune"} changeFunction={change}/>
+            <Slider module={selectedOscAction} label={"PWM"} valueLabel={(oscSettings[selectedOscSettings].pwm).toFixed(2)} unit={"Hz"} min={0} max={40} step={0.001} values={oscSettings[selectedOscSettings].pwm} sliderRef={oscRef} id={"pwm"} changeFunction={change}/>
+            <Slider module={selectedOscAction} label={"GLIDE"} valueLabel={(oscSettings[selectedOscSettings].glide).toFixed(2)} unit={"s"} min={0.0001} max={2} step={0.001} values={oscSettings[selectedOscSettings].glide} sliderRef={oscRef} id={"glide"} changeFunction={change}/>
+            <Slider module={selectedOscAction} label={"FM DEPTH"} valueLabel={(oscSettings[selectedOscSettings].oscFMDepth).toFixed(2)} unit={""} min={0} max={2500} step={0.001} values={oscSettings[selectedOscSettings].oscFMDepth} sliderRef={oscRef} id={"oscFMDepth"} changeFunction={change}/>
+            
             <div className="rightSideContainer">
                 <div className="moduleInfo">
                     <h2>{`OSC_${oscNum}`}</h2>
@@ -121,7 +72,7 @@ const Oscillator = ({ oscNum }) => {
                 </div>
             </div>
             
-            
+
         </div>
     )
 }

@@ -275,6 +275,9 @@ function ModularBus (props) {
     let oscilloscopeRef = useRef(null)
     let sequencerRef = useRef(null)
     let seqSlidersRef = useRef(null)
+    const oscRef = useRef([])
+    const lfoRef = useRef([])
+    const filterRef = useRef([])
 
 
     const connectToOscilloscope = () => {
@@ -357,7 +360,7 @@ function ModularBus (props) {
     })
 
     return (
-        <ModularBusContext.Provider value={{stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr}}>
+        <ModularBusContext.Provider value={{stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr, oscRef, lfoRef, filterRef}}>
         {props.children}
         </ModularBusContext.Provider>
     )
