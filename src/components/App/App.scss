@@ -33,7 +33,7 @@ $containerBorderRadius: 3px;
     flex-wrap: wrap;
     column-gap: 1vw;
     row-gap: 2vh;
-    background-color: rgb(47, 47, 47);
+    background-color: rgb(57, 57, 57);
     min-height: 100vh
 }
 
@@ -44,13 +44,6 @@ $containerBorderRadius: 3px;
     min-width: 50px;
     max-width: 50px;
     text-align: center
-}
-
-.startBtn {
-    min-width: 75px;
-    max-width: 75px;
-    padding: 1.5rem 1rem;
-    border-radius: 0;
 }
 
 .btn:hover {
@@ -222,18 +215,6 @@ $containerBorderRadius: 3px;
     padding: 1rem;
     border-top-left-radius: $containerBorderRadius;
     border-bottom-left-radius: $containerBorderRadius;
-}
-
-.startBtnContainer {
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
-    border: solid black 1px;
-    min-height: $moduleMinHeight;
-    min-width: 150px;
-    max-width: 250px;
-    width: 32vw;
-    background-color: white;
 }
 
 #nexus-ui-sequencer-1 {

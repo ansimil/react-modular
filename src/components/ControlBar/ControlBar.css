@@ -1,0 +1,10 @@
+.controlBarContainer {
+  position: relative;
+  top: 0;
+  width: 100vw;
+  height: 50px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: rgb(44, 44, 44);
+}/*# sourceMappingURL=ControlBar.css.map */

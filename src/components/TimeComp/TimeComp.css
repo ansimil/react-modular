@@ -1,0 +1,69 @@
+.timeCompContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -moz-column-gap: 0.2rem;
+       column-gap: 0.2rem;
+  width: 15vw;
+  height: 40px;
+  border: black solid 0.5px;
+  background-color: rgb(57, 57, 57);
+  border-radius: 3px;
+  box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.timeCompContainer input {
+  width: 40px;
+  height: 25px;
+  text-align: center;
+  font-family: mainFont;
+  border-radius: 3px;
+  border: none;
+  background-color: rgb(222, 222, 222);
+}
+
+.timeCompContainer input::-webkit-outer-spin-button,
+.timeCompContainer input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.timeCompContainer input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.bpmIncDecContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.bpmBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  height: 14.2857142857px;
+  text-align: center;
+  width: 20px;
+  padding: 0;
+}
+
+.bpmTopBtn {
+  border-left: solid black 1px;
+  border-right: solid black 1px;
+  border-top: solid black 1px;
+  border-bottom: solid black 0.5px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+
+.bpmBtmBtn {
+  border-left: solid black 1px;
+  border-right: solid black 1px;
+  border-top: solid black 0.5px;
+  border-bottom: solid black 1px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+}/*# sourceMappingURL=TimeComp.css.map */
