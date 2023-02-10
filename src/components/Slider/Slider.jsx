@@ -23,7 +23,6 @@ const Slider = ({module, label, valueLabel, unit, min, max, step, values, slider
         multislider.caps[0].attributes[4].value = "#000"
         multislider.element.attributes[2].value = "background-color: rgb(255, 255, 255); cursor: pointer;"
         sliderRef.current = [...sliderRef.current, multislider]
-        console.log(sliderRef.current)
     // eslint-disable-next-line
     },[])
 

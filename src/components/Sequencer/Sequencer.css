@@ -1,4 +1,17 @@
-.slidersContainer {
+.sequencerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.sequencerNotesGates {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.slidersContainer, .sequencerNotes, .noteOctave {
   display: flex;
   justify-content: center;
   align-items: center;

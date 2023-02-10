@@ -109,14 +109,14 @@ const Keyboard = () => {
         <div className="octaveInfo">
             <p>Octave: {noteState+1}</p>
             <div className="octaveBtns">
-                <button disabled={noteState<=4 ? "" : "true"} className={noteState<=4 ? "btn endBtnLeft": "btn endBtnLeft disabledBtn"} onClick={()=> {
+                <button disabled={noteState<=4 ? "" : true} className={noteState<=4 ? "btn endBtnLeft": "btn endBtnLeft disabledBtn"} onClick={()=> {
                     setNoteState(noteState+1)
                     }}
                 >
                 +
                 </button>
 
-                <button disabled={noteState >= 1 ? "" : "true"} className={noteState>=1 ? "btn endBtnRight": "btn endBtnRight disabledBtn"} onClick={()=> {
+                <button disabled={noteState >= 1 ? "" : true} className={noteState>=1 ? "btn endBtnRight": "btn endBtnRight disabledBtn"} onClick={()=> {
                     setNoteState(noteState-1)
                     }}
                 >

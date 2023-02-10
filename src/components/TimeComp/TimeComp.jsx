@@ -4,29 +4,26 @@ import { ACTIONS } from '../../contexts/ModularBusContext'
 import './TimeComp.css'
 
 const TimeComp = () => {
-    const { stateHook } = useContext(ModularBusContext)
+    const { stateHook, sequencerRef } = useContext(ModularBusContext)
     const [appState, updateState] = stateHook 
-
-    // const handleSubmit = (e) => {
-    //     e.preventDfault()
-    //     const { id, value } = e.target
-    //     updateState({type: ACTIONS.synth[id], payload: {id, value}})
-    // }
 
     const handleChange = (e) => {
         const { id, value } = e.target
+        sequencerRef.current.interval.rate = (60 / value) * 1000
         updateState({type: ACTIONS.SYNTH[id], payload: {id, value}})
     }
 
     const handleInc = (e) => {
         const { id } = e.target
         let value = appState.synthSettings.bpm + 1
+        sequencerRef.current.interval.rate = (60 / value) * 1000
         updateState({type: ACTIONS.SYNTH[id], payload: {id, value}})
     }
 
     const handleDec = (e) => {
         const { id } = e.target
         let value = appState.synthSettings.bpm - 1
+        sequencerRef.current.interval.rate = (60 / value) * 1000
         updateState({type: ACTIONS.SYNTH[id], payload: {id, value}})
     }
 

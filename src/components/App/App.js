@@ -7,7 +7,7 @@ import LFO from '../LFO/LFO'
 import Keyboard from '../Keyboard/Keyboard';
 import Oscilloscope from '../Oscilloscope/Oscilloscope';
 import ControlBar from '../ControlBar/ControlBar';
-// import Sequencer from '../Sequencer/Sequencer';
+import Sequencer from '../Sequencer/Sequencer';
 
 
 
@@ -17,6 +17,7 @@ function App() {
       <ControlBar />
       {/* <Matrix/> */}
       <Keyboard />
+      <Sequencer />
       <Oscillator oscNum={1} />
       {/* <Oscillator oscNum={2} /> */}
       <LFO lfoNum={1} />
@@ -24,7 +25,7 @@ function App() {
       <Filter />
       <ADSR />
       <Oscilloscope />
-      {/* <Sequencer /> */}
+      
     </div>
   );
 }
