@@ -6,7 +6,7 @@ import Nexus from 'nexusui'
 import './Sequencer.css'
 
 const Sequencer = () => {
-  const { stateHook, sequencerRef, seqSlidersRef } = useContext(ModularBusContext)
+  const { stateHook, sequencerRef, seqSlidersRef, adsr } = useContext(ModularBusContext)
   // eslint-disable-next-line
   const [appState, updateState] = stateHook
   const { sequencerSettings } = appState
@@ -46,12 +46,11 @@ const Sequencer = () => {
     updateState({type: ACTIONS.SEQUENCER.note, payload: {value, i}})
   }
 
-  const handleStep = (e) => {
-    counter.next()
-    const { value } = counter
-    const [stepBool] = e
-    if (stepBool) {
-      updateState({type: ACTIONS.SEQUENCER.step, payload: {value}})
+  const handleStep = (time) => {
+    sequencerRef.current.next()
+    const { value } = sequencerRef.current.stepper
+    if (sequencerRef.current.cells[value]._state.state) {
+      updateState({type: ACTIONS.SEQUENCER.step, payload: {value, time}})
     }
   }
 
@@ -64,9 +63,11 @@ const Sequencer = () => {
         slider.destroy()
       })
     }
+
+
     Tone.Transport.scheduleRepeat(function(time){
-      sequencerRef.current.next()
-    }, "8n")
+      handleStep(time)
+    }, "16n")
 
     let sequencer = new Nexus.Sequencer("#sequencer", {
       "size": [300,25],
@@ -99,11 +100,11 @@ const Sequencer = () => {
     seqSlidersRef.current = sliders
 
     sequencer.on("step", (e) => {
-      handleStep(e)
+      // handleStep(e)
     })
     sequencer.interval.rate = 60 / appState.synthSettings.bpm * 1000
     sequencer.colors.accent = "#000"
-    sequencer.colors.mediumLight = "#000"
+    sequencer.colors.mediumLight = "#fff"
     sequencerRef.current = sequencer
   // eslint-disable-next-line
   },[])
@@ -164,6 +165,8 @@ const Sequencer = () => {
       <div className="sequencerControlsContainer">
         <button onClick={()=>{Tone.Transport.start()}}>Start</button>
         <button onClick={()=>{Tone.Transport.stop()}}>Stop</button>
+        <button onClick={()=>{sequencerRef.current.stepper.max = 16; sequencerRef.current.stepper.mode = 'up'}}>Up</button>
+        <button onClick={()=>{sequencerRef.current.stepper.max = 15; sequencerRef.current.stepper.mode = 'down'}}>Down</button>
       </div>
     </div>
   )

@@ -156,7 +156,7 @@ updateMatrix()
 
 
 export function reducer(state, action){
-    let { id, value, note, stateKey, i } = action.payload
+    let { id, value, note, stateKey, i, time } = action.payload
 
     switch (action.type) {
         // SYNTH SETTINGS //
@@ -177,6 +177,7 @@ export function reducer(state, action){
 
         case ACTIONS.SYNTH.bpm:
             state.synthSettings.bpm = value
+            Tone.Transport.bpm.rampTo(value, 0.05)
             return {...state, synthSettings: {...state.synthSettings, [id]: Number(value)}}
 
 
@@ -288,9 +289,8 @@ export function reducer(state, action){
             return {...state, sequencerSettings: {...state.sequencerSettings, sliders: {...state.sequencerSettings.sliders, [i]: {...state.sequencerSettings.sliders[i], note: value}}}}
         
         case ACTIONS.SEQUENCER.step:
-            console.log(value)
             const stepNote = state.sequencerSettings.sliders[value].note + 24 + (12 * state.sequencerSettings.sliders[value].octave)
-            step(osc1, adsr, actx.currentTime, state, midiToFreqArr, stepNote)
+            step(osc1, adsr, time, state, midiToFreqArr, stepNote)
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note], oscADSRGain: osc1ADSRGain.gain.value}}};
 
         default:
