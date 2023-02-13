@@ -32,9 +32,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 35px;
+  height: 35px;
 }
 
 .playerIcon {
-  width: 25px;
-  height: 25px;
+  width: 15px;
+  height: 15px;
 }/*# sourceMappingURL=PlayerControls.css.map */

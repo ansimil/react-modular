@@ -1,3 +1,5 @@
+$borderThickness: 1px;
+
 .sequencerContainer {
     display: flex;
     justify-content: center;
@@ -46,8 +48,8 @@
 
 .sequencerNotes {
     flex: 1;
-    border-top: solid black 0.5px;
-    border-bottom: solid black 0.5px;
+    border-top: solid black $borderThickness;
+    // border-bottom: solid black $borderThickness;
 }
 
 .noteOctave {
@@ -57,6 +59,13 @@
 .sequencerNotes p {
     text-align: center;
     flex: 1;
+    height: 100%;
+    border-left: solid black $borderThickness;
+    border-right: solid black $borderThickness;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: lightFont;
 }
 
 .noteOctave div {
@@ -68,10 +77,13 @@
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    border-left: solid black $borderThickness;
+    border-right: solid black $borderThickness;
 }
 
 .noteOctaveInner p {
     text-align: center;
+    font-family: lightFont;
 }
 
 .sequencerNotes p, .noteOctaveInner p {
@@ -80,4 +92,15 @@
 
 .downIcon {
     transform: rotate(180deg);
+}
+
+.slidersContainer div {
+    border-top: solid black $borderThickness;
+    border-left: solid black $borderThickness;
+    border-right: solid black $borderThickness;
+
+}
+
+#sequencer {
+    margin-bottom: 10px;
 }

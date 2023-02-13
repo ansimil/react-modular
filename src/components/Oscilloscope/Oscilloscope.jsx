@@ -2,11 +2,11 @@ import { useEffect, useContext } from 'react'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
 import Nexus from 'nexusui'
 
-const Oscilloscope = () => {
+const Oscilloscope = ({size, id}) => {
     const { oscilloscopeRef, connectToOscilloscope } = useContext(ModularBusContext)
     useEffect(()=>{
-        let oscilloscope = new Nexus.Oscilloscope("#oscilloscope", {
-            'size': [500,225],
+        let oscilloscope = new Nexus.Oscilloscope(`${id}#oscilloscope`, {
+            'size': size,
         })
         oscilloscope.colors.accent = "#000"
         oscilloscopeRef.current = oscilloscope
@@ -15,7 +15,7 @@ const Oscilloscope = () => {
     },[])
   return (
     <div className="oscilloscopeContainer">
-        <div id="oscilloscope"></div>
+        <div id={`${id}oscilloscope`}></div>
     </div>
   )
 }

@@ -24,7 +24,7 @@ function App() {
       <LFO lfoNum={2} />
       <Filter />
       <ADSR />
-      <Oscilloscope />
+      <Oscilloscope size={[500,225]} id={"large"} />
       
     </div>
   );
