@@ -19,12 +19,9 @@
 
 .App {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  -moz-column-gap: 1vw;
-       column-gap: 1vw;
-  row-gap: 2vh;
+  justify-content: flex-start;
+  flex-direction: column;
+  width: 1435px;
   background-color: rgb(57, 57, 57);
   min-height: 100vh;
 }
@@ -254,4 +251,9 @@
   text-align: center;
   margin: 0;
   font-family: mainFont;
+}
+
+.oscilloscope .detailsInner {
+  display: flex;
+  justify-content: center;
 }/*# sourceMappingURL=App.css.map */
