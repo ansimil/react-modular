@@ -80,7 +80,7 @@ const Sequencer = () => {
     let sliders = []
     arr.forEach(i => {
       let slider = new Nexus.Multislider(`#slider${i}`, {
-        'size': [sequencerWidth/16,100],
+        'size': [(sequencerWidth/16)-2,100],
         'numberOfSliders': 1,
         'min': 0,
         'max': 11,
@@ -92,9 +92,9 @@ const Sequencer = () => {
       slider.on("change", (e) => {
         change(e, i)
       })
-      slider.bars[0].attributes[5].value = "#dedede"
+      slider.bars[0].attributes[5].value = "#fafdd1"
       slider.caps[0].attributes[4].value = "#000"
-      slider.element.attributes[2].value = "backgroundColor: rgb(255, 255, 255); cursor: pointer;"
+      slider.element.attributes[2].value = "background-color: rgb(255, 255, 255); cursor: pointer;"
       sliders.push(slider)
     })
     seqSlidersRef.current = sliders

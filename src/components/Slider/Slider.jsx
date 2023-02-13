@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import Nexus from 'nexusui'
+import './Slider.css'
 
 const Slider = ({module, label, valueLabel, unit, min, max, step, values, sliderRef, id, changeFunction}) => {
     
@@ -30,7 +31,7 @@ const Slider = ({module, label, valueLabel, unit, min, max, step, values, slider
     <div className={`sliderContainer ${id}`}>
     <label className="sliderLabel"><p>{label}</p></label>
     <p className="valueIndicator">{`${valueLabel}${unit}`}</p>
-    <div id={`${module}${id}`}></div>
+    <div className="sliderInnerContainer" id={`${module}${id}`}></div>
     </div>
   )
 }

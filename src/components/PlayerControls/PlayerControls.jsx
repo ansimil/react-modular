@@ -69,25 +69,31 @@ const PlayerControls = () => {
 
         <div className='directionBtnContainer'>
           <button 
-          className="playerBtn endBtnLeft activeBtn"
+          className={appState.sequencerSettings.direction === "up" ? "playerBtn endBtnLeft activeBtn": "playerBtn endBtnLeft"}
           onClick={
-            ()=>{sequencerRef.current.stepper.max = 16; sequencerRef.current.stepper.mode = 'up'}
+            ()=>{
+                sequencerRef.current.stepper.max = 16; sequencerRef.current.stepper.mode = 'up'
+                updateState({type: ACTIONS.SEQUENCER.direction, payload: {value: "up"}})
+                }
             }
             >
             <img
             className="upIcon directionIcon playerIcon"  
-            src={ArrowWhiteIcon} 
+            src={appState.sequencerSettings.direction === "up" ? ArrowWhiteIcon: ArrowBlackIcon} 
             alt="up" 
             />
             </button>
           <button
-          className="playerBtn endBtnRight" 
+          className={appState.sequencerSettings.direction === "down" ? "playerBtn endBtnRight activeBtn": "playerBtn endBtnRight"}
           onClick={
-            ()=>{sequencerRef.current.stepper.max = 15; sequencerRef.current.stepper.mode = 'down'}
+            ()=>{
+                sequencerRef.current.stepper.max = 15; sequencerRef.current.stepper.mode = 'down'
+                updateState({type: ACTIONS.SEQUENCER.direction, payload: {value: "down"}})
+                }
             }>
             <img
             className="downIcon directionIcon playerIcon" 
-            src={ArrowBlackIcon} 
+            src={appState.sequencerSettings.direction === "down" ? ArrowWhiteIcon : ArrowBlackIcon} 
             alt="down" />
             </button>
           </div>

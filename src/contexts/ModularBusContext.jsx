@@ -67,7 +67,8 @@ export const ACTIONS = {
         note: "change_step_note",
         octave: "change_step_octave",
         step: "trigger_step",
-        player: "change_sequencer_player"
+        player: "change_sequencer_player",
+        direction: "change_sequencer_direction"
     }
 }
 
@@ -285,6 +286,9 @@ export function reducer(state, action){
         // SEQUENCER SETTINGS //
         case ACTIONS.SEQUENCER.player:
             return {...state, sequencerSettings: {...state.sequencerSettings, player: value}}
+            
+        case ACTIONS.SEQUENCER.direction:
+            return {...state, sequencerSettings: {...state.sequencerSettings, direction: value}}
 
         case ACTIONS.SEQUENCER.octave:
             return {...state, sequencerSettings: {...state.sequencerSettings, sliders: {...state.sequencerSettings.sliders, [i]: {...state.sequencerSettings.sliders[i], octave: value}}}}
@@ -397,7 +401,8 @@ function ModularBus (props) {
                 14:{note:0,octave:4},
                 15:{note:0,octave:4},
             },
-            player: "stopped"
+            player: "stopped",
+            direction: "up"
         }
     })
 
