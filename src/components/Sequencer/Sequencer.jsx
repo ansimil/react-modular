@@ -10,7 +10,6 @@ const Sequencer = () => {
   // eslint-disable-next-line
   const [appState, updateState] = stateHook
   const { sequencerSettings } = appState
-  const counter = new Nexus.Counter(0,16)
   const arr = Object.keys(sequencerSettings.sliders)
   const notesObject = {
     0: "C",
@@ -55,6 +54,7 @@ const Sequencer = () => {
   }
 
   useEffect(()=>{
+    const sequencerWidth = 600
     if (sequencerRef.current){
       sequencerRef.current.destroy()
     }
@@ -70,7 +70,7 @@ const Sequencer = () => {
     }, "16n")
 
     let sequencer = new Nexus.Sequencer("#sequencer", {
-      "size": [300,25],
+      "size": [sequencerWidth,30],
       "mode": "toggle",
       "rows": 1,
       "columns": 16,
@@ -80,7 +80,7 @@ const Sequencer = () => {
     let sliders = []
     arr.forEach(i => {
       let slider = new Nexus.Multislider(`#slider${i}`, {
-        'size': [20,100],
+        'size': [sequencerWidth/16,100],
         'numberOfSliders': 1,
         'min': 0,
         'max': 11,
@@ -122,52 +122,49 @@ const Sequencer = () => {
             )
           })}
           </div>
-          <div className="sequencerNotes">
+
+          <div className='notesAndOctaves'>
+            <div className="sequencerNotes">
+              {arr.map(i => {
+                return (
+                  <p key={i}>{notesObject[sequencerSettings.sliders[i].note]}</p>
+                )
+              })}
+            </div>
+            <div className="noteOctave">
             {arr.map(i => {
-              return (
-                <p key={i}>{notesObject[sequencerSettings.sliders[i].note]}</p>
-              )
-            })}
-          </div>
-          <div className="noteOctave">
-          {arr.map(i => {
-              return (
-                <div key={i} className="noteOctaveInner">
-                  <p>{sequencerSettings.sliders[i].octave}</p>
-                  <div className="bpmIncDecContainer">
-                    <button
-                    disabled={sequencerSettings.sliders[i].octave >= 6 ? true: ""}
-                    className="bpmBtn bpmTopBtn" 
-                    onClick={()=> {
-                      handleInc("octave", i)
-                    }}
-                    >
-                    +
-                    </button>
-                    <button
-                    disabled={sequencerSettings.sliders[i].octave <= 1 ? true: ""}
-                    className="bpmBtn bpmBtmBtn"
-                    onClick={()=> {
-                      handleDec("octave", i)
-                    }}
-                    >
-                    -
-                    </button>
+                return (
+                  <div key={i} className="noteOctaveInner">
+                    <p>{sequencerSettings.sliders[i].octave}</p>
+                    <div className="bpmIncDecContainer">
+                      <button
+                      disabled={sequencerSettings.sliders[i].octave >= 6 ? true: ""}
+                      className="bpmBtn bpmTopBtn" 
+                      onClick={()=> {
+                        handleInc("octave", i)
+                      }}
+                      >
+                      +
+                      </button>
+                      <button
+                      disabled={sequencerSettings.sliders[i].octave <= 1 ? true: ""}
+                      className="bpmBtn bpmBtmBtn"
+                      onClick={()=> {
+                        handleDec("octave", i)
+                      }}
+                      >
+                      -
+                      </button>
+                    </div>
                   </div>
-                </div>
-              )
-          })
-          }
+                )
+            })
+            }
+            </div>
           </div>
         
-        
       </div>
-      <div className="sequencerControlsContainer">
-        <button onClick={()=>{Tone.Transport.start()}}>Start</button>
-        <button onClick={()=>{Tone.Transport.stop()}}>Stop</button>
-        <button onClick={()=>{sequencerRef.current.stepper.max = 16; sequencerRef.current.stepper.mode = 'up'}}>Up</button>
-        <button onClick={()=>{sequencerRef.current.stepper.max = 15; sequencerRef.current.stepper.mode = 'down'}}>Down</button>
-      </div>
+      
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { useState } from 'react'
 import StartBtn from '../StartBtn/StartBtn'
 import TimeComp from '../TimeComp/TimeComp'
 import HelpModal from '../HelpModal/HelpModal'
+import PlayerControls from '../PlayerControls/PlayerControls'
 // import { ModularBusContext } from '../../contexts/ModularBusContext'
 import './ControlBar.css'
 import qMark from '../../assets/icons/questionmark-icon.png'
@@ -17,6 +18,7 @@ const ControlBar = () => {
     <div className="controlBarContainer">
         <StartBtn/>
         <TimeComp />
+        <PlayerControls/>
         <div className="helpIconContainer">
         <img onClick={toggleModal} className="helpIcon" src={qMark} alt="help" />
         <HelpModal showModal={showModal} setShowModal={setShowModal}/>
