@@ -14,10 +14,10 @@ const ControlBar = () => {
     return (
     <div className="controlBarContainer">
         <StartBtn/>
-        {/* <div className='bpmIndicatorContainer'>
+        <div className='bpmIndicatorContainer'>
           <div className='bpmIndicator'>
           </div>
-        </div> */}
+        </div>
         <TimeComp />
         <PlayerControls/>
         <Oscilloscope size={[60,30]} id={"small"}/>

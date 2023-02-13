@@ -56,6 +56,7 @@ const Sequencer = () => {
 
   useEffect(()=>{
     const sequencerWidth = 600
+    const [bpm] = document.getElementsByClassName('bpmIndicator')
     if (sequencerRef.current){
       sequencerRef.current.destroy()
     }
@@ -64,17 +65,19 @@ const Sequencer = () => {
         slider.destroy()
       })
     }
-
+    
+    Tone.Transport.scheduleRepeat(()=>{
+      if (bpm.classList.length > 1) {
+        console.log('remove')
+        bpm.classList.remove('activeBpmIndicator')
+      }
+      else {
+        console.log('add')
+        bpm.classList.add('activeBpmIndicator')
+      }
+    }, "32n")
 
     Tone.Transport.scheduleRepeat(function(time){
-      const [bpm] = document.getElementsByClassName('bpmIndicator')
-      const clock = ((60 / appState.synthSettings.bpm) * 1000) / 8
-      bpm.classList.add('activeBpmIndicator')
-      console.log('on')
-      setTimeout(()=>{
-      bpm.classList.remove('activeBpmIndicator')
-      console.log('off')
-      }, clock)
       handleStep(time)
     }, "16n")
 
