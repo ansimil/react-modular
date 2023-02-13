@@ -9,11 +9,11 @@ const HelpModal = ({showModal, setShowModal}) => {
         <Rodal 
         visible={showModal} 
         onClose={()=>{setShowModal(!showModal)}}
-        width={"600"}
-        height={"400"}
+        width={600}
+        height={400}
         animation={"slideDown"}
         customStyles={{
-            "background-color": "rgb(57, 57, 57)"
+            "backgroundColor": "rgb(57, 57, 57)"
         }}
         >
             <div className="modalContainer">
