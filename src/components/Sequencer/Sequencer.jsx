@@ -46,6 +46,7 @@ const Sequencer = () => {
   }
 
   const handleStep = (time) => {
+    
     sequencerRef.current.next()
     const { value } = sequencerRef.current.stepper
     if (sequencerRef.current.cells[value]._state.state) {
@@ -66,6 +67,14 @@ const Sequencer = () => {
 
 
     Tone.Transport.scheduleRepeat(function(time){
+      const [bpm] = document.getElementsByClassName('bpmIndicator')
+      const clock = ((60 / appState.synthSettings.bpm) * 1000) / 8
+      bpm.classList.add('activeBpmIndicator')
+      console.log('on')
+      setTimeout(()=>{
+      bpm.classList.remove('activeBpmIndicator')
+      console.log('off')
+      }, clock)
       handleStep(time)
     }, "16n")
 
