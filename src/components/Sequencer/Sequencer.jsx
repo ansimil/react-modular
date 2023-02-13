@@ -6,7 +6,7 @@ import Nexus from 'nexusui'
 import './Sequencer.css'
 
 const Sequencer = () => {
-  const { stateHook, sequencerRef, seqSlidersRef, adsr } = useContext(ModularBusContext)
+  const { stateHook, sequencerRef, seqSlidersRef } = useContext(ModularBusContext)
   // eslint-disable-next-line
   const [appState, updateState] = stateHook
   const { sequencerSettings } = appState
