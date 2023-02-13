@@ -27,7 +27,7 @@ const updateFMDepth = (FMDepth, value) => {
     FMDepth.gain.value = value
 }
 
-const updateOscADSR = (osc, adsr, stateKey, timeNow, state, midiToFreqArr, note, meter, adsrState) => {
+const updateOscADSR = (osc, adsr, stateKey, timeNow, state, midiToFreqArr, note, meter,) => {
     if (stateKey) {
         let glide = timeNow + state.oscSettings.osc1.glide
         osc.frequency.cancelScheduledValues(timeNow)
@@ -37,11 +37,12 @@ const updateOscADSR = (osc, adsr, stateKey, timeNow, state, midiToFreqArr, note,
     }
     if (!stateKey) {
         // let multiplier = (meter.getValue() + 1) / 2
-        // let currentRelease = adsrState.adsrSettings.release
+        // let currentRelease = state.adsrSettings.release
         // let newRelease = currentRelease * multiplier
         adsr.triggerRelease(timeNow+0.05, 0.0001)
     }
 }
+
 
 export {
     updateOscType,

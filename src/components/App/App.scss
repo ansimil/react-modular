@@ -28,7 +28,7 @@ $containerBorderRadius: 3px;
 
 .App {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: flex-start;
     flex-wrap: wrap;
     column-gap: 1vw;
@@ -51,7 +51,7 @@ $containerBorderRadius: 3px;
 }
 
 .activeBtn {
-    background-color: black;
+    background-color: black !important;
     color: white
 }
 
@@ -86,7 +86,18 @@ $containerBorderRadius: 3px;
 
 .valueIndicator {
     font-family: lightFont;
-    font-size: 0.8rem
+    font-size: 0.7rem;
+    background-color: rgb(246, 246, 246);
+    text-align: center;
+    padding: 0 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+    max-height: 1.5rem;
+    width: 67.5%;
+    box-shadow: inset 0px 0px 3px rgba(0,0,0,0.4);
+    border: black solid 0.5px
 }
 
 .slider {
@@ -144,7 +155,6 @@ $containerBorderRadius: 3px;
 
 .sliderContainer p {
     flex: 1;
-    margin: 0;
     margin-top: 6px;
 }
 

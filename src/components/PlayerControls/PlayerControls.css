@@ -1,0 +1,43 @@
+.sequencerControlsContainer {
+  -moz-column-gap: 3rem;
+       column-gap: 3rem;
+  align-items: flex-start;
+  background-color: rgb(57, 57, 57);
+  border-radius: 3px;
+  border: black solid 0.5px;
+  box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+  height: 40px;
+  margin-right: 2rem;
+}
+
+.sequencerControlsContainer, .playBtnsContainer, .directionBtnContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.playBtnsContainer {
+  padding-left: 1rem;
+}
+
+.directionBtnContainer {
+  padding-right: 1rem;
+}
+
+.sequencerControlsContainer .active {
+  background-color: black;
+}
+
+.playerBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 35px;
+  height: 35px;
+}
+
+.playerIcon {
+  width: 15px;
+  height: 15px;
+}/*# sourceMappingURL=PlayerControls.css.map */

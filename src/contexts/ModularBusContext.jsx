@@ -8,6 +8,7 @@ import {
     updateOscADSR, 
     updateOscFrequency 
 } from "../services/oscillator.services";
+import { step } from "../services/sequencer.services";
 import * as Tone from 'tone'
 
 const ModularBusContext = createContext()
@@ -61,6 +62,13 @@ export const ACTIONS = {
             lfoFMDepth: "change_lfo2_FMDepth",
             pwm: "change_lfo2_pwm"
         }
+    },
+    SEQUENCER: {
+        note: "change_step_note",
+        octave: "change_step_octave",
+        step: "trigger_step",
+        player: "change_sequencer_player",
+        direction: "change_sequencer_direction"
     }
 }
 
@@ -110,9 +118,13 @@ let adsr = new Tone.Envelope({
     decayCurve: "linear",
     releaseCurve: "exponential"
 })
-const meter = new Tone.DCMeter();
-
-
+let meter = new Tone.DCMeter();
+Tone.Transport.scheduleRepeat(clock, "8n")
+let count = 0
+function clock(){
+  count++
+  return count
+} 
 osc1ADSRGain.gain.setValueAtTime(0.00001, actx.currentTime)
 output.gain.setValueAtTime(0.00001, actx.currentTime)
 outputGain.gain.setValueAtTime(1.0, actx.currentTime)
@@ -146,9 +158,10 @@ updateMatrix()
 
 
 export function reducer(state, action){
-    let { id, value, note, stateKey } = action.payload
+    let { id, value, note, stateKey, i, time } = action.payload
 
     switch (action.type) {
+        // SYNTH SETTINGS //
         case ACTIONS.SYNTH.start:
             Tone.start()
             output.gain.setValueAtTime(output.gain.value, actx.currentTime)
@@ -166,7 +179,11 @@ export function reducer(state, action){
 
         case ACTIONS.SYNTH.bpm:
             state.synthSettings.bpm = value
+            Tone.Transport.bpm.rampTo(value, 0.05)
             return {...state, synthSettings: {...state.synthSettings, [id]: Number(value)}}
+
+
+        // OSCILLATOR SETTINGS //
 
         case ACTIONS.OSCILLATOR.OSC1.type: 
             updateOscType(id, osc1, state)
@@ -188,7 +205,7 @@ export function reducer(state, action){
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, [id]: Number(value)}}};
 
         case ACTIONS.OSCILLATOR.OSC1.oscADSRGain:
-            updateOscADSR(osc1, adsr, stateKey, actx.currentTime, state, midiToFreqArr, note, meter, state)
+            updateOscADSR(osc1, adsr, stateKey, actx.currentTime, state, midiToFreqArr, note, meter)
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note], oscADSRGain: osc1ADSRGain.gain.value}}};
 
         case ACTIONS.OSCILLATOR.OSC2.type:
@@ -203,6 +220,9 @@ export function reducer(state, action){
             updateFMDepth(osc2FMDepth, value)
             return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
         
+
+        // LFO SETTINGS //
+
         case ACTIONS.LFO.CHANGE_LFO1.frequency:
             updateOscFrequency(lfo1, value)
             return {...state, lfoSettings: {...state.lfoSettings, lfo1: {...state.lfoSettings.lfo1, [id]: Number(value)}}}
@@ -235,6 +255,9 @@ export function reducer(state, action){
             updateOscPwm(lfo2, value)
             return {...state, lfoSettings: {...state.lfoSettings, lfo1: {...state.lfoSettings.lfo1, [id]: Number(value)}}}
         
+
+        // FILTER SETTINGS //
+
         case ACTIONS.FILTER.CHANGE_FILTER.type:
             filter.type = id
             return {...state, filterSettings: {...state.filterSettings, type: id}};
@@ -251,10 +274,32 @@ export function reducer(state, action){
             filter.Q.value = value
             return {...state, filterSettings: {...state.filterSettings, [id]: Number(value)}};
         
+
+        // ADSR SETTINGS //
+
         case ACTIONS.ADSR.CHANGE_ADSR:
             state.adsrSettings[id] = value
             adsr[id] = value
             return {...state, adsrSettings: {...state.adsrSettings, [id]: Number(value)}};
+
+
+        // SEQUENCER SETTINGS //
+        case ACTIONS.SEQUENCER.player:
+            return {...state, sequencerSettings: {...state.sequencerSettings, player: value}}
+            
+        case ACTIONS.SEQUENCER.direction:
+            return {...state, sequencerSettings: {...state.sequencerSettings, direction: value}}
+
+        case ACTIONS.SEQUENCER.octave:
+            return {...state, sequencerSettings: {...state.sequencerSettings, sliders: {...state.sequencerSettings.sliders, [i]: {...state.sequencerSettings.sliders[i], octave: value}}}}
+        
+        case ACTIONS.SEQUENCER.note:
+            return {...state, sequencerSettings: {...state.sequencerSettings, sliders: {...state.sequencerSettings.sliders, [i]: {...state.sequencerSettings.sliders[i], note: value}}}}
+        
+        case ACTIONS.SEQUENCER.step:
+            const stepNote = state.sequencerSettings.sliders[value].note + 24 + (12 * state.sequencerSettings.sliders[value].octave)
+            step(osc1, adsr, time, state, midiToFreqArr, stepNote)
+            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note], oscADSRGain: osc1ADSRGain.gain.value}}};
 
         default:
             console.log('error', action)
@@ -264,17 +309,20 @@ export function reducer(state, action){
 
 function ModularBus (props) {
     
-    for (let i = 24; i < 106; i++){
+    for (let i = 0; i < 106; i++){
         let freq = (Math.pow(2, (i-69)/12)*440)
         midiToFreqArr = {...midiToFreqArr, [i]: freq}
     }
-
+    
     let matrixRef = useRef(null)
     let keyboardRef = useRef(null)
-    let adsrRef = useRef(null)
+    let adsrRef = useRef([])
     let oscilloscopeRef = useRef(null)
     let sequencerRef = useRef(null)
     let seqSlidersRef = useRef(null)
+    const oscRef = useRef([])
+    const lfoRef = useRef([])
+    const filterRef = useRef([])
 
 
     const connectToOscilloscope = () => {
@@ -335,29 +383,31 @@ function ModularBus (props) {
             }
         },
         sequencerSettings: {
-            sliders: [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-            ]
+            sliders: {
+                0:{note:0,octave:4},
+                1:{note:0,octave:4},
+                2:{note:0,octave:4},
+                3:{note:0,octave:4},
+                4:{note:0,octave:4},
+                5:{note:0,octave:4},
+                6:{note:0,octave:4},
+                7:{note:0,octave:4},
+                8:{note:0,octave:4},
+                9:{note:0,octave:4},
+                10:{note:0,octave:4},
+                11:{note:0,octave:4},
+                12:{note:0,octave:4},
+                13:{note:0,octave:4},
+                14:{note:0,octave:4},
+                15:{note:0,octave:4},
+            },
+            player: "stopped",
+            direction: "up"
         }
     })
 
     return (
-        <ModularBusContext.Provider value={{stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr}}>
+        <ModularBusContext.Provider value={{stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr, osc1, oscRef, lfoRef, filterRef}}>
         {props.children}
         </ModularBusContext.Provider>
     )

@@ -7,4 +7,31 @@
   justify-content: flex-start;
   align-items: center;
   background-color: rgb(44, 44, 44);
+}
+
+.helpIconContainer {
+  width: 10vw;
+  margin-left: 2rem;
+}
+
+.helpIcon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.controlBarContainer .oscilloscopeContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(57, 57, 57);
+  border-radius: 3px;
+  border: black solid 0.5px;
+  box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+  height: 40px;
+}
+
+#smalloscilloscope {
+  margin-left: 1rem;
+  margin-right: 1rem;
 }/*# sourceMappingURL=ControlBar.css.map */

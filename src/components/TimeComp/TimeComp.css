@@ -10,6 +10,7 @@
   background-color: rgb(57, 57, 57);
   border-radius: 3px;
   box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+  margin-right: 2rem;
 }
 
 .timeCompContainer input {
@@ -48,6 +49,7 @@
   text-align: center;
   width: 20px;
   padding: 0;
+  cursor: pointer;
 }
 
 .bpmTopBtn {
