@@ -10,6 +10,8 @@ The Modular Monosynth web app is a project that is inspired by my passion for mo
 
 The main goal of the synth is to create a monosynth with the flexibility of a modular synth system.
 
+### Technical details
+The web app is being built with ReactJS and Sass. For sound the main library used in Tone.js, which uses the Web Audio API. 
 
 ### Next steps
 
