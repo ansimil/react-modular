@@ -68,11 +68,9 @@ const Sequencer = () => {
     
     Tone.Transport.scheduleRepeat(()=>{
       if (bpm.classList.length > 1) {
-        console.log('remove')
         bpm.classList.remove('activeBpmIndicator')
       }
       else {
-        console.log('add')
         bpm.classList.add('activeBpmIndicator')
       }
     }, "32n")

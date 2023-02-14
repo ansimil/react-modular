@@ -69,6 +69,10 @@ export const ACTIONS = {
         step: "trigger_step",
         player: "change_sequencer_player",
         direction: "change_sequencer_direction"
+    },
+    MATRIX: {
+        connections: "change_connections",
+        setConnections: "set_connections"
     }
 }
 
@@ -119,12 +123,6 @@ let adsr = new Tone.Envelope({
     releaseCurve: "exponential"
 })
 let meter = new Tone.DCMeter();
-Tone.Transport.scheduleRepeat(clock, "8n")
-let count = 0
-function clock(){
-  count++
-  return count
-} 
 osc1ADSRGain.gain.setValueAtTime(0.00001, actx.currentTime)
 output.gain.setValueAtTime(0.00001, actx.currentTime)
 outputGain.gain.setValueAtTime(1.0, actx.currentTime)
@@ -138,6 +136,16 @@ lfo1FMDepth.gain.value = 0.0001
 lfo2FMDepth.gain.value = 0.0001
 
 // Connection chain //
+const initialConnection = [
+    [4,0],
+    [5,4],
+    [6,6]
+]
+
+let connectionChain = []
+
+
+
 osc1.start()
 osc2.start()
 lfo1.start()
@@ -147,12 +155,8 @@ lfo1.connect(osc1FMDepth)
 lfo2.connect(lfo1FMDepth)
 lfo1FMDepth.connect(lfo1.detune)
 osc1FMDepth.connect(osc1.detune)
-osc1.connect(osc1ADSRGain)
+// osc1.chain(filter,osc1ADSRGain, outputGain, output, out)
 adsr.connect(osc1ADSRGain.gain)
-osc1ADSRGain.connect(filter)    
-filter.connect(outputGain)
-outputGain.connect(output)
-output.connect(out)
 lfo1.connect(meter)
 updateMatrix()
 
@@ -282,7 +286,6 @@ export function reducer(state, action){
             adsr[id] = value
             return {...state, adsrSettings: {...state.adsrSettings, [id]: Number(value)}};
 
-
         // SEQUENCER SETTINGS //
         case ACTIONS.SEQUENCER.player:
             return {...state, sequencerSettings: {...state.sequencerSettings, player: value}}
@@ -300,7 +303,23 @@ export function reducer(state, action){
             const stepNote = state.sequencerSettings.sliders[value].note + 24 + (12 * state.sequencerSettings.sliders[value].octave)
             step(osc1, adsr, time, state, midiToFreqArr, stepNote)
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note], oscADSRGain: osc1ADSRGain.gain.value}}};
+        
+        case ACTIONS.MATRIX.connections:
+            const {row:outputs, column:inputs} = value
+            connectionChain.push([inputs,outputs])
+            return {...state, matrixSettings: {...state.matrixSettings, currentConnections: [connectionChain]}}
 
+        case ACTIONS.MATRIX.setConnections:
+            connectionChain.forEach(connection => {
+                if (connection.indexOf(6) === 0){
+                    (state.matrixSettings.inputs[connection[0]].node).connect(output)
+                    output.connect(out)
+                }
+                state.matrixSettings.outputs[connection[1]].node.connect(state.matrixSettings.inputs[connection[0]].node)
+            })
+            connectionChain = []
+            return {...state}
+            
         default:
             console.log('error', action)
             return {...state};
@@ -323,7 +342,6 @@ function ModularBus (props) {
     const oscRef = useRef([])
     const lfoRef = useRef([])
     const filterRef = useRef([])
-
 
     const connectToOscilloscope = () => {
         oscilloscopeRef.current.connect(outputGain)
@@ -403,11 +421,77 @@ function ModularBus (props) {
             },
             player: "stopped",
             direction: "up"
+        },
+        matrixSettings: {
+            outputs: {
+                0: {
+                    name: "osc1",
+                    node: osc1,
+                },
+                1: {
+                    name: "osc2",
+                    node: osc2
+                },
+                2: {
+                    name: "lfo1",
+                    node:lfo1
+                },
+                3: {
+                    name: "lfo2",
+                    node: lfo2
+                },
+                4: {
+                    name: "filter",
+                    node: filter
+                },
+                5: {
+                    name: "adsr",
+                    node: adsr
+                },
+                6: {
+                    name: "vca",
+                    node: osc1ADSRGain
+                }
+            },
+            inputs: {
+                0: {
+                    name: "osc1",
+                    node: osc1FMDepth,
+                },
+                1: {
+                    name: "osc2",
+                    node: osc2FMDepth,
+                },
+                2: {
+                    name: "lfo1",
+                    node: lfo1FMDepth,
+                },
+                3: {
+                    name: "lfo2",
+                    node: lfo2FMDepth,
+                },
+                4: {
+                    name: "filter",
+                    node: filter,
+                },
+                5: {
+                    name: "vca",
+                    node: osc1ADSRGain,
+                },
+                6: {
+                    name: "output",
+                    node: outputGain,
+                }
+            },
+            initialConnections: [
+                ...initialConnection
+            ],
+            currentConnections: []
         }
     })
 
     return (
-        <ModularBusContext.Provider value={{stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr, osc1, oscRef, lfoRef, filterRef}}>
+        <ModularBusContext.Provider value={{stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr, osc1, oscRef, lfoRef, filterRef, initialConnection}}>
         {props.children}
         </ModularBusContext.Provider>
     )

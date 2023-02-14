@@ -12,12 +12,17 @@
 
 details[open].detailsContainer {
   max-height: 500px;
+  transition: all 1s ease-in-out;
 }
 
 .detailsInner {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  width: 98%;
+  margin-bottom: 2rem;
+  margin-left: 1%;
+  padding-top: 1rem;
 }
 
 .summaryContainer {
@@ -51,11 +56,9 @@ details[open].summaryContainer {
   border-top-left-radius: 3px;
 }
 
-.detailsInner {
-  width: 98%;
-  margin-bottom: 2rem;
-  margin-left: 1%;
-  padding-top: 1rem;
+.oscilloscope.detailsInner, details.cxnmatrix.detailsContainer div.detailsInner {
+  display: flex;
+  justify-content: center;
 }
 
 details[open] .containerName {
