@@ -16,11 +16,8 @@ function App() {
   return (
     <div className="App">
       <ControlBar />
+      <Matrix/>   
       
-      <ModuleContainer name={'_cxn-matrix'} moduleClass={'cxnmatrix'}>
-         <Matrix/>   
-      </ModuleContainer>
-
       <ModuleContainer name={'_keys + _seq'} moduleClass={'keysAndSeq'}>
         <Keyboard />
         <Sequencer />

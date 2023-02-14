@@ -6,14 +6,11 @@ import './Matrix.css'
 
 const Matrix = () => {
     const { matrixRef, initialConnection, stateHook } = useContext(ModularBusContext)
+    // eslint-disable-next-line
     const [appState, updateState] = stateHook
 
     const changeConnections = e => {
         updateState({type: ACTIONS.MATRIX.connections, payload: {value: e} })
-    }
-
-    const setConnections = () => {
-        updateState({type: ACTIONS.MATRIX.setConnections, payload: "setConnections" })
     }
 
     useEffect(()=>{
@@ -33,7 +30,8 @@ const Matrix = () => {
             matrix.matrix.toggle.cell(...connection)
         })
         matrixRef.current = matrix
-        updateState({type: ACTIONS.MATRIX.setConnections, payload: "setConnections" })
+        // updateState({type: ACTIONS.MATRIX.setConnections, payload: "setConnections" })
+        // eslint-disable-next-line
     },[])
 
    
@@ -42,13 +40,13 @@ const Matrix = () => {
     <div className='matrixContainer'>
         <div className='matrixContainerInner'>
             <div className="horizontalLabels">
-                <div className="horizontalLabel">osc1FM</div>
-                <div className="horizontalLabel">osc2FM</div>
-                <div className="horizontalLabel">lfo1FM</div>
-                <div className="horizontalLabel">lfo2FM</div>
-                <div className="horizontalLabel">filter</div>
-                <div className="horizontalLabel">vca</div> 
-                <div className="horizontalLabel">output</div>
+                <div className="horizontalLabel"><p>osc1FM</p></div>
+                <div className="horizontalLabel"><p>osc2FM</p></div>
+                <div className="horizontalLabel"><p>lfo1FM</p></div>
+                <div className="horizontalLabel"><p>lfo2FM</p></div>
+                <div className="horizontalLabel"><p>filter</p></div>
+                <div className="horizontalLabel"><p>vca</p></div> 
+                <div className="horizontalLabel"><p>output</p></div>
             </div>
             <div className="matrixInner">
             <div className='verticalLabels'>
@@ -61,15 +59,7 @@ const Matrix = () => {
                 <div className="verticalLabel">vca</div> 
             </div>
             <div id="matrix"></div>
-            <div>
-                <button
-                onClick={()=>{
-                    setConnections()
-                }}
-                >
-                Set Connections
-                </button>
-            </div>
+    
             </div>
         </div>
     </div>

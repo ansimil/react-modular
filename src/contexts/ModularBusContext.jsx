@@ -139,7 +139,9 @@ lfo2FMDepth.gain.value = 0.0001
 const initialConnection = [
     [4,0],
     [5,4],
-    [6,6]
+    [6,6],
+    [0,2],
+    [2,3]
 ]
 
 let connectionChain = []
@@ -307,9 +309,6 @@ export function reducer(state, action){
         case ACTIONS.MATRIX.connections:
             const {row:outputs, column:inputs} = value
             connectionChain.push([inputs,outputs])
-            return {...state, matrixSettings: {...state.matrixSettings, currentConnections: [connectionChain]}}
-
-        case ACTIONS.MATRIX.setConnections:
             connectionChain.forEach(connection => {
                 if (connection.indexOf(6) === 0){
                     (state.matrixSettings.inputs[connection[0]].node).connect(output)
@@ -317,8 +316,17 @@ export function reducer(state, action){
                 }
                 state.matrixSettings.outputs[connection[1]].node.connect(state.matrixSettings.inputs[connection[0]].node)
             })
-            connectionChain = []
-            return {...state}
+            return {...state, matrixSettings: {...state.matrixSettings, currentConnections: [connectionChain]}}
+
+        // case ACTIONS.MATRIX.setConnections:
+        //     connectionChain.forEach(connection => {
+        //         if (connection.indexOf(6) === 0){
+        //             (state.matrixSettings.inputs[connection[0]].node).connect(output)
+        //             output.connect(out)
+        //         }
+        //         state.matrixSettings.outputs[connection[1]].node.connect(state.matrixSettings.inputs[connection[0]].node)
+        //     })
+        //     return {...state}
             
         default:
             console.log('error', action)
