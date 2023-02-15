@@ -173,7 +173,7 @@
   border-radius: 2px;
 }
 
-.matrixContainer, .keyboardContainer {
+.keyboardContainer {
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -191,69 +191,12 @@
   width: 35vw;
 }
 
-.matrixContainer {
-  align-items: stretch;
-}
-
-.matrixContainer .moduleInfo {
+.moduleInfo {
   border-bottom: none;
   background-color: rgb(250, 253, 209);
-}
-
-.matrixContainer h2 {
-  text-align: center;
-  padding: 1.1rem 0.7rem;
-}
-
-.matrixContainerInner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  border: solid black 1px;
-  padding: 1rem;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
 }
 
 #nexus-ui-sequencer-1 {
   border: black solid 1px;
   padding: 0.5rem;
-}
-
-.verticalLabels {
-  height: 150px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  margin-top: 1.5%;
-}
-
-.horizontalLabels {
-  width: 200px;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  margin-left: 4%;
-}
-
-.matrixInner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  -moz-column-gap: 10px;
-       column-gap: 10px;
-}
-
-.horizontalLabel, .verticalLabel {
-  flex: 1;
-  text-align: center;
-  margin: 0;
-  font-family: mainFont;
-}
-
-.oscilloscope .detailsInner {
-  display: flex;
-  justify-content: center;
 }/*# sourceMappingURL=App.css.map */
