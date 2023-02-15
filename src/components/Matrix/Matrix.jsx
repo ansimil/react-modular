@@ -30,7 +30,6 @@ const Matrix = () => {
             matrix.matrix.toggle.cell(...connection)
         })
         matrixRef.current = matrix
-        // updateState({type: ACTIONS.MATRIX.setConnections, payload: "setConnections" })
         // eslint-disable-next-line
     },[])
 
@@ -39,6 +38,7 @@ const Matrix = () => {
   return (
     <div className='matrixContainer'>
         <div className='matrixContainerInner'>
+        <div className="inputsLabel"><p>inputs</p></div>
             <div className="horizontalLabels">
                 <div className="horizontalLabel"><p>osc1FM</p></div>
                 <div className="horizontalLabel"><p>osc2FM</p></div>
@@ -49,6 +49,7 @@ const Matrix = () => {
                 <div className="horizontalLabel"><p>output</p></div>
             </div>
             <div className="matrixInner">
+            <div className="outputsLabel"><p>outputs</p></div>
             <div className='verticalLabels'>
                 <div className="verticalLabel">osc1</div>
                 <div className="verticalLabel">osc2</div>

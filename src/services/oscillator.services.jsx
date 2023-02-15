@@ -33,6 +33,7 @@ const updateOscADSR = (osc, adsr, stateKey, timeNow, state, midiToFreqArr, note,
         osc.frequency.cancelScheduledValues(timeNow)
         osc.frequency.setValueAtTime(osc.frequency.value, timeNow)
         osc.frequency.linearRampToValueAtTime(midiToFreqArr[note], glide)
+        console.log(adsr)
         adsr.triggerAttack(timeNow, 1)
     }
     if (!stateKey) {

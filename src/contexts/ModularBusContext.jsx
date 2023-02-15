@@ -1,5 +1,8 @@
 import { createContext, useReducer, useRef } from "react";
-import { updateMatrix } from "../services/matrix.services";
+import { 
+    setConnections,
+    setDisconnections 
+} from "../services/matrix.services";
 import { 
     updateOscType, 
     updateOscDetune, 
@@ -147,20 +150,19 @@ const initialConnection = [
 let connectionChain = []
 
 
-
 osc1.start()
 osc2.start()
 lfo1.start()
 lfo2.start()
 osc1ADSRGain.gain.setValueAtTime(0.0001, actx.currentTime)
-lfo1.connect(osc1FMDepth)
-lfo2.connect(lfo1FMDepth)
+// lfo1.connect(osc1FMDepth)
+// lfo2.connect(lfo1FMDepth)
 lfo1FMDepth.connect(lfo1.detune)
 osc1FMDepth.connect(osc1.detune)
 // osc1.chain(filter,osc1ADSRGain, outputGain, output, out)
 adsr.connect(osc1ADSRGain.gain)
 lfo1.connect(meter)
-updateMatrix()
+
 
 
 export function reducer(state, action){
@@ -307,26 +309,20 @@ export function reducer(state, action){
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note], oscADSRGain: osc1ADSRGain.gain.value}}};
         
         case ACTIONS.MATRIX.connections:
-            const {row:outputs, column:inputs} = value
-            connectionChain.push([inputs,outputs])
-            connectionChain.forEach(connection => {
-                if (connection.indexOf(6) === 0){
-                    (state.matrixSettings.inputs[connection[0]].node).connect(output)
-                    output.connect(out)
-                }
-                state.matrixSettings.outputs[connection[1]].node.connect(state.matrixSettings.inputs[connection[0]].node)
-            })
+            const {row:outputs, column:inputs, state:cellState} = value
+            const tuple = [inputs,outputs]
+            if (cellState) {
+                connectionChain.push(tuple)
+                setConnections(tuple, state, output, out)
+            }
+            else {
+                setDisconnections(tuple, state)
+                let leftoverConnections = connectionChain.filter(connection => {
+                        return (connection[0] !== tuple[0] && connection[1] !== tuple[1])
+                })
+                connectionChain = leftoverConnections
+            }
             return {...state, matrixSettings: {...state.matrixSettings, currentConnections: [connectionChain]}}
-
-        // case ACTIONS.MATRIX.setConnections:
-        //     connectionChain.forEach(connection => {
-        //         if (connection.indexOf(6) === 0){
-        //             (state.matrixSettings.inputs[connection[0]].node).connect(output)
-        //             output.connect(out)
-        //         }
-        //         state.matrixSettings.outputs[connection[1]].node.connect(state.matrixSettings.inputs[connection[0]].node)
-        //     })
-        //     return {...state}
             
         default:
             console.log('error', action)
