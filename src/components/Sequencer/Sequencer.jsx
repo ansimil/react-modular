@@ -46,6 +46,7 @@ const Sequencer = () => {
   }
 
   const handleStep = (time) => {
+    
     sequencerRef.current.next()
     const { value } = sequencerRef.current.stepper
     if (sequencerRef.current.cells[value]._state.state) {
@@ -55,6 +56,7 @@ const Sequencer = () => {
 
   useEffect(()=>{
     const sequencerWidth = 600
+    const [bpm] = document.getElementsByClassName('bpmIndicator')
     if (sequencerRef.current){
       sequencerRef.current.destroy()
     }
@@ -63,7 +65,15 @@ const Sequencer = () => {
         slider.destroy()
       })
     }
-
+    
+    Tone.Transport.scheduleRepeat(()=>{
+      if (bpm.classList.length > 1) {
+        bpm.classList.remove('activeBpmIndicator')
+      }
+      else {
+        bpm.classList.add('activeBpmIndicator')
+      }
+    }, "32n")
 
     Tone.Transport.scheduleRepeat(function(time){
       handleStep(time)
