@@ -1,6 +1,7 @@
 import { useContext, useEffect } from 'react'
 import { ACTIONS } from '../../contexts/ModularBusContext'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
+import SeqLength from '../SeqLength/SeqLength'
 import * as Tone from 'tone'
 import Nexus from 'nexusui'
 import './Sequencer.css'
@@ -174,7 +175,11 @@ const Sequencer = () => {
           </div>
         
       </div>
-      
+      <div className="sequencerSettingsContainer">
+        <div className="sequencerSettingsInner">
+          <SeqLength/>
+        </div>
+      </div>
     </div>
   )
 }

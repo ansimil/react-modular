@@ -1,0 +1,34 @@
+.sequencerLengthContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: black solid 0.5px;
+  background-color: rgb(57, 57, 57);
+  border-radius: 3px;
+  box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.lengthBtnsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 0.5rem;
+}
+
+.lengthBtn {
+  min-width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lengthLabel {
+  color: white;
+}
+
+.lengthLabel p {
+  margin: 0;
+  padding-top: 0.5rem;
+}/*# sourceMappingURL=SeqLength.css.map */

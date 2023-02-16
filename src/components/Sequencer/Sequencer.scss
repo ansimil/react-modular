@@ -7,16 +7,30 @@ $borderThickness: 1px;
     min-height: 225px;
     border-radius: 3px;
     overflow: hidden;
+    background-color: rgb(239, 239, 239);
+
 }
 
+.sequencerSettingsContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
+.sequencerSettingsInner {
+    min-height: 97%;
+    width: 97%;
+    border: solid black 1px;
+    border-radius: 3px;
+    background-color: rgb(44, 44, 44);
+}
 
 .sequencerNotesGates {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-end;
-    width: 700px;
+    width: 600px;
     background-color: rgb(239, 239, 239);
 }
 
@@ -103,4 +117,8 @@ $borderThickness: 1px;
 
 #sequencer {
     margin-bottom: 10px;
+}
+
+.sequencerSettingsContainer {
+    width: 200px;
 }

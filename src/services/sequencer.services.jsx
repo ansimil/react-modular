@@ -7,5 +7,5 @@ const step = (osc, adsr, timeNow, state, midiToFreqArr, note) => {
 }
 
 export {
-    step
+    step,
 }
