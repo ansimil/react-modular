@@ -95,14 +95,6 @@ const actx = new Tone.Context()
 const out = actx.destination
 Tone.setContext(actx)
 
-
-// document.getElementsByClassName('startBtn')[0].addEventListener('click', async () => {
-//     // check if context is in suspended state (autoplay policy)
-//     if (Tone.context.state === 'suspended') {
-//       await Tone.start().then(res => console.log(res));
-//     }
-//   }, false);
-
 let osc1 = new Tone.OmniOscillator({
     type:"sine",
 })
@@ -166,10 +158,7 @@ const initialConnection = [
 let connectionChain = []
 
 
-osc1.start()
-osc2.start()
-lfo1.start()
-lfo2.start()
+
 osc1ADSRGain.gain.setValueAtTime(0.0001, actx.currentTime)
 lfo1FMDepth.connect(lfo1.detune)
 osc1FMDepth.connect(osc1.detune)
@@ -177,7 +166,15 @@ adsr.connect(osc1ADSRGain.gain)
 lfo1.connect(meter)
 // osc1.chain(filter,osc1ADSRGain, outputGain, output, out)
 
-
+const startContext = async () => {
+    if (Tone.context.state === "suspended"){
+        await Tone.context.resume()
+        osc1.start()
+        osc2.start()
+        lfo1.start()
+        lfo2.start()
+    }
+}
 
 export function reducer(state, action){
     let { id, value, note, stateKey, i, time } = action.payload
@@ -185,9 +182,7 @@ export function reducer(state, action){
     switch (action.type) {
         // SYNTH SETTINGS //
         case ACTIONS.SYNTH.start:
-            if (Tone.context.state === "suspended"){
-                Tone.context.resume()
-            }
+            startContext()
             output.gain.setValueAtTime(output.gain.value, actx.currentTime)
             output.gain.linearRampToValueAtTime(0.2, actx.currentTime + smoothing)
             return {...state, synthSettings: {...state.synthSettings, start: true, startCount: 1}}
@@ -326,9 +321,9 @@ export function reducer(state, action){
             return {...state, sequencerSettings: {...state.sequencerSettings, random: value}}
             
         case ACTIONS.SEQUENCER.step:
+            console.log(osc1.state)
             const stepNote = state.sequencerSettings.sliders[value].note + 24 + (12 * state.sequencerSettings.sliders[value].octave)
             step(osc1, adsr, time, state, midiToFreqArr, stepNote)
-            console.log(value)
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note], oscADSRGain: osc1ADSRGain.gain.value}}};
         
         case ACTIONS.SEQUENCER.length:

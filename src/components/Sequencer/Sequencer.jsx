@@ -70,7 +70,6 @@ const Sequencer = () => {
     }
     
     Tone.Transport.scheduleRepeat(()=>{
-      console.log('step')
       if (bpm.classList.length > 1) {
         bpm.classList.remove('activeBpmIndicator')
       }
