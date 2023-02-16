@@ -28,12 +28,12 @@ const updateFMDepth = (FMDepth, value) => {
 }
 
 const updateOscADSR = (osc, adsr, stateKey, timeNow, state, midiToFreqArr, note, meter,) => {
+    console.log('fire')
     if (stateKey) {
         let glide = timeNow + state.oscSettings.osc1.glide
         osc.frequency.cancelScheduledValues(timeNow)
         osc.frequency.setValueAtTime(osc.frequency.value, timeNow)
-        osc.frequency.linearRampToValueAtTime(midiToFreqArr[note], glide)
-        console.log(adsr)
+        osc.frequency.linearRampToValueAtTime(midiToFreqArr[note], glide)   
         adsr.triggerAttack(timeNow, 1)
     }
     if (!stateKey) {
