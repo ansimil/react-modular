@@ -24,6 +24,7 @@ const PlayerControls = () => {
           className={appState.sequencerSettings.player === 'started' ? "playerBtn endBtnLeft activeBtn" : "playerBtn endBtnLeft"} 
           onClick={
             ()=>{
+              console.log(Tone.context.state)
               Tone.Transport.start()
               updateState({type: ACTIONS.SEQUENCER.player, payload: {value: 'started'}})
               }

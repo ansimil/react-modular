@@ -91,9 +91,17 @@ let midiToFreqArr = {}
 let smoothing = 1.0
 
 
-const actx = new AudioContext() 
+const actx = new Tone.Context() 
 const out = actx.destination
 Tone.setContext(actx)
+
+
+// document.getElementsByClassName('startBtn')[0].addEventListener('click', async () => {
+//     // check if context is in suspended state (autoplay policy)
+//     if (Tone.context.state === 'suspended') {
+//       await Tone.start().then(res => console.log(res));
+//     }
+//   }, false);
 
 let osc1 = new Tone.OmniOscillator({
     type:"sine",
@@ -177,7 +185,10 @@ export function reducer(state, action){
     switch (action.type) {
         // SYNTH SETTINGS //
         case ACTIONS.SYNTH.start:
-            Tone.start()
+            console.log(actx.state)
+            if (actx.state === "suspended"){
+                Tone.start()
+            }
             output.gain.setValueAtTime(output.gain.value, actx.currentTime)
             output.gain.linearRampToValueAtTime(0.2, actx.currentTime + smoothing)
             return {...state, synthSettings: {...state.synthSettings, start: true, startCount: 1}}
