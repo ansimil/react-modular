@@ -3,6 +3,7 @@ import {
     setConnections,
     setDisconnections 
 } from "../services/matrix.services";
+
 import { 
     updateOscType, 
     updateOscDetune, 
@@ -11,7 +12,11 @@ import {
     updateOscADSR, 
     updateOscFrequency 
 } from "../services/oscillator.services";
-import { step } from "../services/sequencer.services";
+
+import { 
+    step,
+} from "../services/sequencer.services";
+
 import * as Tone from 'tone'
 
 const ModularBusContext = createContext()
@@ -71,7 +76,10 @@ export const ACTIONS = {
         octave: "change_step_octave",
         step: "trigger_step",
         player: "change_sequencer_player",
-        direction: "change_sequencer_direction"
+        direction: "change_sequencer_direction",
+        length: "change_sequencer_length",
+        updateStepValue: "update_sequencer_step_value",
+        random: "change_sequencer_random"
     },
     MATRIX: {
         connections: "change_connections",
@@ -155,13 +163,11 @@ osc2.start()
 lfo1.start()
 lfo2.start()
 osc1ADSRGain.gain.setValueAtTime(0.0001, actx.currentTime)
-// lfo1.connect(osc1FMDepth)
-// lfo2.connect(lfo1FMDepth)
 lfo1FMDepth.connect(lfo1.detune)
 osc1FMDepth.connect(osc1.detune)
-// osc1.chain(filter,osc1ADSRGain, outputGain, output, out)
 adsr.connect(osc1ADSRGain.gain)
 lfo1.connect(meter)
+// osc1.chain(filter,osc1ADSRGain, outputGain, output, out)
 
 
 
@@ -303,11 +309,22 @@ export function reducer(state, action){
         case ACTIONS.SEQUENCER.note:
             return {...state, sequencerSettings: {...state.sequencerSettings, sliders: {...state.sequencerSettings.sliders, [i]: {...state.sequencerSettings.sliders[i], note: value}}}}
         
+        case ACTIONS.SEQUENCER.updateStepValue:
+            return {...state, sequencerSettings: {...state.sequencerSettings, step: value}}
+
+        case ACTIONS.SEQUENCER.random:
+            return {...state, sequencerSettings: {...state.sequencerSettings, random: value}}
+            
         case ACTIONS.SEQUENCER.step:
             const stepNote = state.sequencerSettings.sliders[value].note + 24 + (12 * state.sequencerSettings.sliders[value].octave)
             step(osc1, adsr, time, state, midiToFreqArr, stepNote)
+            console.log(value)
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note], oscADSRGain: osc1ADSRGain.gain.value}}};
         
+        case ACTIONS.SEQUENCER.length:
+            return {...state, sequencerSettings: {...state.sequencerSettings, length: value}}
+
+        // MATRIX SETTINGS //    
         case ACTIONS.MATRIX.connections:
             const {row:outputs, column:inputs, state:cellState} = value
             const tuple = [inputs,outputs]
@@ -423,8 +440,11 @@ function ModularBus (props) {
                 14:{note:0,octave:4},
                 15:{note:0,octave:4},
             },
+            step: -1,
             player: "stopped",
-            direction: "up"
+            direction: "up",
+            length: 16,
+            random: false
         },
         matrixSettings: {
             outputs: {

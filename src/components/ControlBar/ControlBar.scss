@@ -1,5 +1,5 @@
 .controlBarContainer {
-    position: relative;
+    position: fixed;
     top: 0;
     width: 100%;
     height: 50px;
@@ -7,6 +7,8 @@
     justify-content: flex-start;
     align-items: center;
     background-color: rgb(44, 44, 44);
+    z-index: 1;
+    box-shadow: 0 0 10px 5px black;
 }
 
 .helpIconContainer {
