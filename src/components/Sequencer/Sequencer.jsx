@@ -49,7 +49,6 @@ const Sequencer = () => {
   }
 
   const handleStep = (time) => {
-    
     sequencerRef.current.next()
     const { value } = sequencerRef.current.stepper
     updateState({type: ACTIONS.SEQUENCER.updateStepValue, payload: {value}})
@@ -71,6 +70,7 @@ const Sequencer = () => {
     }
     
     Tone.Transport.scheduleRepeat(()=>{
+      console.log('step')
       if (bpm.classList.length > 1) {
         bpm.classList.remove('activeBpmIndicator')
       }
@@ -120,7 +120,6 @@ const Sequencer = () => {
     sequencer.colors.accent = "#000"
     sequencer.colors.mediumLight = "#fafdd1"
     sequencerRef.current = sequencer
-    console.log(sequencer)
   // eslint-disable-next-line
   },[])
 
