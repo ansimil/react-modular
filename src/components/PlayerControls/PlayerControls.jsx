@@ -1,6 +1,7 @@
 import {useContext} from 'react'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
 import { ACTIONS } from '../../contexts/ModularBusContext'
+import { lengthMap } from '../SeqLength/SeqLength'
 import * as Tone from 'tone'
 import PlayBlackIcon from '../../assets/icons/play-black-icon.png'
 import PlayWhiteIcon from '../../assets/icons/play-white-icon.png'
@@ -52,11 +53,12 @@ const PlayerControls = () => {
           className={appState.sequencerSettings.player === 'stopped' ? "playerBtn endBtnRight activeBtn" : "playerBtn endBtnRight" }
           onClick={
             ()=>{
-              sequencerRef.current.stepper.value = 15
+              sequencerRef.current.stepper.value = lengthMap[appState.sequencerSettings.length].up.max
               sequencerRef.current.next()
-              sequencerRef.current.stepper.value = 15
+              sequencerRef.current.stepper.value = lengthMap[appState.sequencerSettings.length].up.max
               Tone.Transport.stop()
               updateState({type: ACTIONS.SEQUENCER.player, payload: {value: 'stopped'}})
+              updateState({type: ACTIONS.SEQUENCER.updateStepValue, payload: {value: 0}})
               }
           }
           >
@@ -74,6 +76,7 @@ const PlayerControls = () => {
             ()=>{
                 sequencerRef.current.stepper.max = 16; sequencerRef.current.stepper.mode = 'up'
                 updateState({type: ACTIONS.SEQUENCER.direction, payload: {value: "up"}})
+                updateState({type: ACTIONS.SEQUENCER.random, payload: {value: false}})
                 }
             }
             >
@@ -89,6 +92,7 @@ const PlayerControls = () => {
             ()=>{
                 sequencerRef.current.stepper.max = 15; sequencerRef.current.stepper.mode = 'down'
                 updateState({type: ACTIONS.SEQUENCER.direction, payload: {value: "down"}})
+                updateState({type: ACTIONS.SEQUENCER.random, payload: {value: false}})
                 }
             }>
             <img

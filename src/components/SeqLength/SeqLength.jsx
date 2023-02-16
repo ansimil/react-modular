@@ -3,52 +3,52 @@ import { ModularBusContext } from '../../contexts/ModularBusContext'
 import { ACTIONS } from '../../contexts/ModularBusContext'
 import './SeqLength.css'
 
+export const lengthMap = {
+    2: {
+        up: {
+            min: 0,
+            max: 2
+        },
+        down: {
+            min: 0,
+            max: 1
+        }
+    },
+    4: {
+        up: {
+            min: 0,
+            max: 4
+        },
+        down: {
+            min: 0,
+            max: 3
+        }
+    },
+    8: {
+        up: {
+            min: 0,
+            max: 8
+        },
+        down: {
+            min: 0,
+            max: 7
+        }
+    },
+    16: {
+        up: {
+            min: 0,
+            max: 16
+        },
+        down: {
+            min: 0,
+            max: 15
+        }
+    }
+}
+
 const SeqLength = () => {
     const { stateHook, sequencerRef } = useContext(ModularBusContext)
     const [appState, updateState] = stateHook
-
-    const lengthMap = {
-        2: {
-            up: {
-                min: 0,
-                max: 2
-            },
-            down: {
-                min: 0,
-                max: 1
-            }
-        },
-        4: {
-            up: {
-                min: 0,
-                max: 4
-            },
-            down: {
-                min: 0,
-                max: 3
-            }
-        },
-        8: {
-            up: {
-                min: 0,
-                max: 8
-            },
-            down: {
-                min: 0,
-                max: 7
-            }
-        },
-        16: {
-            up: {
-                min: 0,
-                max: 16
-            },
-            down: {
-                min: 0,
-                max: 15
-            }
-        }
-    }
 
     const changeSeqLength = (length) => {
         if (sequencerRef.current.stepper.mode === "up"){
@@ -67,7 +67,7 @@ const SeqLength = () => {
   return (
     <div className="sequencerLengthContainer">
         <div className="lengthLabel">
-            <p>length</p>
+            <p>LENGTH</p>
         </div>
         <div className="lengthBtnsContainer">
             <button

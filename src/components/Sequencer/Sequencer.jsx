@@ -2,6 +2,8 @@ import { useContext, useEffect } from 'react'
 import { ACTIONS } from '../../contexts/ModularBusContext'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
 import SeqLength from '../SeqLength/SeqLength'
+import SevenSegDisplay from '../SevenSegDisplay/SevenSegDisplay'
+import RandomSequenceBtn from '../RandomSequenceBtn/RandomSequenceBtn'
 import * as Tone from 'tone'
 import Nexus from 'nexusui'
 import './Sequencer.css'
@@ -50,6 +52,7 @@ const Sequencer = () => {
     
     sequencerRef.current.next()
     const { value } = sequencerRef.current.stepper
+    updateState({type: ACTIONS.SEQUENCER.updateStepValue, payload: {value}})
     if (sequencerRef.current.cells[value]._state.state) {
       updateState({type: ACTIONS.SEQUENCER.step, payload: {value, time}})
     }
@@ -81,7 +84,7 @@ const Sequencer = () => {
     }, "16n")
 
     let sequencer = new Nexus.Sequencer("#sequencer", {
-      "size": [sequencerWidth,30],
+      "size": [sequencerWidth,37.5],
       "mode": "toggle",
       "rows": 1,
       "columns": 16,
@@ -91,7 +94,7 @@ const Sequencer = () => {
     let sliders = []
     arr.forEach(i => {
       let slider = new Nexus.Multislider(`#slider${i}`, {
-        'size': [(sequencerWidth/16)-2,100],
+        'size': [(sequencerWidth/16)-1,120],
         'numberOfSliders': 1,
         'min': 0,
         'max': 11,
@@ -105,7 +108,7 @@ const Sequencer = () => {
       })
       slider.bars[0].attributes[5].value = "#fafdd1"
       slider.caps[0].attributes[4].value = "#000"
-      slider.element.attributes[2].value = "background-color: rgb(255, 255, 255); cursor: pointer;"
+      slider.element.attributes[2].value = "background-color: rgb(57, 57, 57); cursor: pointer;"
       sliders.push(slider)
     })
     seqSlidersRef.current = sliders
@@ -115,8 +118,9 @@ const Sequencer = () => {
     })
     sequencer.interval.rate = 60 / appState.synthSettings.bpm * 1000
     sequencer.colors.accent = "#000"
-    sequencer.colors.mediumLight = "#fff"
+    sequencer.colors.mediumLight = "#fafdd1"
     sequencerRef.current = sequencer
+    console.log(sequencer)
   // eslint-disable-next-line
   },[])
 
@@ -177,7 +181,9 @@ const Sequencer = () => {
       </div>
       <div className="sequencerSettingsContainer">
         <div className="sequencerSettingsInner">
+          <SevenSegDisplay />
           <SeqLength/>
+          <RandomSequenceBtn/>
         </div>
       </div>
     </div>

@@ -77,7 +77,9 @@ export const ACTIONS = {
         step: "trigger_step",
         player: "change_sequencer_player",
         direction: "change_sequencer_direction",
-        length: "change_sequencer_length"
+        length: "change_sequencer_length",
+        updateStepValue: "update_sequencer_step_value",
+        random: "change_sequencer_random"
     },
     MATRIX: {
         connections: "change_connections",
@@ -307,9 +309,16 @@ export function reducer(state, action){
         case ACTIONS.SEQUENCER.note:
             return {...state, sequencerSettings: {...state.sequencerSettings, sliders: {...state.sequencerSettings.sliders, [i]: {...state.sequencerSettings.sliders[i], note: value}}}}
         
+        case ACTIONS.SEQUENCER.updateStepValue:
+            return {...state, sequencerSettings: {...state.sequencerSettings, step: value}}
+
+        case ACTIONS.SEQUENCER.random:
+            return {...state, sequencerSettings: {...state.sequencerSettings, random: value}}
+            
         case ACTIONS.SEQUENCER.step:
             const stepNote = state.sequencerSettings.sliders[value].note + 24 + (12 * state.sequencerSettings.sliders[value].octave)
             step(osc1, adsr, time, state, midiToFreqArr, stepNote)
+            console.log(value)
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note], oscADSRGain: osc1ADSRGain.gain.value}}};
         
         case ACTIONS.SEQUENCER.length:
@@ -431,9 +440,11 @@ function ModularBus (props) {
                 14:{note:0,octave:4},
                 15:{note:0,octave:4},
             },
+            step: -1,
             player: "stopped",
             direction: "up",
-            length: 16
+            length: 16,
+            random: false
         },
         matrixSettings: {
             outputs: {
