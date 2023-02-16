@@ -185,9 +185,8 @@ export function reducer(state, action){
     switch (action.type) {
         // SYNTH SETTINGS //
         case ACTIONS.SYNTH.start:
-            console.log(actx.state)
-            if (actx.state === "suspended"){
-                Tone.start()
+            if (Tone.context.state === "suspended"){
+                Tone.context.resume()
             }
             output.gain.setValueAtTime(output.gain.value, actx.currentTime)
             output.gain.linearRampToValueAtTime(0.2, actx.currentTime + smoothing)
