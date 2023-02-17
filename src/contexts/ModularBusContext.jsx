@@ -150,10 +150,10 @@ lfo2FMDepth.gain.value = 0.0001
 const initialConnection = [
     [4,0],
     [5,4],
-    [6,6],
+    [7,6],
     [0,2],
     [2,3],
-    [5,5]
+    [6,5]
 ]
 
 let connectionChain = []
@@ -517,6 +517,10 @@ function ModularBus (props) {
                     node: osc1ADSRGain,
                 },
                 6: {
+                    name: "vca",
+                    node: osc1ADSRGain.gain, 
+                },
+                7: {
                     name: "output",
                     node: outputGain,
                 }
