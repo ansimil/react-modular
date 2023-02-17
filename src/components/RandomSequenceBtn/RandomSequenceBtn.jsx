@@ -11,7 +11,7 @@ const RandomSequenceBtn = () => {
   return (
     <div className="randomSequenceContainer">
         <div className="lengthLabel">
-            <p>RANDOM</p>
+            <p>RANDOM SEQ</p>
         </div>
         <div className="randomSequenceBtnsContainer">
         <button

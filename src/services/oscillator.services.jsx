@@ -28,7 +28,6 @@ const updateFMDepth = (FMDepth, value) => {
 }
 
 const updateOscADSR = (osc, adsr, stateKey, timeNow, state, midiToFreqArr, note, meter,) => {
-    console.log('fire')
     if (stateKey) {
         let glide = timeNow + state.oscSettings.osc1.glide
         osc.frequency.cancelScheduledValues(timeNow)

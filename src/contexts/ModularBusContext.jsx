@@ -152,7 +152,8 @@ const initialConnection = [
     [5,4],
     [6,6],
     [0,2],
-    [2,3]
+    [2,3],
+    [5,5]
 ]
 
 let connectionChain = []
@@ -162,13 +163,19 @@ let connectionChain = []
 osc1ADSRGain.gain.setValueAtTime(0.0001, actx.currentTime)
 lfo1FMDepth.connect(lfo1.detune)
 osc1FMDepth.connect(osc1.detune)
-adsr.connect(osc1ADSRGain.gain)
+// adsr.connect(osc1ADSRGain.gain)
 lfo1.connect(meter)
 // osc1.chain(filter,osc1ADSRGain, outputGain, output, out)
 
 const startContext = async () => {
     if (Tone.context.state === "suspended"){
         await Tone.context.resume()
+        osc1.start()
+        osc2.start()
+        lfo1.start()
+        lfo2.start()
+    }
+    else if (Tone.context.state === "running") {
         osc1.start()
         osc2.start()
         lfo1.start()
@@ -321,9 +328,9 @@ export function reducer(state, action){
             return {...state, sequencerSettings: {...state.sequencerSettings, random: value}}
             
         case ACTIONS.SEQUENCER.step:
-            console.log(osc1.state)
             const stepNote = state.sequencerSettings.sliders[value].note + 24 + (12 * state.sequencerSettings.sliders[value].octave)
-            step(osc1, adsr, time, state, midiToFreqArr, stepNote)
+            const bpmForClockWidth = 60 / state.synthSettings.bpm
+            step(osc1, adsr, time, state, midiToFreqArr, stepNote, bpmForClockWidth)
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note], oscADSRGain: osc1ADSRGain.gain.value}}};
         
         case ACTIONS.SEQUENCER.length:
@@ -340,10 +347,12 @@ export function reducer(state, action){
             else {
                 setDisconnections(tuple, state)
                 let leftoverConnections = connectionChain.filter(connection => {
-                        return (connection[0] !== tuple[0] && connection[1] !== tuple[1])
+                        return (connection[0] !== tuple[0] || connection[1] !== tuple[1])
                 })
                 connectionChain = leftoverConnections
+                console.log(leftoverConnections)
             }
+            
             return {...state, matrixSettings: {...state.matrixSettings, currentConnections: [connectionChain]}}
             
         default:

@@ -89,6 +89,15 @@ $borderThickness: 0.5px;
     background-color: rgb(71, 71, 71) !important;
 }
 
+.activeSeqSlider svg {
+    background-color: rgb(65, 65, 65) !important;
+    // color: #fcffdd
+}
+
+.activeSeqSlider svg > rect {
+    fill: #fbfde9
+}
+
 .sequencerNotes, .noteOctave {
     width: 600px;
 }
