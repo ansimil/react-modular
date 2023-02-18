@@ -145,6 +145,9 @@ osc1FMDepth.gain.value = 0.0001
 osc2FMDepth.gain.value = 0.0001
 lfo1FMDepth.gain.value = 0.0001
 lfo2FMDepth.gain.value = 0.0001
+osc1ADSRGain.gain.setValueAtTime(0.0001, actx.currentTime)
+lfo1FMDepth.connect(lfo1.detune)
+osc1FMDepth.connect(osc1.detune)
 
 // Connection chain //
 const initialConnection = [
@@ -160,11 +163,9 @@ let connectionChain = []
 
 
 
-osc1ADSRGain.gain.setValueAtTime(0.0001, actx.currentTime)
-lfo1FMDepth.connect(lfo1.detune)
-osc1FMDepth.connect(osc1.detune)
+
 // adsr.connect(osc1ADSRGain.gain)
-lfo1.connect(meter)
+// lfo1.connect(meter)
 // osc1.chain(filter,osc1ADSRGain, outputGain, output, out)
 
 const startContext = async () => {
@@ -487,37 +488,37 @@ function ModularBus (props) {
                     node: adsr
                 },
                 6: {
-                    name: "vca",
+                    name: "vca output",
                     node: osc1ADSRGain
                 }
             },
             inputs: {
                 0: {
-                    name: "osc1",
+                    name: "osc1 FM",
                     node: osc1FMDepth,
                 },
                 1: {
-                    name: "osc2",
+                    name: "osc2 FM",
                     node: osc2FMDepth,
                 },
                 2: {
-                    name: "lfo1",
+                    name: "lfo1 FM",
                     node: lfo1FMDepth,
                 },
                 3: {
-                    name: "lfo2",
+                    name: "lfo2 FM",
                     node: lfo2FMDepth,
                 },
                 4: {
-                    name: "filter",
+                    name: "filter audio",
                     node: filter,
                 },
                 5: {
-                    name: "vca",
+                    name: "vca audio",
                     node: osc1ADSRGain,
                 },
                 6: {
-                    name: "vca",
+                    name: "vca ctrl",
                     node: osc1ADSRGain.gain, 
                 },
                 7: {
