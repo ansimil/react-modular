@@ -1,14 +1,27 @@
 const setConnections = (tuple, state, output, out) => {
-        if (tuple.indexOf(6) === 0){
-            (state.matrixSettings.inputs[tuple[0]].node).connect(output)
+        let nodeToConnectTo = state.matrixSettings.inputs[tuple[0]]
+        let nodeToConnect = state.matrixSettings.outputs[tuple[1]]
+        if (tuple[0] === 7){
+            console.log(nodeToConnect.name, 'connects to', nodeToConnectTo.name)
+            console.log(nodeToConnectTo.name, 'connects to output')
+            nodeToConnect.node.connect(nodeToConnectTo.node)
+            nodeToConnectTo.node.connect(output)
             output.connect(out)
         }
-        state.matrixSettings.outputs[tuple[1]].node.connect(state.matrixSettings.inputs[tuple[0]].node)
+        else {
+            console.log(nodeToConnect.name, 'connects to', nodeToConnectTo.name)
+            nodeToConnect.node.connect(nodeToConnectTo.node)
+        }
 
 }
 
 const setDisconnections = (tuple, state) => {
-            state.matrixSettings.outputs[tuple[1]].node.disconnect(state.matrixSettings.inputs[tuple[0]].node)
+        let nodeToDisconnectFrom = state.matrixSettings.inputs[tuple[0]]
+        let nodeToDisconnect = state.matrixSettings.outputs[tuple[1]]
+        console.log(nodeToDisconnect.name, 'discconnects from', nodeToDisconnectFrom.name)
+
+        nodeToDisconnect.node.disconnect(nodeToDisconnectFrom.node)
+            
 }
 
 export {
