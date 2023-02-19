@@ -3,3 +3,7 @@
     border-left: solid black 0.5px;
     border-right: solid black 0.5px;
 }
+
+div[id*="slider"] svg:hover, div[class*="sliderHover"] svg:hover {
+    background-color: rgb(71, 71, 71) !important;
+}

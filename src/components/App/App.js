@@ -8,7 +8,7 @@ import Keyboard from '../Keyboard/Keyboard';
 import Oscilloscope from '../Oscilloscope/Oscilloscope';
 import ControlBar from '../ControlBar/ControlBar';
 import Sequencer from '../Sequencer/Sequencer';
-import ModuleContainer from '../OscillatorContainer/ModuleContainer';
+import ModuleContainer from '../ModuleContainer/ModuleContainer';
 
 
 
