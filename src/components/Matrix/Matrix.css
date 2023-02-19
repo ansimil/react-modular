@@ -58,20 +58,22 @@
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  margin-bottom: 4%;
-  margin-left: 32%;
+  margin-bottom: 7%;
+  margin-left: 51%;
   margin-top: 2rem;
 }
 
 .horizontalLabel {
   transform: rotate(315deg);
   margin: 0;
+  margin-left: 0px;
   padding: 0;
   flex: 1 1;
   display: flex;
   justify-content: flex-start;
-  max-width: 42.8571428571px;
+  min-width: 77.857px;
   align-items: center;
+  margin-left: -46px;
 }
 
 .horizontalLabel p {

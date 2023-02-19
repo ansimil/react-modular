@@ -51,10 +51,20 @@ const Sequencer = () => {
   const handleStep = (time) => {
     sequencerRef.current.next()
     const { value } = sequencerRef.current.stepper
+    
+    console.log(seqSlidersRef.current[value])
     updateState({type: ACTIONS.SEQUENCER.updateStepValue, payload: {value}})
     if (sequencerRef.current.cells[value]._state.state) {
       updateState({type: ACTIONS.SEQUENCER.step, payload: {value, time}})
     }
+    seqSlidersRef.current.forEach(slider => {
+      if (slider.parent.id === `slider${value}`){
+        slider.parent.className = "activeSeqSlider"
+      }
+      else {
+        slider.parent.className = ""
+      }
+    })
   }
 
   useEffect(()=>{

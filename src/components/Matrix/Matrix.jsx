@@ -17,7 +17,7 @@ const Matrix = () => {
         let matrix = new Nexus.Sequencer("#matrix", {
             "size": [300, 300],
             "rows": 7,
-            "columns": 7 
+            "columns": 8 
         })
         matrix.on("change", (e) => {
             changeConnections(e)
@@ -45,7 +45,8 @@ const Matrix = () => {
                 <div className="horizontalLabel"><p>lfo1FM</p></div>
                 <div className="horizontalLabel"><p>lfo2FM</p></div>
                 <div className="horizontalLabel"><p>filter</p></div>
-                <div className="horizontalLabel"><p>vca</p></div> 
+                <div className="horizontalLabel"><p>vca audio</p></div> 
+                <div className="horizontalLabel"><p>vca ctrl.</p></div> 
                 <div className="horizontalLabel"><p>output</p></div>
             </div>
             <div className="matrixInner">
