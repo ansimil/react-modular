@@ -123,7 +123,8 @@ let lfo1FMDepth = new Tone.Gain()
 let lfo2FMDepth = new Tone.Gain()
 let output = new Tone.Gain()
 let outputGain = new Tone.Gain()
-
+let osc1ADSRGainParamBuffer = new Tone.Gain()
+osc1ADSRGainParamBuffer.connect(osc1ADSRGain.gain)
 let adsr = new Tone.Envelope({
     attack: 0.01,
     decay: 0.2,
@@ -145,9 +146,12 @@ osc1FMDepth.gain.value = 0.0001
 osc2FMDepth.gain.value = 0.0001
 lfo1FMDepth.gain.value = 0.0001
 lfo2FMDepth.gain.value = 0.0001
-osc1ADSRGain.gain.setValueAtTime(0.0001, actx.currentTime)
-lfo1FMDepth.connect(lfo1.detune)
+osc1ADSRGainParamBuffer.gain.value = 1
+// osc1ADSRGain.gain.setValueAtTime(0.0001, actx.currentTime)
 osc1FMDepth.connect(osc1.detune)
+osc2FMDepth.connect(osc2.detune)
+lfo1FMDepth.connect(lfo1.detune)
+lfo2FMDepth.connect(lfo2.detune)
 
 // Connection chain //
 const initialConnection = [
@@ -175,12 +179,14 @@ const startContext = async () => {
         osc2.start()
         lfo1.start()
         lfo2.start()
+        osc1ADSRGain.gain.setValueAtTime(0, actx.currentTime)
     }
     else if (Tone.context.state === "running") {
         osc1.start()
         osc2.start()
         lfo1.start()
         lfo2.start()
+        osc1ADSRGain.gain.setValueAtTime(0, actx.currentTime)
     }
 }
 
@@ -351,7 +357,6 @@ export function reducer(state, action){
                         return (connection[0] !== tuple[0] || connection[1] !== tuple[1])
                 })
                 connectionChain = leftoverConnections
-                console.log(leftoverConnections)
             }
             
             return {...state, matrixSettings: {...state.matrixSettings, currentConnections: [connectionChain]}}
@@ -473,7 +478,7 @@ function ModularBus (props) {
                 },
                 2: {
                     name: "lfo1",
-                    node:lfo1
+                    node: lfo1
                 },
                 3: {
                     name: "lfo2",
@@ -519,7 +524,7 @@ function ModularBus (props) {
                 },
                 6: {
                     name: "vca ctrl",
-                    node: osc1ADSRGain.gain, 
+                    node: osc1ADSRGainParamBuffer, 
                 },
                 7: {
                     name: "output",
