@@ -23,15 +23,21 @@ const LFO = ({ lfoNum }) => {
     }
 
     return (
-        <div className={`lfoContainer lfoContainer${lfoNum}`}>
-
+        <div className={`modulesContainer lfoContainer lfoContainer${lfoNum}`}>
+            <div className="moduleInfo">
+                <div className="moduleInfoInner">
+                    <p>{`lfo_${lfoNum}`}</p>
+                </div>
+            </div>
+            <div className="moduleSettingsContainer">
+                <div className="moduleSettingsInner">
+                <div className="slidersContainer">
             <Slider module={selectedLfoSettings} label={"COARSE"} valueLabel={(lfoSettings[selectedLfoSettings].frequency).toFixed(2)} unit={"Hz"} min={0.5} max={40} step={0.001} values={lfoSettings[selectedLfoSettings].frequency} sliderRef={lfoRef} id={"frequency"} changeFunction={change}/>
             <Slider module={selectedLfoSettings} label={"PWM"} valueLabel={(lfoSettings[selectedLfoSettings].pwm).toFixed(2)} unit={"Hz"} min={0} max={40} step={0.001} values={lfoSettings[selectedLfoSettings].pwm} sliderRef={lfoRef} id={"pwm"} changeFunction={change}/>
             <Slider module={selectedLfoSettings} label={"FM DEPTH"} valueLabel={(lfoSettings[selectedLfoSettings].lfoFMDepth / 1000).toFixed(2)} unit={""} min={0} max={10000} step={0.001} values={lfoSettings[selectedLfoSettings].lfoFMDepth} sliderRef={lfoRef} id={"lfoFMDepth"} changeFunction={change}/>
+            </div>
             <div className="rightSideContainer">
-                    <div className="moduleInfo">
-                        <h2>{`LFO_${lfoNum}`}</h2>
-                    </div>
+
                 <div className="waveSelectContainer">
                     <button 
                     id="sine"
@@ -64,6 +70,8 @@ const LFO = ({ lfoNum }) => {
                     >
                     SAW
                     </button>
+                </div>
+                </div>
                 </div>
             </div>
         </div>

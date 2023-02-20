@@ -122,7 +122,7 @@
   transform: rotate(180deg);
 }
 
-.slidersContainer div {
+.sequencerNotesGates .slidersContainer div {
   border-top: solid black 0.5px;
   border-left: solid black 0.5px;
   border-right: solid black 0.5px;

@@ -131,11 +131,10 @@ $borderThickness: 0.5px;
     transform: rotate(180deg);
 }
 
-.slidersContainer div {
+.sequencerNotesGates .slidersContainer div {
     border-top: solid black $borderThickness;
     border-left: solid black $borderThickness;
     border-right: solid black $borderThickness;
-
 }
 
 #sequencer {
