@@ -1,18 +1,42 @@
 .sequencerContainer {
   display: flex;
   justify-content: center;
-  align-items: stretch;
-  min-height: 350px;
+  align-items: center;
+  flex-direction: column;
+  min-width: 500px;
+  max-width: 900px;
+  width: 61%;
+  min-height: 400px;
   border-radius: 3px;
   overflow: hidden;
   background-color: rgb(57, 57, 57);
   border: solid black 1px;
 }
 
+.moduleInfoInnerSeq {
+  margin-left: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: solid black 0.5px;
+  border-radius: 3px;
+  background-color: #7e7e6a;
+  box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.5);
+}
+
+.sequencerInner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1 1;
+  min-width: 100%;
+}
+
 .sequencerSettingsContainer {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 101%;
 }
 
 .sequencerSettingsInner {
@@ -34,8 +58,7 @@
   padding-right: 1rem;
   margin-left: 0.1rem;
   margin-right: 0.1rem;
-  max-height: 97%;
-  margin-top: 0.55%;
+  height: 98%;
   border-radius: 3px;
   border: solid black 1px;
 }
