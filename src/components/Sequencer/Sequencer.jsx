@@ -122,9 +122,6 @@ const Sequencer = () => {
     })
     seqSlidersRef.current = sliders
 
-    sequencer.on("step", (e) => {
-      // handleStep(e)
-    })
     sequencer.interval.rate = 60 / appState.synthSettings.bpm * 1000
     sequencer.colors.accent = "#000"
     sequencer.colors.mediumLight = "#fafdd1"
@@ -134,7 +131,12 @@ const Sequencer = () => {
 
   return (
     <div className="sequencerContainer">
-    
+      <div className="moduleInfo">
+        <div className="moduleInfoInnerSeq">
+            <p>{`seq`}</p>
+        </div>
+      </div>
+      <div className="sequencerInner">
       <div className="sequencerNotesGates">
         <div id="sequencer"></div>
         <div className="slidersContainer">
@@ -193,6 +195,7 @@ const Sequencer = () => {
           <SeqLength/>
           <RandomSequenceBtn/>
         </div>
+      </div>
       </div>
     </div>
   )
