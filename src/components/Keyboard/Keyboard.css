@@ -15,7 +15,7 @@
   margin-top: 1rem;
   border: solid black 0.5px;
   border-radius: 3px;
-  box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.5);
 }
 
 .octaveInfo {
@@ -42,7 +42,7 @@
   padding: 1rem 2rem;
   border: black solid 0.5px;
   border-radius: 3px;
-  box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.5);
 }
 
 .octaveIndicator {
