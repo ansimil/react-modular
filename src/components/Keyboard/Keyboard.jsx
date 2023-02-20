@@ -103,26 +103,33 @@ const Keyboard = () => {
 
   return (
     <div className='keyboardContainer'>
+        <div className="moduleInfo">
+            <div className="moduleInfoInnerSeq">
+                <p>{`keys`}</p>
+            </div>
+        </div>
+        <div className="moduleSettingsInner">
         <div className="keyboardContainerInner">
             <div id='keyboard'></div>
         </div>
         <div className="octaveInfo">
-            <p>Octave: {noteState+1}</p>
+            
             <div className="octaveBtns">
-                <button disabled={noteState<=4 ? "" : true} className={noteState<=4 ? "btn endBtnLeft": "btn endBtnLeft disabledBtn"} onClick={()=> {
+                <button disabled={noteState<=4 ? "" : true} className={noteState<=4 ? "btn": "btn disabledBtn"} onClick={()=> {
                     setNoteState(noteState+1)
                     }}
                 >
                 +
                 </button>
-
-                <button disabled={noteState >= 1 ? "" : true} className={noteState>=1 ? "btn endBtnRight": "btn endBtnRight disabledBtn"} onClick={()=> {
+                <p className="valueIndicator octaveIndicator">{noteState+1}</p>
+                <button disabled={noteState >= 1 ? "" : true} className={noteState>=1 ? "btn": "btn disabledBtn"} onClick={()=> {
                     setNoteState(noteState-1)
                     }}
                 >
                 -
                 </button>
             </div>
+        </div>
         </div>
     </div>
   )

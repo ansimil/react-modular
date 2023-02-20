@@ -145,7 +145,20 @@ $containerBorderRadius: 3px;
 }
 
 .moduleSettingsInner .slidersContainer {
-    column-gap: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 6.5%;
+    margin-right: 6.5%;
+    height: 96%;
+    border: solid black 0.5px;
+    margin-top: 0.75%;
+    border-radius: 3px;
+    box-shadow: inset 0px 0px 8px rgba(0,0,0,0.4);
+}
+
+.slidersContainer div:nth-last-child(n+2) {
+    border-right: solid black 0.5px
 }
 
 .moduleSettingsInner .sliderContainer {
@@ -242,6 +255,8 @@ $containerBorderRadius: 3px;
     min-width: 70px;
     border: solid black 1px;
     background-color: rgb(222, 222, 222);
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
 }
 
 .left {
@@ -268,16 +283,31 @@ $containerBorderRadius: 3px;
 .keyboardContainer {
     display: flex;
     justify-content: flex-start;
-    align-items: stretch;
+    align-items: center;
+    flex-direction: column;
     min-height: 300px;
     min-width: 400px;
     max-width: 600px;
     width: 37%;
-    background-color: rgb(239, 239, 239);
+    background-color: rgb(57, 57, 57);
     overflow: hidden;
     border-radius: 3px;
     z-index: 0;
-  }
+    border: solid black 1px;
+}
+
+.moduleInfoInnerSeq {
+    margin-left: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid black 0.5px;
+    border-radius: 3px;
+    // background-color: rgb(57,57,57);
+    // background-color: #8a8b74;
+    background-color: #7e7e6a;
+    box-shadow: inset 0px 0px 3px rgba(0,0,0,0.5);
+}
 
 #nexus-ui-sequencer-1 {
     border: black solid 1px;
