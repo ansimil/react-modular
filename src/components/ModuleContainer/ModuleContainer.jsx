@@ -1,8 +1,9 @@
 import './ModuleContainer.css'
 
-const ModuleContainer = ({children, name, moduleClass}) => {
+const ModuleContainer = ({children, name, moduleClass, locationRef}) => {
+
   return (
-    <details open className={`${moduleClass} detailsContainer`}>
+    <details ref={locationRef} open className={`${moduleClass} detailsContainer`}>
         <summary className="summaryContainer">
             <div className="summaryInner">
                 <p className="containerName">{name}</p> 

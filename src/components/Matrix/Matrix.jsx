@@ -4,7 +4,7 @@ import { ACTIONS } from '../../contexts/ModularBusContext'
 import Nexus from 'nexusui'
 import './Matrix.css'
 
-const Matrix = () => {
+const Matrix = ( { matrixLocationRef } ) => {
     const { matrixRef, initialConnection, stateHook } = useContext(ModularBusContext)
     // eslint-disable-next-line
     const [appState, updateState] = stateHook
@@ -36,7 +36,7 @@ const Matrix = () => {
    
 
   return (
-    <div className='matrixContainer'>
+    <div ref={matrixLocationRef} className='matrixContainer'>
         <div className='matrixContainerInner'>
         <div className="inputsLabel"><p>inputs</p></div>
             <div className="horizontalLabels">

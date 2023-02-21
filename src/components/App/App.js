@@ -1,4 +1,5 @@
 import './App.css';
+import { useRef } from 'react'
 import Oscillator from '../Oscillator/Oscillator';
 import Filter from '../Filter/Filter';
 import { ADSR } from '../ADSR/ADSR';
@@ -9,39 +10,50 @@ import Oscilloscope from '../Oscilloscope/Oscilloscope';
 import ControlBar from '../ControlBar/ControlBar';
 import Sequencer from '../Sequencer/Sequencer';
 import ModuleContainer from '../ModuleContainer/ModuleContainer';
+import Navbar from '../Navbar/Navbar';
 
 
 
 function App() {
+  let keysAndSeqRef = useRef(null)
+  let oscillatorsRef = useRef(null)
+  let lfosRef = useRef(null)
+  let filterRef = useRef(null)
+  let envelopeRef = useRef(null)
+  let oscilloscopeRef = useRef(null)
+  let matrixLocationRef = useRef(null)
+
+
   return (
     <div className="App">
       <ControlBar />
-      <Matrix/>   
+      <Navbar keysAndSeqRef={keysAndSeqRef} oscillatorsRef={oscillatorsRef} lfosRef={lfosRef} filterRef={filterRef} envelopeRef={envelopeRef} oscilloscopeRef={oscilloscopeRef} matrixLocationRef={matrixLocationRef} />
+      <Matrix matrixLocationRef={matrixLocationRef}/>   
       
-      <ModuleContainer name={'_keys + _seq'} moduleClass={'keysAndSeq'}>
+      <ModuleContainer name={'_keys + _seq'} moduleClass={'keysAndSeq'} locationRef={keysAndSeqRef}>
         <Keyboard />
         <Sequencer />
       </ModuleContainer>
       
-      <ModuleContainer name={'_oscillators'} moduleClass={'oscillators'}>
+      <ModuleContainer name={'_oscillators'} moduleClass={'oscillators'} locationRef={oscillatorsRef}>
         <Oscillator oscNum={1}/>
         <Oscillator oscNum={2}/>
       </ModuleContainer>
     
-      <ModuleContainer name={'_lfos'} moduleClass={'lfos'}>
+      <ModuleContainer name={'_lfos'} moduleClass={'lfos'} locationRef={lfosRef}>
         <LFO lfoNum={1} />
         <LFO lfoNum={2} />
       </ModuleContainer>
 
-      <ModuleContainer name={'_filter'} moduleClass={'filter'}>
+      <ModuleContainer name={'_filter'} moduleClass={'filter'} locationRef={filterRef}>
         <Filter />
       </ModuleContainer>
         
-      <ModuleContainer name={'_envelope'} moduleClass={'envelope'}>
+      <ModuleContainer name={'_envelope'} moduleClass={'envelope'} locationRef={envelopeRef}>
       <ADSR />
       </ModuleContainer>
       
-      <ModuleContainer name={'_oscilloscope'} moduleClass={'oscilloscope'}>
+      <ModuleContainer name={'_oscilloscope'} moduleClass={'oscilloscope'} locationRef={oscilloscopeRef}>
         <Oscilloscope size={[500,225]} id={"large"} />
       </ModuleContainer>
       

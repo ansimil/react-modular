@@ -9,7 +9,6 @@ const Filter = () => {
     const [appState, updateState] = stateHook
     const [ activeType, setActiveType ] = useState('lowpass')
     const { filterSettings } = appState
-
     const change = (e, id) => {
         let value = e;
         updateState({type: ACTIONS.FILTER.CHANGE_FILTER[id], payload: { id, value }})
