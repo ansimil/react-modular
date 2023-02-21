@@ -15,6 +15,7 @@ const Navbar = ({keysAndSeqRef, oscillatorsRef, lfosRef, filterRef, envelopeRef,
 
   return (
     <div className="navbar-container">
+        <p className="navbar-title">navigation:</p>
         <button 
         className="btn navbar-btn matrix-navbar-btn" 
         onClick={()=>{
