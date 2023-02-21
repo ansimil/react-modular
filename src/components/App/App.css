@@ -29,9 +29,82 @@
 .btn {
   cursor: pointer;
   background-color: rgb(222, 222, 222);
+  border: solid black 1px;
   padding: 0.7rem 0.4rem;
   min-width: 50px;
   text-align: center;
+}
+
+.inc-dec-btns-container {
+  display: flex;
+  align-items: center;
+}
+
+.inc-dec-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.inc-dec-btn {
+  min-width: 15px;
+  max-width: 25px;
+  max-height: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inc-btn {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.dec-btn {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.inc-dec-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 25px;
+  min-height: 22.5px;
+  background-color: rgb(222, 222, 222);
+  margin: 0;
+  font-family: lightFont;
+  font-size: 0.7rem;
+  box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.4);
+}
+
+.inc-dec-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.5rem !important;
+  margin: 0;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  font-family: mainFont;
+  color: black;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+}
+
+.waveselect-btn {
+  font-size: 0.7rem;
+  min-width: 40px;
+  max-width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(44, 44, 44);
+  color: rgb(222, 222, 222);
+  box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.4);
+  border: solid black 0.5px;
+  border-radius: 3px;
 }
 
 .btn:hover {
@@ -39,8 +112,8 @@
 }
 
 .activeBtn {
-  background-color: black !important;
-  color: white;
+  background-color: #1e1e1e !important;
+  color: rgb(179, 227, 252);
 }
 
 .middleBtn {
@@ -111,6 +184,7 @@
   align-items: center;
   flex-direction: column;
   flex: 1;
+  row-gap: 0.2rem;
 }
 
 .startSelectContainer {
@@ -138,8 +212,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 6.5%;
-  margin-right: 6.5%;
+  margin-left: 1.5%;
+  margin-right: 1.5%;
   height: 96%;
   border: solid black 0.5px;
   margin-top: 0.75%;
@@ -260,8 +334,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-left: 5%;
-  padding-right: 5%;
+  padding-right: 3%;
+  -moz-column-gap: 1rem;
+       column-gap: 1rem;
+  padding-left: 3%;
+  height: 96%;
+  border: solid black 0.5px;
+  border-radius: 3px;
+  margin-top: 0.75%;
+  margin-right: 1.5%;
+  box-shadow: inset 0px 0px 8px rgba(0, 0, 0, 0.4);
 }
 
 .keyboardContainer {

@@ -40,7 +40,7 @@ const Filter = () => {
                 <div className="waveSelectContainer">
                     <button 
                     id="lowpass"
-                    className={activeType === 'lowpass' ? "btn activeBtn endBtnLeft": "btn endBtnLeft"}
+                    className={activeType === 'lowpass' ? "btn activeBtn waveselect-btn": "btn waveselect-btn"}
                     onClick={changeType}
                     >
                     LP
@@ -48,7 +48,7 @@ const Filter = () => {
 
                     <button 
                     id="highpass"
-                    className={activeType === 'highpass' ? "btn activeBtn middleBtn": "btn middleBtn"}
+                    className={activeType === 'highpass' ? "btn activeBtn waveselect-btn": "btn waveselect-btn"}
                     onClick={changeType}
                     >
                     HP
@@ -56,7 +56,7 @@ const Filter = () => {
 
                     <button
                     id="bandpass"
-                    className={activeType === 'bandpass' ? "btn activeBtn middleBtn": "btn middleBtn"}
+                    className={activeType === 'bandpass' ? "btn activeBtn waveselect-btn": "btn waveselect-btn"}
                     onClick={changeType}
                     >
                     BP
@@ -64,7 +64,7 @@ const Filter = () => {
 
                     <button 
                     id="notch"
-                    className={activeType === 'notch' ? "btn activeBtn endBtnRight": "btn endBtnRight"}
+                    className={activeType === 'notch' ? "btn activeBtn waveselect-btn": "btn waveselect-btn"}
                     onClick={changeType}
                     >
                     N

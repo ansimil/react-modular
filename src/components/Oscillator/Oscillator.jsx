@@ -1,8 +1,45 @@
 import { useContext, useState } from 'react'
 import { ACTIONS } from '../../contexts/ModularBusContext'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
+import { handleMouseEvent } from '../../services/general.services'
 import Slider from '../Slider/Slider'
 import './Oscillator.css'
+
+const IncDec = ({value, incDecClass, label}) => {
+    const { stateHook, oscRef } = useContext(ModularBusContext)
+    const [appState, updateState] = stateHook
+
+    return (
+        <div className="inc-dec-inner">
+            {label && <p className="inc-dec-label sliderLabel">{label}</p>}
+            <div className="inc-dec-btns-container">
+            <button 
+            className={`inc-dec-btn dec-btn dec-btn${incDecClass} btn`}
+            onMouseDown={
+                () => handleMouseEvent(`dec-btn${incDecClass}`, true)
+            }
+            onMouseUp={
+                () => handleMouseEvent(`dec-btn${incDecClass}`, false)
+            }
+            >
+            -
+            </button>
+            <p className="inc-dec-indicator">0</p>
+            <button 
+            className={`inc-dec-btn inc-btn inc-btn${incDecClass} btn`}
+            onMouseDown={
+                () => handleMouseEvent(`inc-btn${incDecClass}`, true)
+            }
+            onMouseUp={
+                () => handleMouseEvent(`inc-btn${incDecClass}`, false)
+            }
+            >
+            +
+            </button>
+            </div>
+        </div>
+    )
+}
 
 const Oscillator = ({ oscNum }) => {
     const { stateHook, oscRef } = useContext(ModularBusContext)
@@ -46,7 +83,7 @@ const Oscillator = ({ oscNum }) => {
                     <div className="waveSelectContainer">
                         <button 
                         id="sine"
-                        className={activeType === 'sine' ? "btn activeBtn endBtnLeft": "btn endBtnLeft"}
+                        className={activeType === 'sine' ? "btn waveselect-btn activeBtn": "btn waveselect-btn"}
                         onClick={changeType}
                         >
                         SINE
@@ -54,7 +91,7 @@ const Oscillator = ({ oscNum }) => {
 
                         <button 
                         id="triangle"
-                        className={activeType === 'triangle' ? "btn activeBtn middleBtn": "btn middleBtn"}
+                        className={activeType === 'triangle' ? "btn waveselect-btn activeBtn": "btn waveselect-btn"}
                         onClick={changeType}
                         >
                         TRI
@@ -62,7 +99,7 @@ const Oscillator = ({ oscNum }) => {
 
                         <button
                         id="pwm"
-                        className={activeType === 'pwm' ? "btn activeBtn middleBtn": "btn middleBtn"}
+                        className={activeType === 'pwm' ? "btn waveselect-btn activeBtn": "btn waveselect-btn"}
                         onClick={changeType}
                         >
                         PULS
@@ -70,11 +107,15 @@ const Oscillator = ({ oscNum }) => {
 
                         <button 
                         id="sawtooth"
-                        className={activeType === 'sawtooth' ? "btn activeBtn endBtnRight": "btn endBtnRight"}
+                        className={activeType === 'sawtooth' ? "btn waveselect-btn activeBtn": "btn waveselect-btn"}
                         onClick={changeType}
                         >
                         SAW
                         </button>
+                    </div>
+                    <div className="inc-dec-container">
+                    <IncDec incDecClass={"osc-1"} label={"SEMITONE"}/>
+                    <IncDec incDecClass={"osc-2"} label={"OCTAVE"}/>
                     </div>
                 </div>
             </div>
