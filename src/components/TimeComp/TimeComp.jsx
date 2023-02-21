@@ -1,6 +1,7 @@
 import {useContext} from 'react'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
 import { ACTIONS } from '../../contexts/ModularBusContext'
+import { handleMouseEvent } from '../../services/general.services'
 import './TimeComp.css'
 
 const TimeComp = () => {
@@ -32,10 +33,29 @@ const TimeComp = () => {
         <p style={{"color": "rgb(222, 222, 222)", "marginRight": "2rem"}}>BPM</p>
         <input id="bpm" onChange={handleChange} value={appState.synthSettings.bpm} type="number"/>
         <div className="bpmIncDecContainer">
-            <button className="bpmBtn bpmTopBtn" id="bpm" onClick={handleInc}>
+            <button 
+            className="bpmBtn bpmTopBtn" id="bpm" 
+            onClick={handleInc}
+            onMouseDown={
+                () => handleMouseEvent("bpmTopBtn", true)
+            }
+            onMouseUp={
+                () => handleMouseEvent("bpmTopBtn", false)
+            }
+            >
             +
             </button>
-            <button className="bpmBtn bpmBtmBtn" id="bpm" onClick={handleDec}>
+            <button 
+            className="bpmBtn bpmBtmBtn" 
+            id="bpm" 
+            onClick={handleDec}
+            onMouseDown={
+                () => handleMouseEvent("bpmBtmBtn", true)
+            }
+            onMouseUp={
+                () => handleMouseEvent("bpmBtmBtn", false)
+            }
+            >
             -
             </button>
         </div>

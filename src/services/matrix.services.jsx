@@ -1,16 +1,7 @@
 const setConnections = (tuple, state, output, out) => {
         let nodeToConnectTo = state.matrixSettings.inputs[tuple[0]]
         let nodeToConnect = state.matrixSettings.outputs[tuple[1]]
-        // if (nodeToConnectTo.name === 'output'){
-        //     console.log(nodeToConnect.name, 'connects to', nodeToConnectTo.name)
-        //     console.log(nodeToConnectTo.name, 'connects to output')
-        //     nodeToConnect.node.connect(nodeToConnectTo.node)
-        //     nodeToConnectTo.node.connect(output)
-        //     output.connect(out)
-        // }
-        // else {
-            
-        // }
+       
         if ((nodeToConnect.type === "gain source" && nodeToConnectTo.type === "audio param") || (nodeToConnect.type === "audio source" && nodeToConnectTo.type === "gain param")) {
             nodeToConnect.node.connect(nodeToConnect.converter)
             nodeToConnect.converter.connect(nodeToConnectTo.node)
