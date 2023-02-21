@@ -1,7 +1,5 @@
 .sliderInnerContainer {
-  border-top: solid black 0.5px;
-  border-left: solid black 0.5px;
-  border-right: solid black 0.5px;
+  border: black solid 0.5px;
 }
 
 div[id*=slider] svg:hover, div[class*=sliderHover] svg:hover {

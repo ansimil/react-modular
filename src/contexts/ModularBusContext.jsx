@@ -250,6 +250,13 @@ export function reducer(state, action){
             updateOscDetune(osc2, value)
             return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
 
+        case ACTIONS.OSCILLATOR.OSC2.glide:
+            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
+
+        case ACTIONS.OSCILLATOR.OSC2.pwm:
+            updateOscPwm(osc2, value)
+            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}}
+
         case ACTIONS.OSCILLATOR.OSC2.oscFMDepth:
             updateFMDepth(osc2FMDepth, value)
             return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
@@ -408,7 +415,9 @@ function ModularBus (props) {
                 oscFMDepth: osc1FMDepth.gain.value,
                 oscADSRGain: osc1ADSRGain.gain.value,
                 glide: 0.00,
-                pwm: 0
+                pwm: 0,
+                octaveMult: 0,
+                semitoneMult: 0
             },
             osc2: {
                 frequency: osc2.frequency.value,
@@ -417,7 +426,9 @@ function ModularBus (props) {
                 oscFMDepth: osc2FMDepth.gain.value,
                 oscADSRGain: osc2ADSRGain.gain.value,
                 glide: 0.00,
-                pwm: 0
+                pwm: 0,
+                octaveMult: 0,
+                semitoneMult: 0
             },
         },
         filterSettings: {
