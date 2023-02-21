@@ -6,8 +6,7 @@ import Slider from '../Slider/Slider'
 import './Oscillator.css'
 
 const IncDec = ({value, incDecClass, label}) => {
-    const { stateHook, oscRef } = useContext(ModularBusContext)
-    const [appState, updateState] = stateHook
+
 
     return (
         <div className="inc-dec-inner">
