@@ -27,7 +27,7 @@ const updateFMDepth = (FMDepth, value) => {
     FMDepth.gain.value = value
 }
 
-const updateOscADSR = (osc, adsr, stateKey, timeNow, state, midiToFreqArr, note, meter,) => {
+const updateOscADSR = (osc, adsr, stateKey, timeNow, state, midiToFreqArr, note) => {
     if (stateKey) {
         let glide = timeNow + state.oscSettings.osc1.glide
         osc.frequency.cancelScheduledValues(timeNow)
@@ -50,5 +50,5 @@ export {
     updateOscPwm,
     updateFMDepth,
     updateOscADSR,
-    updateOscFrequency
+    updateOscFrequency,
 }

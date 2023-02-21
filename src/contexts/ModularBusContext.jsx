@@ -35,7 +35,8 @@ export const ACTIONS = {
             oscFMDepth: "change_osc1_FMDepth",
             oscADSRGain: "change_osc1_ADSR_gain",
             glide: "change_osc1_glide",
-            pwm: "change_osc1_pwm"
+            pwm: "change_osc1_pwm",
+            offset: "change_osc1_offset"
         },
         OSC2: {
             type: "change_osc2_type",
@@ -43,7 +44,8 @@ export const ACTIONS = {
             oscFMDepth: "change_osc2_FMDepth",
             oscADSRGain: "change_osc2_ADSR_gain",
             glide: "change_osc2_glide",
-            pwm: "change_osc2_pwm"
+            pwm: "change_osc2_pwm",
+            offset: "change_osc2_offset"
         }
     },
     FILTER: {
@@ -241,6 +243,16 @@ export function reducer(state, action){
         case ACTIONS.OSCILLATOR.OSC1.oscADSRGain:
             updateOscADSR(osc1, adsr, stateKey, actx.currentTime, state, midiToFreqArr, note, meter)
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note], oscADSRGain: osc1ADSRGain.gain.value}}};
+            
+        case ACTIONS.OSCILLATOR.OSC1.offset:
+            let newValue
+            if (value === "inc") {
+                newValue = state.oscSettings.osc1[id] + 1
+            }
+            else {
+                newValue = state.oscSettings.osc1[id] - 1
+            }
+            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, [id]: Number(newValue)}}};
 
         case ACTIONS.OSCILLATOR.OSC2.type:
             updateOscType(id, osc2, state)
@@ -260,7 +272,16 @@ export function reducer(state, action){
         case ACTIONS.OSCILLATOR.OSC2.oscFMDepth:
             updateFMDepth(osc2FMDepth, value)
             return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
-        
+            
+        case ACTIONS.OSCILLATOR.OSC2.offset:
+            let newValue2
+            if (value === "inc") {
+                newValue2 = state.oscSettings.osc2[id] + 1
+            }
+            else {
+                newValue2 = state.oscSettings.osc2[id] - 1
+            }
+            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(newValue2)}}};
 
         // LFO SETTINGS //
 
@@ -416,8 +437,8 @@ function ModularBus (props) {
                 oscADSRGain: osc1ADSRGain.gain.value,
                 glide: 0.00,
                 pwm: 0,
-                octaveMult: 0,
-                semitoneMult: 0
+                octave: 0,
+                semitone: 0
             },
             osc2: {
                 frequency: osc2.frequency.value,
@@ -427,8 +448,8 @@ function ModularBus (props) {
                 oscADSRGain: osc2ADSRGain.gain.value,
                 glide: 0.00,
                 pwm: 0,
-                octaveMult: 0,
-                semitoneMult: 0
+                octave: 0,
+                semitone: 0
             },
         },
         filterSettings: {
