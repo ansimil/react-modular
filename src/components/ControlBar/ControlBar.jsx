@@ -13,17 +13,24 @@ const ControlBar = () => {
 
     return (
     <div className="controlBarContainer">
-        <StartBtn/>
-        <div className='bpmIndicatorContainer'>
-          <div className='bpmIndicator'>
-          </div>
+        <div className="controlbar-start-container controlbar-inner">
+          <StartBtn/>
         </div>
-        <TimeComp />
-        <PlayerControls/>
-        <Oscilloscope size={[60,30]} id={"small"}/>
-        <div className="helpIconContainer">
-        <img onClick={toggleModal} className="helpIcon" src={qMark} alt="help" />
-        <HelpModal showModal={showModal} setShowModal={setShowModal}/>
+
+        <div className="controlbar-middle-container controlbar-inner">
+          <div className='bpmIndicatorContainer'>
+            <div className='bpmIndicator'>
+            </div>
+          </div>
+          <TimeComp />
+          <PlayerControls/>
+        </div>
+        <div className="controlbar-end-container controlbar-inner">
+          <Oscilloscope size={[60,30]} id={"small"}/>
+          <div className="helpIconContainer">
+          <img onClick={toggleModal} className="helpIcon" src={qMark} alt="help" />
+          <HelpModal showModal={showModal} setShowModal={setShowModal}/>
+          </div>
         </div>
     </div>
   )

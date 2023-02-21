@@ -341,7 +341,7 @@ export function reducer(state, action){
             
         case ACTIONS.SEQUENCER.step:
             const stepNote = state.sequencerSettings.sliders[value].note + 24 + (12 * state.sequencerSettings.sliders[value].octave)
-            const bpmForClockWidth = 60 / state.synthSettings.bpm
+            const bpmForClockWidth = (60 / state.synthSettings.bpm) / 16
             step(osc1, adsr, time, state, midiToFreqArr, stepNote, bpmForClockWidth)
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note], oscADSRGain: osc1ADSRGain.gain.value}}};
         
