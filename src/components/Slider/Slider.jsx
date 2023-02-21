@@ -20,9 +20,9 @@ const Slider = ({module, label, valueLabel, unit, min, max, step, values, slider
         multislider.on("change", (e) => {
             changeFunction(e, id)
         })
-        multislider.bars[0].attributes[5].value = "#dedede"
+        multislider.bars[0].attributes[5].value = "#fafdd1"
         multislider.caps[0].attributes[4].value = "#000"
-        multislider.element.attributes[2].value = "background-color: rgb(255, 255, 255); cursor: pointer;"
+        multislider.element.attributes[2].value = "background-color: rgb(57, 57, 57); cursor: pointer;"
         sliderRef.current = [...sliderRef.current, multislider]
     // eslint-disable-next-line
     },[])
@@ -31,7 +31,7 @@ const Slider = ({module, label, valueLabel, unit, min, max, step, values, slider
     <div className={`sliderContainer ${id}`}>
     <label className="sliderLabel"><p>{label}</p></label>
     <p className="valueIndicator">{`${valueLabel}${unit}`}</p>
-    <div className="sliderInnerContainer" id={`${module}${id}`}></div>
+    <div className="sliderInnerContainer sliderHover" id={`${module}${id}`}></div>
     </div>
   )
 }

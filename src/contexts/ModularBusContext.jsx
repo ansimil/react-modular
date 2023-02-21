@@ -51,7 +51,8 @@ export const ACTIONS = {
             type: "change_filter_type",
             frequency: "change_filter_frequency",
             detune: "change_filter_detune",
-            Q: "change_filter_Q"
+            Q: "change_filter_Q",
+            filterFMDepth: "change_filterFMDepth"
         }
     },
     ADSR: {
@@ -121,6 +122,7 @@ let osc1FMDepth = new Tone.Gain()
 let osc2FMDepth = new Tone.Gain()
 let lfo1FMDepth = new Tone.Gain()
 let lfo2FMDepth = new Tone.Gain()
+let filterFMDepth = new Tone.Gain()
 let output = new Tone.Gain()
 let outputGain = new Tone.Gain()
 let osc1ADSRGainParamBuffer = new Tone.Gain()
@@ -134,6 +136,9 @@ let adsr = new Tone.Envelope({
     decayCurve: "linear",
     releaseCurve: "exponential"
 })
+let adsrToAudio = new Tone.GainToAudio()
+
+
 let meter = new Tone.DCMeter();
 osc1ADSRGain.gain.setValueAtTime(0.00001, actx.currentTime)
 output.gain.setValueAtTime(0.00001, actx.currentTime)
@@ -142,35 +147,33 @@ lfo1.frequency.value = 2
 lfo2.frequency.value = 2
 filter.frequency.value = 10000
 filter.Q.value = 0
-osc1FMDepth.gain.value = 0.0001
-osc2FMDepth.gain.value = 0.0001
-lfo1FMDepth.gain.value = 0.0001
-lfo2FMDepth.gain.value = 0.0001
+osc1FMDepth.gain.value = 0
+osc2FMDepth.gain.value = 0
+lfo1FMDepth.gain.value = 0
+lfo2FMDepth.gain.value = 0
+filterFMDepth.gain.value = 0
 osc1ADSRGainParamBuffer.gain.value = 1
-// osc1ADSRGain.gain.setValueAtTime(0.0001, actx.currentTime)
+osc1ADSRGain.gain.setValueAtTime(0, actx.currentTime)
 osc1FMDepth.connect(osc1.detune)
 osc2FMDepth.connect(osc2.detune)
 lfo1FMDepth.connect(lfo1.detune)
 lfo2FMDepth.connect(lfo2.detune)
+filterFMDepth.connect(filter.detune)
+
+outputGain.connect(output)
+output.connect(out)
 
 // Connection chain //
 const initialConnection = [
     [4,0],
-    [5,4],
-    [7,6],
+    [6,4],
+    [8,6],
     [0,2],
     [2,3],
-    [6,5]
+    [7,5]
 ]
 
 let connectionChain = []
-
-
-
-
-// adsr.connect(osc1ADSRGain.gain)
-// lfo1.connect(meter)
-// osc1.chain(filter,osc1ADSRGain, outputGain, output, out)
 
 const startContext = async () => {
     if (Tone.context.state === "suspended"){
@@ -179,14 +182,12 @@ const startContext = async () => {
         osc2.start()
         lfo1.start()
         lfo2.start()
-        osc1ADSRGain.gain.setValueAtTime(0, actx.currentTime)
     }
     else if (Tone.context.state === "running") {
         osc1.start()
         osc2.start()
         lfo1.start()
         lfo2.start()
-        osc1ADSRGain.gain.setValueAtTime(0, actx.currentTime)
     }
 }
 
@@ -249,6 +250,13 @@ export function reducer(state, action){
             updateOscDetune(osc2, value)
             return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
 
+        case ACTIONS.OSCILLATOR.OSC2.glide:
+            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
+
+        case ACTIONS.OSCILLATOR.OSC2.pwm:
+            updateOscPwm(osc2, value)
+            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}}
+
         case ACTIONS.OSCILLATOR.OSC2.oscFMDepth:
             updateFMDepth(osc2FMDepth, value)
             return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
@@ -306,6 +314,10 @@ export function reducer(state, action){
         case ACTIONS.FILTER.CHANGE_FILTER.Q:
             filter.Q.value = value
             return {...state, filterSettings: {...state.filterSettings, [id]: Number(value)}};
+
+        case ACTIONS.FILTER.CHANGE_FILTER.filterFMDepth:
+            filterFMDepth.gain.value = value
+            return {...state, filterSettings: {...state.filterSettings, [id]: Number(value) }};
         
 
         // ADSR SETTINGS //
@@ -336,7 +348,7 @@ export function reducer(state, action){
             
         case ACTIONS.SEQUENCER.step:
             const stepNote = state.sequencerSettings.sliders[value].note + 24 + (12 * state.sequencerSettings.sliders[value].octave)
-            const bpmForClockWidth = 60 / state.synthSettings.bpm
+            const bpmForClockWidth = (60 / state.synthSettings.bpm) / 16
             step(osc1, adsr, time, state, midiToFreqArr, stepNote, bpmForClockWidth)
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note], oscADSRGain: osc1ADSRGain.gain.value}}};
         
@@ -403,7 +415,9 @@ function ModularBus (props) {
                 oscFMDepth: osc1FMDepth.gain.value,
                 oscADSRGain: osc1ADSRGain.gain.value,
                 glide: 0.00,
-                pwm: 0
+                pwm: 0,
+                octaveMult: 0,
+                semitoneMult: 0
             },
             osc2: {
                 frequency: osc2.frequency.value,
@@ -412,7 +426,9 @@ function ModularBus (props) {
                 oscFMDepth: osc2FMDepth.gain.value,
                 oscADSRGain: osc2ADSRGain.gain.value,
                 glide: 0.00,
-                pwm: 0
+                pwm: 0,
+                octaveMult: 0,
+                semitoneMult: 0
             },
         },
         filterSettings: {
@@ -420,6 +436,7 @@ function ModularBus (props) {
             detune: filter.detune.value,
             type: filter.type,
             Q: filter.Q.value,
+            filterFMDepth: filterFMDepth.gain.value
         },
         adsrSettings: {
             attack: 0.01,
@@ -471,64 +488,85 @@ function ModularBus (props) {
                 0: {
                     name: "osc1",
                     node: osc1,
+                    type: "audio source"
                 },
                 1: {
                     name: "osc2",
-                    node: osc2
+                    node: osc2,
+                    type: "audio source"
                 },
                 2: {
                     name: "lfo1",
-                    node: lfo1
+                    node: lfo1,
+                    type: "audio source"
                 },
                 3: {
                     name: "lfo2",
-                    node: lfo2
+                    node: lfo2,
+                    type: "audio source"
                 },
                 4: {
                     name: "filter",
-                    node: filter
+                    node: filter,
+                    type: "audio source"
                 },
                 5: {
                     name: "adsr",
-                    node: adsr
+                    node: adsr,
+                    type: "gain source",
+                    converter: adsrToAudio
                 },
                 6: {
                     name: "vca output",
-                    node: osc1ADSRGain
+                    node: osc1ADSRGain,
+                    type: "audio source"
                 }
             },
             inputs: {
                 0: {
                     name: "osc1 FM",
                     node: osc1FMDepth,
+                    type: "audio param"
                 },
                 1: {
                     name: "osc2 FM",
                     node: osc2FMDepth,
+                    type: "audio param"
                 },
                 2: {
                     name: "lfo1 FM",
                     node: lfo1FMDepth,
+                    type: "audio param"
                 },
                 3: {
                     name: "lfo2 FM",
                     node: lfo2FMDepth,
+                    type: "audio param"
                 },
                 4: {
                     name: "filter audio",
                     node: filter,
+                    type: "audio param"
                 },
                 5: {
-                    name: "vca audio",
-                    node: osc1ADSRGain,
+                    name: "filter FM",
+                    node: filterFMDepth,
+                    type: "audio param"
                 },
                 6: {
-                    name: "vca ctrl",
-                    node: osc1ADSRGainParamBuffer, 
+                    name: "vca audio",
+                    node: osc1ADSRGain,
+                    type: "audio param"
                 },
                 7: {
+                    name: "vca ctrl",
+                    node: osc1ADSRGainParamBuffer,
+                    type: "audio gain" 
+                },
+                8: {
                     name: "output",
                     node: outputGain,
+                    type: "audio param"
                 }
             },
             initialConnections: [

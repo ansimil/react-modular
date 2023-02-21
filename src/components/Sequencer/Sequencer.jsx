@@ -4,6 +4,7 @@ import { ModularBusContext } from '../../contexts/ModularBusContext'
 import SeqLength from '../SeqLength/SeqLength'
 import SevenSegDisplay from '../SevenSegDisplay/SevenSegDisplay'
 import RandomSequenceBtn from '../RandomSequenceBtn/RandomSequenceBtn'
+import { handleMouseEvent } from '../../services/general.services'
 import * as Tone from 'tone'
 import Nexus from 'nexusui'
 import './Sequencer.css'
@@ -70,6 +71,7 @@ const Sequencer = () => {
   useEffect(()=>{
     const sequencerWidth = 600
     const [bpm] = document.getElementsByClassName('bpmIndicator')
+
     if (sequencerRef.current){
       sequencerRef.current.destroy()
     }
@@ -122,9 +124,6 @@ const Sequencer = () => {
     })
     seqSlidersRef.current = sliders
 
-    sequencer.on("step", (e) => {
-      // handleStep(e)
-    })
     sequencer.interval.rate = 60 / appState.synthSettings.bpm * 1000
     sequencer.colors.accent = "#000"
     sequencer.colors.mediumLight = "#fafdd1"
@@ -134,7 +133,12 @@ const Sequencer = () => {
 
   return (
     <div className="sequencerContainer">
-    
+      <div className="moduleInfo">
+        <div className="moduleInfoInnerSeq">
+            <p>{`seq`}</p>
+        </div>
+      </div>
+      <div className="sequencerInner">
       <div className="sequencerNotesGates">
         <div id="sequencer"></div>
         <div className="slidersContainer">
@@ -162,19 +166,31 @@ const Sequencer = () => {
                     <div className="bpmIncDecContainer">
                       <button
                       disabled={sequencerSettings.sliders[i].octave >= 6 ? true: ""}
-                      className="bpmBtn bpmTopBtn" 
+                      className={`bpmBtn bpmTopBtn octave-up-${i}`} 
                       onClick={()=> {
                         handleInc("octave", i)
                       }}
+                      onMouseDown={
+                        () => handleMouseEvent(`octave-up-${i}`, true)
+                      }
+                      onMouseUp={
+                        () => handleMouseEvent(`octave-up-${i}`, false)
+                      }
                       >
                       +
                       </button>
                       <button
                       disabled={sequencerSettings.sliders[i].octave <= 1 ? true: ""}
-                      className="bpmBtn bpmBtmBtn"
+                      className={`bpmBtn bpmBtmBtn octave-down-${i}`}
                       onClick={()=> {
                         handleDec("octave", i)
                       }}
+                      onMouseDown={
+                        () => handleMouseEvent(`octave-down-${i}`, true)
+                      }
+                      onMouseUp={
+                        () => handleMouseEvent(`octave-down-${i}`, false)
+                      }
                       >
                       -
                       </button>
@@ -193,6 +209,7 @@ const Sequencer = () => {
           <SeqLength/>
           <RandomSequenceBtn/>
         </div>
+      </div>
       </div>
     </div>
   )

@@ -1,18 +1,31 @@
 .sequencerContainer {
   display: flex;
   justify-content: center;
-  align-items: stretch;
-  min-height: 350px;
+  align-items: center;
+  flex-direction: column;
+  min-width: 500px;
+  max-width: 900px;
+  width: 61%;
+  min-height: 400px;
   border-radius: 3px;
   overflow: hidden;
   background-color: rgb(57, 57, 57);
   border: solid black 1px;
 }
 
+.sequencerInner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1 1;
+  min-width: 100%;
+}
+
 .sequencerSettingsContainer {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 101%;
 }
 
 .sequencerSettingsInner {
@@ -34,8 +47,7 @@
   padding-right: 1rem;
   margin-left: 0.1rem;
   margin-right: 0.1rem;
-  max-height: 97%;
-  margin-top: 0.55%;
+  height: 98%;
   border-radius: 3px;
   border: solid black 1px;
 }
@@ -66,25 +78,6 @@
 
 .slidersContainer {
   flex: 1;
-}
-
-#slider0 svg:hover,
-#slider1 svg:hover,
-#slider2 svg:hover,
-#slider3 svg:hover,
-#slider4 svg:hover,
-#slider5 svg:hover,
-#slider6 svg:hover,
-#slider7 svg:hover,
-#slider8 svg:hover,
-#slider9 svg:hover,
-#slider10 svg:hover,
-#slider11 svg:hover,
-#slider12 svg:hover,
-#slider13 svg:hover,
-#slider14 svg:hover,
-#slider15 svg:hover {
-  background-color: rgb(71, 71, 71) !important;
 }
 
 .activeSeqSlider svg {
@@ -141,7 +134,7 @@
   transform: rotate(180deg);
 }
 
-.slidersContainer div {
+.sequencerNotesGates .slidersContainer div {
   border-top: solid black 0.5px;
   border-left: solid black 0.5px;
   border-right: solid black 0.5px;
