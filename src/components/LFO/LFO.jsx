@@ -41,7 +41,7 @@ const LFO = ({ lfoNum }) => {
                 <div className="waveSelectContainer">
                     <button 
                     id="sine"
-                    className={activeType === 'sine' ? "btn activeBtn endBtnLeft": "btn endBtnLeft"}
+                    className={activeType === 'sine' ? "btn activeBtn waveselect-btn": "btn waveselect-btn"}
                     onClick={changeType}
                     >
                     SINE
@@ -49,7 +49,7 @@ const LFO = ({ lfoNum }) => {
 
                     <button 
                     id="triangle"
-                    className={activeType === 'triangle' ? "btn activeBtn middleBtn": "btn middleBtn"}
+                    className={activeType === 'triangle' ? "btn activeBtn waveselect-btn": "btn waveselect-btn"}
                     onClick={changeType}
                     >
                     TRI
@@ -57,7 +57,7 @@ const LFO = ({ lfoNum }) => {
 
                     <button
                     id="pwm"
-                    className={activeType === 'pwm' ? "btn activeBtn middleBtn": "btn middleBtn"}
+                    className={activeType === 'pwm' ? "btn activeBtn waveselect-btn": "btn waveselect-btn"}
                     onClick={changeType}
                     >
                     PULS
@@ -65,7 +65,7 @@ const LFO = ({ lfoNum }) => {
 
                     <button 
                     id="sawtooth"
-                    className={activeType === 'sawtooth' ? "btn activeBtn endBtnRight": "btn endBtnRight"}
+                    className={activeType === 'sawtooth' ? "btn activeBtn waveselect-btn": "btn waveselect-btn"}
                     onClick={changeType}
                     >
                     SAW
