@@ -5,15 +5,16 @@ import { handleMouseEvent } from '../../services/general.services'
 import Slider from '../Slider/Slider'
 import './Oscillator.css'
 
-const IncDec = ({value, incDecClass, label}) => {
-
-
+const IncDec = ({value, incDecClass, label, updateState, oscNum}) => {
+    
     return (
         <div className="inc-dec-inner">
-            {label && <p className="inc-dec-label sliderLabel">{label}</p>}
+            {label && <p className="inc-dec-label sliderLabel">{label.toUpperCase()}</p>}
             <div className="inc-dec-btns-container">
-            <button 
+            <button
+            id={label} 
             className={`inc-dec-btn dec-btn dec-btn${incDecClass} btn`}
+            onClick={(e)=> updateState({type: ACTIONS.OSCILLATOR[oscNum].offset, payload: {value: "dec", id:e.target.id}})}
             onMouseDown={
                 () => handleMouseEvent(`dec-btn${incDecClass}`, true)
             }
@@ -23,9 +24,11 @@ const IncDec = ({value, incDecClass, label}) => {
             >
             -
             </button>
-            <p className="inc-dec-indicator">0</p>
-            <button 
+            <p className="inc-dec-indicator">{value}</p>
+            <button
+            id={label}
             className={`inc-dec-btn inc-btn inc-btn${incDecClass} btn`}
+            onClick={(e)=> updateState({type: ACTIONS.OSCILLATOR[oscNum].offset, payload: {value: "inc", id:e.target.id}})}
             onMouseDown={
                 () => handleMouseEvent(`inc-btn${incDecClass}`, true)
             }
@@ -113,8 +116,8 @@ const Oscillator = ({ oscNum }) => {
                         </button>
                     </div>
                     <div className="inc-dec-container">
-                    <IncDec incDecClass={"osc-1"} label={"SEMITONE"}/>
-                    <IncDec incDecClass={"osc-2"} label={"OCTAVE"}/>
+                    <IncDec value={oscSettings[selectedOscSettings].semitone} incDecClass={selectedOscAction} label={"semitone"} updateState={updateState} oscNum={selectedOscAction}/>
+                    <IncDec value={oscSettings[selectedOscSettings].octave} incDecClass={selectedOscAction} label={"octave"} updateState={updateState} oscNum={selectedOscAction}/>
                     </div>
                 </div>
             </div>

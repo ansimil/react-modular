@@ -2,8 +2,23 @@ const updateOscDetune = (osc, value) => {
     osc.detune.value = value
 }
 
-const updateOscFrequency = (osc, value) => {
-    osc.frequency.value = value
+const updateOscFrequency = (osc, state, timeNow, midiToFreqArr, note, name) => {
+    let glide = timeNow + state.oscSettings[name].glide
+    let newNote = note + state.oscSettings[name].semitone + (state.oscSettings[name].octave * 12)
+    if (newNote >= 127){
+        newNote = 127
+    }
+    else if (newNote <= 24){
+        newNote = 24
+    }
+    osc.frequency.cancelScheduledValues(timeNow)
+    osc.frequency.setValueAtTime(osc.frequency.value, timeNow)
+    osc.frequency.linearRampToValueAtTime(midiToFreqArr[newNote], glide) 
+    return newNote 
+}
+
+const updateLfoFrequency = (lfo, value) => {
+    lfo.frequency.value = value
 }
 
 const updateOscType = (id, osc, state) => {
@@ -27,21 +42,6 @@ const updateFMDepth = (FMDepth, value) => {
     FMDepth.gain.value = value
 }
 
-const updateOscADSR = (osc, adsr, stateKey, timeNow, state, midiToFreqArr, note, meter,) => {
-    if (stateKey) {
-        let glide = timeNow + state.oscSettings.osc1.glide
-        osc.frequency.cancelScheduledValues(timeNow)
-        osc.frequency.setValueAtTime(osc.frequency.value, timeNow)
-        osc.frequency.linearRampToValueAtTime(midiToFreqArr[note], glide)   
-        adsr.triggerAttack(timeNow, 1)
-    }
-    if (!stateKey) {
-        // let multiplier = (meter.getValue() + 1) / 2
-        // let currentRelease = state.adsrSettings.release
-        // let newRelease = currentRelease * multiplier
-        adsr.triggerRelease(timeNow+0.05, 0.0001)
-    }
-}
 
 
 export {
@@ -49,6 +49,6 @@ export {
     updateOscDetune,
     updateOscPwm,
     updateFMDepth,
-    updateOscADSR,
+    updateLfoFrequency,
     updateOscFrequency
 }
