@@ -13,12 +13,17 @@ The main goal of the synth is to create a monosynth with the flexibility of a mo
 ### Technical details
 The web app is being built with ReactJS and Sass. For sound the main library used in Tone.js, which uses the Web Audio API. 
 
+### Updates
+
+The following features have been recently added:
+
+- Connection Matrix - this will bring the modular aspect of the synth to life, allowing the user to connect each module as they please.
+- Step sequencer - a basic implementation of a 16 step sequencer with various functionalities 
+
 ### Next steps
 
 At the moment the app offers a simply monosynth configuration with an oscillator, two lfos, a filter and an ADSR. Functionalities that will be coming shortly include:
 
-- Connection Matrix - this will bring the modular aspect of the synth to life, allowing the user to connect each module as they please.
-- Step sequencer - a basic implementation of a 16 step sequencer with various functionalities, including saving sequences
 - MIDI - it will be possible for the user to plug in a midi keyboard and play the synth
 
 
