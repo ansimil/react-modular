@@ -8,7 +8,7 @@ import './ControlBar.css'
 import qMark from '../../assets/icons/questionmark-icon.png'
 
 const ControlBar = () => {
-    const [showModal, setShowModal] = useState(false)
+    const [showModal, setShowModal] = useState(process.env.REACT_APP_ENVIRONMENT === 'dev' ? false : true)
     const toggleModal = () => setShowModal(!showModal)
 
     return (
