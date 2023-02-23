@@ -13,13 +13,13 @@ const IncDec = ({value, incDecClass, label, updateState, oscNum}) => {
             <div className="inc-dec-btns-container">
             <button
             id={label} 
-            className={`inc-dec-btn dec-btn dec-btn${incDecClass} btn`}
+            className={`inc-dec-btn dec-btn dec-btn${incDecClass}${label} btn`}
             onClick={(e)=> updateState({type: ACTIONS.OSCILLATOR[oscNum].offset, payload: {value: "dec", id:e.target.id}})}
             onMouseDown={
-                () => handleMouseEvent(`dec-btn${incDecClass}`, true)
+                () => handleMouseEvent(`dec-btn${incDecClass}${label}`, true)
             }
             onMouseUp={
-                () => handleMouseEvent(`dec-btn${incDecClass}`, false)
+                () => handleMouseEvent(`dec-btn${incDecClass}${label}`, false)
             }
             >
             -
@@ -27,13 +27,13 @@ const IncDec = ({value, incDecClass, label, updateState, oscNum}) => {
             <p className="inc-dec-indicator">{value}</p>
             <button
             id={label}
-            className={`inc-dec-btn inc-btn inc-btn${incDecClass} btn`}
+            className={`inc-dec-btn inc-btn inc-btn${incDecClass}${label} btn`}
             onClick={(e)=> updateState({type: ACTIONS.OSCILLATOR[oscNum].offset, payload: {value: "inc", id:e.target.id}})}
             onMouseDown={
-                () => handleMouseEvent(`inc-btn${incDecClass}`, true)
+                () => handleMouseEvent(`inc-btn${incDecClass}${label}`, true)
             }
             onMouseUp={
-                () => handleMouseEvent(`inc-btn${incDecClass}`, false)
+                () => handleMouseEvent(`inc-btn${incDecClass}${label}`, false)
             }
             >
             +
