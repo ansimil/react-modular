@@ -121,12 +121,16 @@ let lfo2 = new Tone.OmniOscillator({
     type: "sine",
     frequency: 2,
 })
+
 let filter = new Tone.Filter({
     max: "10000",
     min: "0",
     frequency: "10000",
     rolloff: -24
 })
+let filterGainAdjust = new Tone.Gain(1)
+
+
 let ADSRGain = new Tone.Gain()
 let osc2ADSRGain = new Tone.Gain()
 let osc1FMDepth = new Tone.Gain()
@@ -164,6 +168,8 @@ lfo2FMDepth.gain.value = 0
 filterFMDepth.gain.value = 0
 ADSRGainParamBuffer.gain.value = 1
 ADSRGain.gain.setValueAtTime(0, actx.currentTime)
+
+filterGainAdjust.connect(filter)
 osc1FMDepth.connect(osc1.detune)
 osc2FMDepth.connect(osc2.detune)
 lfo1FMDepth.connect(lfo1.detune)
@@ -408,19 +414,26 @@ export function reducer(state, action){
         case ACTIONS.MATRIX.connections:
             const {row:outputs, column:inputs, state:cellState} = value
             const tuple = [inputs,outputs]
+            let connectionsResponse
             if (cellState) {
                 connectionChain.push(tuple)
-                setConnections(tuple, state, output, out)
+                connectionsResponse = setConnections(tuple, state, output, out)
             }
             else {
-                setDisconnections(tuple, state)
+                connectionsResponse = setDisconnections(tuple, state)
                 let leftoverConnections = connectionChain.filter(connection => {
                         return (connection[0] !== tuple[0] || connection[1] !== tuple[1])
                 })
                 connectionChain = leftoverConnections
             }
-            
-            return {...state, matrixSettings: {...state.matrixSettings, currentConnections: [connectionChain]}}
+            return {...state, matrixSettings: {...state.matrixSettings, 
+                currentConnections: [connectionChain],
+                inputs: {...state.matrixSettings.inputs,
+                    [inputs]: {...state.matrixSettings.inputs[inputs],
+                        connectedNodes: connectionsResponse
+                    }
+                }
+            }}
             
         default:
             console.log('error', action)
@@ -576,47 +589,56 @@ function ModularBus (props) {
                 0: {
                     name: "osc1 FM",
                     node: osc1FMDepth,
-                    type: "audio param"
+                    type: "audio param",
+                    connectedNodes: 0
                 },
                 1: {
                     name: "osc2 FM",
                     node: osc2FMDepth,
-                    type: "audio param"
+                    type: "audio param",
+                    connectedNodes: 0
                 },
                 2: {
                     name: "lfo1 FM",
                     node: lfo1FMDepth,
-                    type: "audio param"
+                    type: "audio param",
+                    connectedNodes: 0
                 },
                 3: {
                     name: "lfo2 FM",
                     node: lfo2FMDepth,
-                    type: "audio param"
+                    type: "audio param",
+                    connectedNodes: 0
                 },
                 4: {
                     name: "filter audio",
-                    node: filter,
-                    type: "audio param"
+                    node: filterGainAdjust,
+                    type: "audio param",
+                    connectedNodes: 0
                 },
                 5: {
                     name: "filter FM",
                     node: filterFMDepth,
-                    type: "audio param"
+                    type: "audio param",
+                    connectedNodes: 0
                 },
                 6: {
                     name: "vca audio",
                     node: ADSRGain,
-                    type: "audio param"
+                    type: "audio param",
+                    connectedNodes: 0
                 },
                 7: {
                     name: "vca ctrl",
                     node: ADSRGainParamBuffer,
-                    type: "audio gain" 
+                    type: "audio gain",
+                    connectedNodes: 0 
                 },
                 8: {
                     name: "output",
                     node: outputGain,
-                    type: "audio param"
+                    type: "audio param",
+                    connectedNodes: 0
                 }
             },
             initialConnections: [
