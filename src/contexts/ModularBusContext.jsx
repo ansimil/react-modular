@@ -22,7 +22,9 @@ import {
 } from "../services/context.services";
 import { 
     Oscillator,
-    Filter
+    Filter,
+    VCA,
+    ADSR
 } from "../classes/classes";
 import { 
     ACTIONS
@@ -33,7 +35,6 @@ const ModularBusContext = createContext()
 
 let midiToFreqArr = {}
 let smoothing = 1.0
-
 
 const actx = new Tone.Context() 
 const out = actx.destination
@@ -49,38 +50,14 @@ let lfo2 = new Oscillator(2)
 lfo2.initialConnections()
 let filter = new Filter()
 filter.initialConnections()
-
-
-
+let adsr = new ADSR()
+let vca = new VCA()
+vca.initialConnections()
 
 let output = new Tone.Gain()
 let outputGain = new Tone.Gain()
-
-let vca = new Tone.Gain()
-let vcaGainAdjust = new Tone.Gain(1)
-let vcaAudioGainAdjust = new Tone.Gain(1)
-
-vcaAudioGainAdjust.connect(vca)
-vcaGainAdjust.connect(vca.gain)
-
-let adsr = new Tone.Envelope({
-    attack: 0.01,
-    decay: 0.2,
-    sustain: 0.5,
-    release: 0.2,
-    attackCurve: "exponential",
-    decayCurve: "linear",
-    releaseCurve: "exponential"
-})
-let adsrToAudio = new Tone.GainToAudio()
-
-
-
 output.gain.setValueAtTime(0.00001, actx.currentTime)
 outputGain.gain.setValueAtTime(1.0, actx.currentTime)
-vcaGainAdjust.gain.value = 1
-vca.gain.setValueAtTime(0, actx.currentTime)
-
 outputGain.connect(output)
 output.connect(out)
 
@@ -96,6 +73,12 @@ const initialConnection = [
 
 let connectionChain = []
 
+const midiToFreqConverter = () => {
+    for (let i = 0; i < 106; i++){
+        let freq = (Math.pow(2, (i-69)/12)*440)
+        midiToFreqArr = {...midiToFreqArr, [i]: freq}
+    }
+}
 
 export function reducer(state, action){
     let { id, value, note, stateKey, i, time } = action.payload
@@ -253,11 +236,11 @@ export function reducer(state, action){
 
         case ACTIONS.ADSR.CHANGE_ADSR.time:
             state.adsrSettings[id] = value
-            adsr[id] = value
+            adsr.adsr[id] = value
             return {...state, adsrSettings: {...state.adsrSettings, [id]: Number(value)}};
         
         case ACTIONS.ADSR.CHANGE_ADSR.gain:
-            updateADSRGain(adsr, stateKey, actx.currentTime, state)
+            updateADSRGain(adsr.adsr, stateKey, actx.currentTime, state)
             return {...state, adsrSettings: {...state.adsrSettings, [id]: Number(value)}};
     
         
@@ -294,8 +277,8 @@ export function reducer(state, action){
                     name: "osc2"
                 }
             ]
-            step(oscillators, adsr, time, state, midiToFreqArr, stepNote, bpmForClockWidth)
-            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note], oscADSRGain: vca.gain.value}}};
+            step(oscillators, adsr.adsr, time, state, midiToFreqArr, stepNote, bpmForClockWidth)
+            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note], oscADSRGain: vca.vca.gain.value}}};
         
         case ACTIONS.SEQUENCER.length:
             return {...state, sequencerSettings: {...state.sequencerSettings, length: value}}
@@ -333,11 +316,6 @@ export function reducer(state, action){
 
 function ModularBus (props) {
     
-    for (let i = 0; i < 106; i++){
-        let freq = (Math.pow(2, (i-69)/12)*440)
-        midiToFreqArr = {...midiToFreqArr, [i]: freq}
-    }
-    
     let matrixRef = useRef(null)
     let keyboardRef = useRef(null)
     let adsrRef = useRef([])
@@ -347,6 +325,8 @@ function ModularBus (props) {
     const oscRef = useRef([])
     const lfoRef = useRef([])
     const filterRef = useRef([])
+    
+    midiToFreqConverter()
 
     const connectToOscilloscope = () => {
         oscilloscopeRef.current.connect(outputGain)
@@ -365,7 +345,7 @@ function ModularBus (props) {
                 detune: osc1.osc.detune.value,
                 type: osc1.osc.type,
                 oscFMDepth: osc1.FMDepth.gain.value,
-                oscADSRGain: vca.gain.value,
+                oscADSRGain: vca.vca.gain.value,
                 glide: 0.00,
                 pwm: 0,
                 octave: 0,
@@ -376,7 +356,6 @@ function ModularBus (props) {
                 detune: osc2.osc.detune.value,
                 type: osc2.osc.type,
                 oscFMDepth: osc2.FMDepth.gain.value,
-                // oscADSRGain: osc2ADSRGain.gain.value,
                 glide: 0.00,
                 pwm: 0,
                 octave: 0,
@@ -395,7 +374,7 @@ function ModularBus (props) {
             decay: 0.2,
             sustain: 0.5,
             release: 0.2,
-            gain: vca.gain.value
+            gain: vca.vca.gain.value
         },
         lfoSettings: {
             lfo1: {
@@ -467,13 +446,13 @@ function ModularBus (props) {
                 },
                 5: {
                     name: "adsr",
-                    node: adsr,
+                    node: adsr.adsr,
                     type: "gain source",
-                    converter: adsrToAudio
+                    converter: adsr.converter
                 },
                 6: {
                     name: "vca output",
-                    node: vca,
+                    node: vca.vca,
                     type: "audio source"
                 }
             },
@@ -516,13 +495,13 @@ function ModularBus (props) {
                 },
                 6: {
                     name: "vca audio",
-                    node: vcaAudioGainAdjust,
+                    node: vca.audioGainAdjust,
                     type: "audio param",
                     connectedNodes: 0,
                 },
                 7: {
                     name: "vca ctrl",
-                    node: vcaGainAdjust,
+                    node: vca.ctrlGainAdjust,
                     type: "audio gain",
                     connectedNodes: 0 
                 },
