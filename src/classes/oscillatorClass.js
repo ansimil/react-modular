@@ -9,9 +9,10 @@ export class Oscillator {
         })
         this.FMDepth = new Tone.Gain(0)
         this.converter = new Tone.AudioToGain()
-    }
-
-    initialConnections(){
         this.FMDepth.connect(this.osc.detune)
     }
+
+    // initialConnections(){
+    //     this.FMDepth.connect(this.osc.detune)
+    // }
 }

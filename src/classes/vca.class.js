@@ -5,9 +5,6 @@ export class VCA {
         this.vca = new Tone.Gain(0)
         this.ctrlGainAdjust = new Tone.Gain(1)
         this.audioGainAdjust = new Tone.Gain(1)
-    }
-
-    initialConnections(){
         this.audioGainAdjust.connect(this.vca)
         this.ctrlGainAdjust.connect(this.vca.gain)
     }

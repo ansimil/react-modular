@@ -41,18 +41,24 @@ const out = actx.destination
 Tone.setContext(actx)
 
 let osc1 = new Oscillator(440)
-osc1.initialConnections()
 let osc2 = new Oscillator(440)
-osc2.initialConnections()
 let lfo1 = new Oscillator(2)
-lfo1.initialConnections()
 let lfo2 = new Oscillator(2)
-lfo2.initialConnections()
 let filter = new Filter()
-filter.initialConnections()
 let adsr = new ADSR()
 let vca = new VCA()
-vca.initialConnections()
+// let convolverGain = new Tone.Gain(0)
+// adsr.adsr.connect(convolverGain.gain)
+
+
+// // const convolver = new Tone.Convolver("https://res.cloudinary.com/dpkg7rmxr/video/upload/v1677229967/Audio/Freeze-1-Audio_zkpjmi.wav", () => {
+// //     console.log(convolver)
+// //     output.connect(convolver)
+// //     convolver.connect(convolverGain)
+// //     convolverGain.connect(out)
+// // });
+// const reverb = new Tone.Reverb(2)
+
 
 let output = new Tone.Gain()
 let outputGain = new Tone.Gain()
@@ -60,6 +66,7 @@ output.gain.setValueAtTime(0.00001, actx.currentTime)
 outputGain.gain.setValueAtTime(1.0, actx.currentTime)
 outputGain.connect(output)
 output.connect(out)
+
 
 // Connection chain //
 const initialConnection = [

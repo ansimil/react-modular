@@ -11,9 +11,6 @@ export class Filter {
         this.FMDepth = new Tone.Gain(0)
         this.QDepth = new Tone.Gain(0)
         this.gainAdjust = new Tone.Gain(1)
-    }
-
-    initialConnections(){
         this.gainAdjust.connect(this.filter)
         this.FMDepth.connect(this.filter.detune)
         this.QDepth.connect(this.filter.Q)
