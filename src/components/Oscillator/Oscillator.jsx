@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { ACTIONS } from '../../contexts/ModularBusContext'
+import { ACTIONS } from '../../utils/ACTIONS'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
 import { handleMouseEvent } from '../../services/general.services'
 import Slider from '../Slider/Slider'
