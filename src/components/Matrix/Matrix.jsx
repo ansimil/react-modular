@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
-import { ACTIONS } from '../../contexts/ModularBusContext'
+import { ACTIONS } from '../../utils/ACTIONS'
 import Nexus from 'nexusui'
 import './Matrix.css'
 
