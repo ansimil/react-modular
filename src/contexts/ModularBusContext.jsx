@@ -22,7 +22,8 @@ import {
 } from "../services/context.services";
 import { 
     Oscillator,
-    Filter
+    Filter,
+    VCA
 } from "../classes/classes";
 import { 
     ACTIONS
@@ -49,19 +50,13 @@ let lfo2 = new Oscillator(2)
 lfo2.initialConnections()
 let filter = new Filter()
 filter.initialConnections()
-
+let vca = new VCA()
+vca.initialConnections()
 
 
 
 let output = new Tone.Gain()
 let outputGain = new Tone.Gain()
-
-let vca = new Tone.Gain()
-let vcaGainAdjust = new Tone.Gain(1)
-let vcaAudioGainAdjust = new Tone.Gain(1)
-
-vcaAudioGainAdjust.connect(vca)
-vcaGainAdjust.connect(vca.gain)
 
 let adsr = new Tone.Envelope({
     attack: 0.01,
@@ -78,8 +73,6 @@ let adsrToAudio = new Tone.GainToAudio()
 
 output.gain.setValueAtTime(0.00001, actx.currentTime)
 outputGain.gain.setValueAtTime(1.0, actx.currentTime)
-vcaGainAdjust.gain.value = 1
-vca.gain.setValueAtTime(0, actx.currentTime)
 
 outputGain.connect(output)
 output.connect(out)
@@ -295,7 +288,7 @@ export function reducer(state, action){
                 }
             ]
             step(oscillators, adsr, time, state, midiToFreqArr, stepNote, bpmForClockWidth)
-            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note], oscADSRGain: vca.gain.value}}};
+            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note], oscADSRGain: vca.vca.gain.value}}};
         
         case ACTIONS.SEQUENCER.length:
             return {...state, sequencerSettings: {...state.sequencerSettings, length: value}}
@@ -365,7 +358,7 @@ function ModularBus (props) {
                 detune: osc1.osc.detune.value,
                 type: osc1.osc.type,
                 oscFMDepth: osc1.FMDepth.gain.value,
-                oscADSRGain: vca.gain.value,
+                oscADSRGain: vca.vca.gain.value,
                 glide: 0.00,
                 pwm: 0,
                 octave: 0,
@@ -376,7 +369,6 @@ function ModularBus (props) {
                 detune: osc2.osc.detune.value,
                 type: osc2.osc.type,
                 oscFMDepth: osc2.FMDepth.gain.value,
-                // oscADSRGain: osc2ADSRGain.gain.value,
                 glide: 0.00,
                 pwm: 0,
                 octave: 0,
@@ -395,7 +387,7 @@ function ModularBus (props) {
             decay: 0.2,
             sustain: 0.5,
             release: 0.2,
-            gain: vca.gain.value
+            gain: vca.vca.gain.value
         },
         lfoSettings: {
             lfo1: {
@@ -473,7 +465,7 @@ function ModularBus (props) {
                 },
                 6: {
                     name: "vca output",
-                    node: vca,
+                    node: vca.vca,
                     type: "audio source"
                 }
             },
@@ -516,13 +508,13 @@ function ModularBus (props) {
                 },
                 6: {
                     name: "vca audio",
-                    node: vcaAudioGainAdjust,
+                    node: vca.audioGainAdjust,
                     type: "audio param",
                     connectedNodes: 0,
                 },
                 7: {
                     name: "vca ctrl",
-                    node: vcaGainAdjust,
+                    node: vca.ctrlGainAdjust,
                     type: "audio gain",
                     connectedNodes: 0 
                 },
