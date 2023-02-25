@@ -1,7 +1,7 @@
 import { handleMouseEvent } from '../../services/general.services'
 import './Navbar.css'
 
-const Navbar = ({keysAndSeqRef, oscillatorsRef, lfosRef, filterRef, envelopeRef, oscilloscopeRef, matrixLocationRef}) => {
+const Navbar = ({keysAndSeqRef, oscillatorsRef, lfosRef, filterRef, envelopeRef, oscilloscopeRef, matrixLocationRef, effectsLocationRef}) => {
 
     const scrollTo = (ref) => {
         const { current } = ref
@@ -104,6 +104,21 @@ const Navbar = ({keysAndSeqRef, oscillatorsRef, lfosRef, filterRef, envelopeRef,
         }}
         >
         _envelope
+        </button>
+
+        <button 
+        className="btn navbar-btn effects-navbar-btn" 
+        onClick={
+            ()=>{scrollTo(effectsLocationRef)}
+        }
+        onMouseDown={()=>{
+            handleMouseEvent("effects-navbar-btn", true)
+        }}
+        onMouseUp={()=>{
+            handleMouseEvent("effects-navbar-btn", false)
+        }}
+        >
+        _effects
         </button>
 
         <button 

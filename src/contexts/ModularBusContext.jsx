@@ -47,9 +47,6 @@ let lfo2 = new Oscillator(2)
 let filter = new Filter()
 let adsr = new ADSR()
 let vca = new VCA()
-// let convolverGain = new Tone.Gain(0)
-// adsr.adsr.connect(convolverGain.gain)
-
 
 // // const convolver = new Tone.Convolver("https://res.cloudinary.com/dpkg7rmxr/video/upload/v1677229967/Audio/Freeze-1-Audio_zkpjmi.wav", () => {
 // //     console.log(convolver)
@@ -57,7 +54,7 @@ let vca = new VCA()
 // //     convolver.connect(convolverGain)
 // //     convolverGain.connect(out)
 // // });
-// const reverb = new Tone.Reverb(2)
+const reverb = new Tone.Reverb(2)
 
 
 let output = new Tone.Gain()
@@ -65,7 +62,8 @@ let outputGain = new Tone.Gain()
 output.gain.setValueAtTime(0.00001, actx.currentTime)
 outputGain.gain.setValueAtTime(1.0, actx.currentTime)
 outputGain.connect(output)
-output.connect(out)
+output.connect(reverb)
+reverb.connect(out)
 
 
 // Connection chain //
@@ -314,6 +312,19 @@ export function reducer(state, action){
                     }
                 }
             }}
+
+        case ACTIONS.EFFECTS.reverb[id]:
+            console.log(reverb)
+            if (id === 'decay'){
+            reverb.decay = value
+            }
+            else if (id === 'preDelay'){
+                reverb.preDelay = value
+            }
+            else {
+                reverb[id].value = value
+            } 
+            return {...state, effectsSettings: {...state.effectsSettings, reverb: {...state.effectsSettings.reverb, [id]: Number(value)}}}
             
         default:
             console.log('error', action)
@@ -325,13 +336,15 @@ function ModularBus (props) {
     
     let matrixRef = useRef(null)
     let keyboardRef = useRef(null)
-    let adsrRef = useRef([])
+    
     let oscilloscopeRef = useRef(null)
     let sequencerRef = useRef(null)
     let seqSlidersRef = useRef(null)
     const oscRef = useRef([])
     const lfoRef = useRef([])
     const filterRef = useRef([])
+    let adsrRef = useRef([])
+    let reverbRef = useRef([])
     
     midiToFreqConverter()
 
@@ -395,6 +408,13 @@ function ModularBus (props) {
                 type: lfo2.osc.type,
                 lfoFMDepth: lfo2.FMDepth.gain.value,
                 pwm: 0
+            }
+        },
+        effectsSettings: {
+            reverb: {
+                decay: 2,
+                wet: 1,
+                preDelay: 0
             }
         },
         sequencerSettings: {
@@ -527,7 +547,7 @@ function ModularBus (props) {
     })
 
     return (
-        <ModularBusContext.Provider value={{stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr, oscRef, lfoRef, filterRef, initialConnection}}>
+        <ModularBusContext.Provider value={{stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr, oscRef, lfoRef, filterRef, reverbRef, initialConnection}}>
         {props.children}
         </ModularBusContext.Provider>
     )
