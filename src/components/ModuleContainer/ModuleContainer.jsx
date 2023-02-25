@@ -1,7 +1,6 @@
 import './ModuleContainer.css'
 
 const ModuleContainer = ({children, name, moduleClass, locationRef}) => {
-
   return (
     <details ref={locationRef} open className={`${moduleClass} detailsContainer`}>
         <summary className="summaryContainer">

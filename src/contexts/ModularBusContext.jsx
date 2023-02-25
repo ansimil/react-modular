@@ -47,18 +47,12 @@ let lfo2 = new Oscillator(2)
 let filter = new Filter()
 let adsr = new ADSR()
 let vca = new VCA()
-// let convolverGain = new Tone.Gain(0)
-// adsr.adsr.connect(convolverGain.gain)
-
-
-// // const convolver = new Tone.Convolver("https://res.cloudinary.com/dpkg7rmxr/video/upload/v1677229967/Audio/Freeze-1-Audio_zkpjmi.wav", () => {
-// //     console.log(convolver)
-// //     output.connect(convolver)
-// //     convolver.connect(convolverGain)
-// //     convolverGain.connect(out)
-// // });
-// const reverb = new Tone.Reverb(2)
-
+let reverb = new Tone.Reverb(2)
+reverb.wet.value = 0
+let reverbWetGainBuffer = new Tone.Gain(1)
+let reverbAudioGainBuffer = new Tone.Gain(1)
+reverbWetGainBuffer.connect(reverb.wet)
+reverbAudioGainBuffer.connect(reverb)
 
 let output = new Tone.Gain()
 let outputGain = new Tone.Gain()
@@ -72,7 +66,7 @@ output.connect(out)
 const initialConnection = [
     [4,0],
     [6,4],
-    [8,6],
+    [10,6],
     [0,2],
     [2,3],
     [7,5]
@@ -314,6 +308,18 @@ export function reducer(state, action){
                     }
                 }
             }}
+
+        case ACTIONS.EFFECTS.reverb[id]:
+            if (id === 'decay'){
+            reverb.decay = value
+            }
+            else if (id === 'preDelay'){
+                reverb.preDelay = value
+            }
+            else {
+                reverb[id].value = value
+            } 
+            return {...state, effectsSettings: {...state.effectsSettings, reverb: {...state.effectsSettings.reverb, [id]: Number(value)}}}
             
         default:
             console.log('error', action)
@@ -325,13 +331,15 @@ function ModularBus (props) {
     
     let matrixRef = useRef(null)
     let keyboardRef = useRef(null)
-    let adsrRef = useRef([])
+    
     let oscilloscopeRef = useRef(null)
     let sequencerRef = useRef(null)
     let seqSlidersRef = useRef(null)
     const oscRef = useRef([])
     const lfoRef = useRef([])
     const filterRef = useRef([])
+    let adsrRef = useRef([])
+    let reverbRef = useRef([])
     
     midiToFreqConverter()
 
@@ -395,6 +403,13 @@ function ModularBus (props) {
                 type: lfo2.osc.type,
                 lfoFMDepth: lfo2.FMDepth.gain.value,
                 pwm: 0
+            }
+        },
+        effectsSettings: {
+            reverb: {
+                decay: 2,
+                wet: 0,
+                preDelay: 0
             }
         },
         sequencerSettings: {
@@ -461,6 +476,11 @@ function ModularBus (props) {
                     name: "vca output",
                     node: vca.vca,
                     type: "audio source"
+                },
+                7: {
+                    name: "reverb",
+                    node: reverb,
+                    type: "audio source"
                 }
             },
             inputs: {
@@ -513,6 +533,18 @@ function ModularBus (props) {
                     connectedNodes: 0 
                 },
                 8: {
+                    name: "reverb audio",
+                    node: reverbAudioGainBuffer,
+                    type: "audio param",
+                    connectedNodes: 0 
+                },
+                9: {
+                    name: "reverb wet",
+                    node: reverbWetGainBuffer,
+                    type: "audio gain",
+                    connectedNodes: 0 
+                },
+                10: {
                     name: "output",
                     node: outputGain,
                     type: "audio param",
@@ -527,7 +559,7 @@ function ModularBus (props) {
     })
 
     return (
-        <ModularBusContext.Provider value={{stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr, oscRef, lfoRef, filterRef, initialConnection}}>
+        <ModularBusContext.Provider value={{stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr, oscRef, lfoRef, filterRef, reverbRef, initialConnection}}>
         {props.children}
         </ModularBusContext.Provider>
     )

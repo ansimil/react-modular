@@ -69,5 +69,12 @@ export const ACTIONS = {
     MATRIX: {
         connections: "change_connections",
         setConnections: "set_connections"
+    },
+    EFFECTS: {
+        reverb: {
+            decay: "change_reverb_decay",
+            wet: "change_reverb_wet",
+            preDelay: "change_reverb_preDelay"
+        }
     }
 }
