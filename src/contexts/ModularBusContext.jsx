@@ -47,30 +47,26 @@ let lfo2 = new Oscillator(2)
 let filter = new Filter()
 let adsr = new ADSR()
 let vca = new VCA()
-
-// // const convolver = new Tone.Convolver("https://res.cloudinary.com/dpkg7rmxr/video/upload/v1677229967/Audio/Freeze-1-Audio_zkpjmi.wav", () => {
-// //     console.log(convolver)
-// //     output.connect(convolver)
-// //     convolver.connect(convolverGain)
-// //     convolverGain.connect(out)
-// // });
-const reverb = new Tone.Reverb(2)
-
+let reverb = new Tone.Reverb(2)
+reverb.wet.value = 0
+let reverbWetGainBuffer = new Tone.Gain(1)
+let reverbAudioGainBuffer = new Tone.Gain(1)
+reverbWetGainBuffer.connect(reverb.wet)
+reverbAudioGainBuffer.connect(reverb)
 
 let output = new Tone.Gain()
 let outputGain = new Tone.Gain()
 output.gain.setValueAtTime(0.00001, actx.currentTime)
 outputGain.gain.setValueAtTime(1.0, actx.currentTime)
 outputGain.connect(output)
-output.connect(reverb)
-reverb.connect(out)
+output.connect(out)
 
 
 // Connection chain //
 const initialConnection = [
     [4,0],
     [6,4],
-    [8,6],
+    [10,6],
     [0,2],
     [2,3],
     [7,5]
@@ -314,7 +310,6 @@ export function reducer(state, action){
             }}
 
         case ACTIONS.EFFECTS.reverb[id]:
-            console.log(reverb)
             if (id === 'decay'){
             reverb.decay = value
             }
@@ -413,7 +408,7 @@ function ModularBus (props) {
         effectsSettings: {
             reverb: {
                 decay: 2,
-                wet: 1,
+                wet: 0,
                 preDelay: 0
             }
         },
@@ -481,6 +476,11 @@ function ModularBus (props) {
                     name: "vca output",
                     node: vca.vca,
                     type: "audio source"
+                },
+                7: {
+                    name: "reverb",
+                    node: reverb,
+                    type: "audio source"
                 }
             },
             inputs: {
@@ -533,6 +533,18 @@ function ModularBus (props) {
                     connectedNodes: 0 
                 },
                 8: {
+                    name: "reverb audio",
+                    node: reverbAudioGainBuffer,
+                    type: "audio param",
+                    connectedNodes: 0 
+                },
+                9: {
+                    name: "reverb wet",
+                    node: reverbWetGainBuffer,
+                    type: "audio gain",
+                    connectedNodes: 0 
+                },
+                10: {
                     name: "output",
                     node: outputGain,
                     type: "audio param",

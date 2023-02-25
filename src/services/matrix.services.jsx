@@ -35,7 +35,6 @@ const setDisconnections = (tuple, state) => {
             nodeToDisconnect.node.disconnect(nodeToDisconnect.converter)
             nodeToDisconnect.converter.disconnect(nodeToDisconnectFrom.node)
         }
-
         else {
             updateConnectionCount = (nodeToDisconnectFrom.connectedNodes) - 1
             if (updateConnectionCount === 0) {
