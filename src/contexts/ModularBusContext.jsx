@@ -40,11 +40,23 @@ const actx = new Tone.Context()
 const out = actx.destination
 Tone.setContext(actx)
 
-let osc1 = new Oscillator(440)
-let osc2 = new Oscillator(440)
-let lfo1 = new Oscillator(2)
+let oscillatorsArr = []
+let lfosArr = []
+let filtersArr = []
+
+let osc1 = new Oscillator(440, `osc${oscillatorsArr.length+1}`)
+oscillatorsArr.push(osc1)
+let osc2 = new Oscillator(440, `osc${oscillatorsArr.length+1}`)
+oscillatorsArr.push(osc2)
+
+let lfo1 = new Oscillator(2, `lfo${lfosArr.length+1}`)
+lfosArr.push(lfo1)
 let lfo2 = new Oscillator(2)
+lfosArr.push(lfo2, `lfo${lfosArr.length+1}`)
+
 let filter = new Filter()
+filtersArr.push(filter, `filter`)
+
 let adsr = new ADSR()
 let vca = new VCA()
 let reverb = new Tone.Reverb(2)
@@ -60,7 +72,6 @@ output.gain.setValueAtTime(0.00001, actx.currentTime)
 outputGain.gain.setValueAtTime(1.0, actx.currentTime)
 outputGain.connect(output)
 output.connect(out)
-
 
 // Connection chain //
 const initialConnection = [
@@ -107,32 +118,32 @@ export function reducer(state, action){
             return {...state, synthSettings: {...state.synthSettings, [id]: Number(value)}}
 
 
-        // OSCILLATOR SETTINGS //
+        // osc SETTINGS //
 
-        case ACTIONS.OSCILLATOR.OSC1.type: 
+        case ACTIONS.osc.osc1.type:
             updateOscType(id, osc1.osc, state)
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, type: id}}};
 
-        case ACTIONS.OSCILLATOR.OSC1.detune:
+        case ACTIONS.osc.osc1.detune:
             updateOscDetune(osc1.osc, value)
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, [id]: Number(value)}}};
         
-        case ACTIONS.OSCILLATOR.OSC1.glide:
+        case ACTIONS.osc.osc1.glide:
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, [id]: Number(value)}}};
 
-        case ACTIONS.OSCILLATOR.OSC1.pwm:
+        case ACTIONS.osc.osc1.pwm:
             updateOscPwm(osc1.osc, value)
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, [id]: Number(value)}}}
         
-        case ACTIONS.OSCILLATOR.OSC1.oscFMDepth:
+        case ACTIONS.osc.osc1.oscFMDepth:
             updateFMDepth(osc1.FMDepth, value)
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, [id]: Number(value)}}};
 
-        case ACTIONS.OSCILLATOR.OSC1.frequency:
+        case ACTIONS.osc.osc1.frequency:
             let newFreq = updateOscFrequency(osc1.osc, state, actx.currentTime, midiToFreqArr, note, "osc1")
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: newFreq}}};
             
-        case ACTIONS.OSCILLATOR.OSC1.offset:
+        case ACTIONS.osc.osc1.offset:
             let newValue
             if (value === "inc") {
                 newValue = state.oscSettings.osc1[id] + 1
@@ -142,30 +153,30 @@ export function reducer(state, action){
             }
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, [id]: Number(newValue)}}};
 
-        case ACTIONS.OSCILLATOR.OSC2.type:
+        case ACTIONS.osc.osc2.type:
             updateOscType(id, osc2.osc, state)
             return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, type: id}}};
 
-        case ACTIONS.OSCILLATOR.OSC2.detune:
+        case ACTIONS.osc.osc2.detune:
             updateOscDetune(osc2.osc, value)
             return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
 
-        case ACTIONS.OSCILLATOR.OSC2.glide:
+        case ACTIONS.osc.osc2.glide:
             return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
 
-        case ACTIONS.OSCILLATOR.OSC2.pwm:
+        case ACTIONS.osc.osc2.pwm:
             updateOscPwm(osc2.osc, value)
             return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}}
 
-        case ACTIONS.OSCILLATOR.OSC2.oscFMDepth:
+        case ACTIONS.osc.osc2.oscFMDepth:
             updateFMDepth(osc2.FMDepth, value)
             return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
 
-        case ACTIONS.OSCILLATOR.OSC2.frequency:
+        case ACTIONS.osc.osc2.frequency:
             let newFreq2 = updateOscFrequency(osc2.osc, state, actx.currentTime, midiToFreqArr, note, "osc2")
             return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, frequency: newFreq2}}};
             
-        case ACTIONS.OSCILLATOR.OSC2.offset:
+        case ACTIONS.osc.osc2.offset:
             let newValue2
             if (value === "inc") {
                 newValue2 = state.oscSettings.osc2[id] + 1
@@ -284,6 +295,18 @@ export function reducer(state, action){
         case ACTIONS.SEQUENCER.length:
             return {...state, sequencerSettings: {...state.sequencerSettings, length: value}}
 
+        case ACTIONS.EFFECTS.reverb[id]:
+            if (id === 'decay'){
+            reverb.decay = value
+            }
+            else if (id === 'preDelay'){
+                reverb.preDelay = value
+            }
+            else {
+                reverb[id].value = value
+            } 
+            return {...state, effectsSettings: {...state.effectsSettings, reverb: {...state.effectsSettings.reverb, [id]: Number(value)}}}
+
         // MATRIX SETTINGS //    
         case ACTIONS.MATRIX.connections:
             const {row:outputs, column:inputs, state:cellState} = value
@@ -309,18 +332,6 @@ export function reducer(state, action){
                 }
             }}
 
-        case ACTIONS.EFFECTS.reverb[id]:
-            if (id === 'decay'){
-            reverb.decay = value
-            }
-            else if (id === 'preDelay'){
-                reverb.preDelay = value
-            }
-            else {
-                reverb[id].value = value
-            } 
-            return {...state, effectsSettings: {...state.effectsSettings, reverb: {...state.effectsSettings.reverb, [id]: Number(value)}}}
-            
         default:
             console.log('error', action)
             return {...state};
@@ -559,7 +570,7 @@ function ModularBus (props) {
     })
 
     return (
-        <ModularBusContext.Provider value={{stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr, oscRef, lfoRef, filterRef, reverbRef, initialConnection}}>
+        <ModularBusContext.Provider value={{oscillatorsArr, stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr, oscRef, lfoRef, filterRef, reverbRef, initialConnection}}>
         {props.children}
         </ModularBusContext.Provider>
     )

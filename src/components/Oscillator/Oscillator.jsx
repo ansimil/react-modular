@@ -14,7 +14,7 @@ const IncDec = ({value, incDecClass, label, updateState, oscNum}) => {
             <button
             id={label} 
             className={`inc-dec-btn dec-btn dec-btn${incDecClass}${label} btn`}
-            onClick={(e)=> updateState({type: ACTIONS.OSCILLATOR[oscNum].offset, payload: {value: "dec", id:e.target.id}})}
+            onClick={(e)=> updateState({type: ACTIONS.osc[oscNum].offset, payload: {value: "dec", id:e.target.id}})}
             onMouseDown={
                 () => handleMouseEvent(`dec-btn${incDecClass}${label}`, true)
             }
@@ -28,7 +28,7 @@ const IncDec = ({value, incDecClass, label, updateState, oscNum}) => {
             <button
             id={label}
             className={`inc-dec-btn inc-btn inc-btn${incDecClass}${label} btn`}
-            onClick={(e)=> updateState({type: ACTIONS.OSCILLATOR[oscNum].offset, payload: {value: "inc", id:e.target.id}})}
+            onClick={(e)=> updateState({type: ACTIONS.osc[oscNum].offset, payload: {value: "inc", id:e.target.id}})}
             onMouseDown={
                 () => handleMouseEvent(`inc-btn${incDecClass}${label}`, true)
             }
@@ -51,17 +51,17 @@ const Oscillator = ({ oscNum }) => {
     const { oscSettings } = appState
    
     
-    const selectedOscAction = Object.keys(ACTIONS.OSCILLATOR)[oscNum-1]
+    const selectedOscAction = Object.keys(ACTIONS.osc)[oscNum-1]
     const selectedOscSettings = Object.keys(appState.oscSettings)[oscNum-1]
     
     const change = (e, id) => {
         let value = e;
-        updateState({type: ACTIONS.OSCILLATOR[selectedOscAction][id], payload: {id, value}})
+        updateState({type: ACTIONS.osc[selectedOscAction][id], payload: {id, value}})
     }
     const changeType = e => {
         let { id } = e.target;
         setActiveType(id)
-        updateState({type: ACTIONS.OSCILLATOR[selectedOscAction].type, payload: {id}})
+        updateState({type: ACTIONS.osc[selectedOscAction].type, payload: {id}})
     }
 
     return (
@@ -116,8 +116,8 @@ const Oscillator = ({ oscNum }) => {
                         </button>
                     </div>
                     <div className="inc-dec-container">
-                    <IncDec value={oscSettings[selectedOscSettings].semitone} incDecClass={selectedOscAction} label={"semitone"} updateState={updateState} oscNum={selectedOscAction}/>
-                    <IncDec value={oscSettings[selectedOscSettings].octave} incDecClass={selectedOscAction} label={"octave"} updateState={updateState} oscNum={selectedOscAction}/>
+                        <IncDec value={oscSettings[selectedOscSettings].semitone} incDecClass={selectedOscAction} label={"semitone"} updateState={updateState} oscNum={selectedOscAction}/>
+                        <IncDec value={oscSettings[selectedOscSettings].octave} incDecClass={selectedOscAction} label={"octave"} updateState={updateState} oscNum={selectedOscAction}/>
                     </div>
                 </div>
             </div>

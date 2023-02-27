@@ -1,5 +1,6 @@
 import './App.css';
-import { useRef } from 'react'
+import { useRef, useContext } from 'react'
+import { ModularBusContext } from '../../contexts/ModularBusContext';
 import Oscillator from '../Oscillator/Oscillator';
 import Filter from '../Filter/Filter';
 import { ADSR } from '../ADSR/ADSR';
@@ -12,10 +13,12 @@ import Sequencer from '../Sequencer/Sequencer';
 import ModuleContainer from '../ModuleContainer/ModuleContainer';
 import Navbar from '../Navbar/Navbar';
 import Reverb from '../Reverb/Reverb';
+import ModuleComp from '../ModuleComp/ModuleComp';
 
 
 
 function App() {
+  const { oscillatorsArr } = useContext(ModularBusContext)
   let keysAndSeqRef = useRef(null)
   let oscillatorsRef = useRef(null)
   let lfosRef = useRef(null)
@@ -63,7 +66,13 @@ function App() {
         <Oscilloscope size={[500,225]} id={"large"} />
       </ModuleContainer>
       
-      
+      <ModuleContainer name={'oscillators2'} moduleClass={'oscillator'}>
+        {oscillatorsArr.map(oscillator => {          
+          return (
+            <ModuleComp key={oscillator.name} module={oscillator}/> 
+          )
+        })}
+      </ModuleContainer>
     </div>
   );
 }

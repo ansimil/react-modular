@@ -5,8 +5,8 @@ export const ACTIONS = {
         outputGain: "change_synth_outputGain",
         bpm: "change_synth_bpm"
     },
-    OSCILLATOR: {
-        OSC1: {
+    osc: {
+        osc1: {
             type: "change_osc1_type",
             detune: "change_osc1_detune",
             frequency: "change_osc1_frequency",
@@ -16,7 +16,7 @@ export const ACTIONS = {
             pwm: "change_osc1_pwm",
             offset: "change_osc1_offset"
         },
-        OSC2: {
+        osc2: {
             type: "change_osc2_type",
             detune: "change_osc2_detune",
             frequency: "change_osc2_frequency",
