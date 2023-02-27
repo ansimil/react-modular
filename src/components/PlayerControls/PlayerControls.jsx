@@ -1,6 +1,6 @@
 import {useContext} from 'react'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
-import { ACTIONS } from '../../contexts/ModularBusContext'
+import { ACTIONS } from '../../utils/ACTIONS'
 import { lengthMap } from '../SeqLength/SeqLength'
 import * as Tone from 'tone'
 import PlayBlackIcon from '../../assets/icons/play-black-icon.png'

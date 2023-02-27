@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react'
-import { ACTIONS } from '../../contexts/ModularBusContext'
+import { ACTIONS } from '../../utils/ACTIONS'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
 import SeqLength from '../SeqLength/SeqLength'
 import SevenSegDisplay from '../SevenSegDisplay/SevenSegDisplay'

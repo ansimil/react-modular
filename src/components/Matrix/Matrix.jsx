@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
-import { ACTIONS } from '../../contexts/ModularBusContext'
+import { ACTIONS } from '../../utils/ACTIONS'
 import Nexus from 'nexusui'
 import './Matrix.css'
 
@@ -14,10 +14,15 @@ const Matrix = ( { matrixLocationRef } ) => {
     }
 
     useEffect(()=>{
+        let rows = 8
+        let columns = 11
+        let width = 300
+        let height = (width/rows)*columns
+
         let matrix = new Nexus.Sequencer("#matrix", {
-            "size": [385, 300],
-            "rows": 7,
-            "columns": 9 
+            "size": [height, width],
+            "rows": rows,
+            "columns": columns 
         })
         matrix.on("change", (e) => {
             changeConnections(e)
@@ -47,7 +52,9 @@ const Matrix = ( { matrixLocationRef } ) => {
                 <div className="horizontalLabel"><p>filter</p></div>
                 <div className="horizontalLabel"><p>filterFM</p></div>
                 <div className="horizontalLabel"><p>vca audio</p></div> 
-                <div className="horizontalLabel"><p>vca ctrl.</p></div> 
+                <div className="horizontalLabel"><p>vca ctrl.</p></div>
+                <div className="horizontalLabel"><p>reverb audio</p></div>
+                <div className="horizontalLabel"><p>reverb wet</p></div>
                 <div className="horizontalLabel"><p>output</p></div>
             </div>
             <div className="matrixInner">
@@ -59,7 +66,8 @@ const Matrix = ( { matrixLocationRef } ) => {
                 <div className="verticalLabel">lfo2</div>
                 <div className="verticalLabel">filter</div>
                 <div className="verticalLabel">env</div>
-                <div className="verticalLabel">vca</div> 
+                <div className="verticalLabel">vca</div>
+                <div className="verticalLabel">reverb</div> 
             </div>
             <div id="matrix"></div>
     

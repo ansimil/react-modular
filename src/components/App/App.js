@@ -11,6 +11,7 @@ import ControlBar from '../ControlBar/ControlBar';
 import Sequencer from '../Sequencer/Sequencer';
 import ModuleContainer from '../ModuleContainer/ModuleContainer';
 import Navbar from '../Navbar/Navbar';
+import Reverb from '../Reverb/Reverb';
 
 
 
@@ -22,12 +23,13 @@ function App() {
   let envelopeRef = useRef(null)
   let oscilloscopeRef = useRef(null)
   let matrixLocationRef = useRef(null)
+  let effectsLocationRef = useRef(null)
 
 
   return (
     <div className="App">
       <ControlBar />
-      <Navbar keysAndSeqRef={keysAndSeqRef} oscillatorsRef={oscillatorsRef} lfosRef={lfosRef} filterRef={filterRef} envelopeRef={envelopeRef} oscilloscopeRef={oscilloscopeRef} matrixLocationRef={matrixLocationRef} />
+      <Navbar keysAndSeqRef={keysAndSeqRef} oscillatorsRef={oscillatorsRef} lfosRef={lfosRef} filterRef={filterRef} envelopeRef={envelopeRef} oscilloscopeRef={oscilloscopeRef} matrixLocationRef={matrixLocationRef} effectsLocationRef={effectsLocationRef}/>
       <Matrix matrixLocationRef={matrixLocationRef}/>   
       
       <ModuleContainer name={'_keys + _seq'} moduleClass={'keysAndSeq'} locationRef={keysAndSeqRef}>
@@ -51,6 +53,10 @@ function App() {
         
       <ModuleContainer name={'_envelope'} moduleClass={'envelope'} locationRef={envelopeRef}>
       <ADSR />
+      </ModuleContainer>
+
+      <ModuleContainer name={'_effects'} moduleClass={'effects'} locationRef={effectsLocationRef}>
+        <Reverb/>
       </ModuleContainer>
       
       <ModuleContainer name={'_oscilloscope'} moduleClass={'oscilloscope'} locationRef={oscilloscopeRef}>
