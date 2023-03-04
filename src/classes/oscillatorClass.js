@@ -70,6 +70,14 @@ export class Oscillator {
                 label: "SAW",
                 type: "type"
             }
+        ],
+        incDecArr: [
+            {
+                name: "octave"
+            },
+            {
+                name: "semitone"
+            }
         ]
         }
     }
