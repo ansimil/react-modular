@@ -219,6 +219,7 @@
   margin-top: 0.75%;
   border-radius: 3px;
   box-shadow: inset 0px 0px 8px rgba(0, 0, 0, 0.4);
+  flex: 1;
 }
 
 .slidersContainer div:nth-last-child(n+2), .sliders-container div:nth-last-child(n+2) {

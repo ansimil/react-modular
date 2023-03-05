@@ -17,10 +17,10 @@ const ModuleComp = ({ module }) => {
         <div className="module-settings-container">
             <div className="module-settings-inner">
                 {slidersArr && <SlidersContainer module={module}/>}
-                <div className="module-right-side-container">
+                {(selectorsArr || incDecArr) && <div className="module-right-side-container">
                 {selectorsArr && <SelectorsComp module={module} />}
                 {incDecArr && <AdditionalSettingsContainer module={module} />}
-                </div>
+                </div>}
             </div>
         </div>
     </div>
