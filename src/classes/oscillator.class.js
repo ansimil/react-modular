@@ -34,6 +34,9 @@ export class Oscillator {
             }
         ]
         }
+        this.initialState = {
+            
+        }
     }
 
     updateOscDetune(value){

@@ -26,4 +26,29 @@ export class LFO {
             ]
         }
     }
+
+    updateLfoFrequency(value) {
+        this.osc.frequency.value = value
+    }
+
+    updateOscType(id, state){
+        if (id === "pwm"){
+            this.osc.type = id
+            this.osc.modulationFrequency.value = state.lfoSettings[this.name].pwm
+        }
+        this.osc.type = id
+    }
+
+    updateFMDepth(value){
+        this.FMDepth.gain.value = value
+    }
+
+    updateOscPwm(value){
+        if (value === "0" && this.osc.width) {
+            this.osc.width.value = 0.5
+        }
+        if (this.osc.type === "pwm") {
+            this.osc.modulationFrequency.value = value
+        }
+    }
 }

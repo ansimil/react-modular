@@ -1,7 +1,3 @@
-const updateOscDetune = (osc, value) => {
-    osc.detune.value = value
-}
-
 const updateOscFrequency = (osc, state, timeNow, midiToFreqArr, note, moduleName) => {
     let glide = timeNow + state.oscSettings[moduleName].glide
     let newNote = note + state.oscSettings[moduleName].semitone + (state.oscSettings[moduleName].octave * 12)
@@ -17,38 +13,8 @@ const updateOscFrequency = (osc, state, timeNow, midiToFreqArr, note, moduleName
     return newNote 
 }
 
-const updateLfoFrequency = (lfo, value) => {
-    lfo.frequency.value = value
-}
-
-const updateOscType = (id, osc, state) => {
-    if (id === "pwm"){
-        osc.type = id
-        osc.modulationFrequency.value = state.oscSettings.osc1.pwm
-    }
-    osc.type = id
-}
-
-const updateOscPwm = (osc, value) => {
-    if (value === "0" && osc.width) {
-        osc.width.value = 0.5
-    }
-    if (osc.type === "pwm") {
-        osc.modulationFrequency.value = value
-    }
-}
-
-const updateFMDepth = (FMDepth, value) => {
-    FMDepth.gain.value = value
-}
-
 
 
 export {
-    updateOscType,
-    updateOscDetune,
-    updateOscPwm,
-    updateFMDepth,
-    updateLfoFrequency,
     updateOscFrequency
 }
