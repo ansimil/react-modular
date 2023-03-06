@@ -5,7 +5,6 @@ import {
 } from "../services/matrix.services";
 import { 
     updateOscType, 
-    updateOscDetune, 
     updateOscPwm, 
     updateFMDepth,
     updateLfoFrequency,
@@ -24,7 +23,9 @@ import {
     Oscillator,
     Filter,
     VCA,
-    ADSR
+    ADSR,
+    LFO,
+    Reverb
 } from "../classes/classes";
 import { 
     ACTIONS
@@ -40,19 +41,48 @@ const actx = new Tone.Context()
 const out = actx.destination
 Tone.setContext(actx)
 
-let osc1 = new Oscillator(440)
-let osc2 = new Oscillator(440)
-let lfo1 = new Oscillator(2)
-let lfo2 = new Oscillator(2)
-let filter = new Filter()
-let adsr = new ADSR()
+let oscillatorsArr = []
+let lfosArr = []
+let filtersArr = []
+let adsrArr = []
+let effectsArr = []
+
+let osc1 = new Oscillator(440, `osc${oscillatorsArr.length+1}`)
+oscillatorsArr.push(osc1)
+let osc2 = new Oscillator(440, `osc${oscillatorsArr.length+1}`)
+oscillatorsArr.push(osc2)
+
+
+let lfo1 = new LFO(2, `lfo${lfosArr.length+1}`)
+lfosArr.push(lfo1)
+let lfo2 = new LFO(2, `lfo${lfosArr.length+1}`)
+lfosArr.push(lfo2)
+
+let filter1 = new Filter(`filter${filtersArr.length+1}`)
+filtersArr.push(filter1)
+
+let adsr1 = new ADSR(`adsr${adsrArr.length+1}`)
+adsrArr.push(adsr1)
+
 let vca = new VCA()
-let reverb = new Tone.Reverb(2)
-reverb.wet.value = 0
-let reverbWetGainBuffer = new Tone.Gain(1)
-let reverbAudioGainBuffer = new Tone.Gain(1)
-reverbWetGainBuffer.connect(reverb.wet)
-reverbAudioGainBuffer.connect(reverb)
+
+function counter(){
+    let count = 0
+    if (effectsArr.length === 0){
+        return 1
+    }
+    effectsArr.forEach(effect => {
+        if (effect.subtype === 'reverb'){
+            count++
+        }
+    })
+
+    return count + 1
+    
+}
+let reverb1 = new Reverb(2, `reverb${counter()}`)
+effectsArr.push(reverb1)
+
 
 let output = new Tone.Gain()
 let outputGain = new Tone.Gain()
@@ -60,7 +90,6 @@ output.gain.setValueAtTime(0.00001, actx.currentTime)
 outputGain.gain.setValueAtTime(1.0, actx.currentTime)
 outputGain.connect(output)
 output.connect(out)
-
 
 // Connection chain //
 const initialConnection = [
@@ -82,8 +111,7 @@ const midiToFreqConverter = () => {
 }
 
 export function reducer(state, action){
-    let { id, value, note, stateKey, i, time } = action.payload
-
+    let { id, value, note, stateKey, i, time, moduleName, subtype } = action.payload
     switch (action.type) {
         // SYNTH SETTINGS //
         case ACTIONS.SYNTH.start:
@@ -107,142 +135,93 @@ export function reducer(state, action){
             return {...state, synthSettings: {...state.synthSettings, [id]: Number(value)}}
 
 
-        // OSCILLATOR SETTINGS //
+        // osc SETTINGS //
 
-        case ACTIONS.OSCILLATOR.OSC1.type: 
-            updateOscType(id, osc1.osc, state)
-            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, type: id}}};
+        case ACTIONS.osc.type:
+            oscillatorsArr[i].updateOscType(id, state)
+            return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], type: id}}};
 
-        case ACTIONS.OSCILLATOR.OSC1.detune:
-            updateOscDetune(osc1.osc, value)
-            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, [id]: Number(value)}}};
+        case ACTIONS.osc.detune:
+            oscillatorsArr[i].updateOscDetune(value)
+            return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], [id]: Number(value)}}};
         
-        case ACTIONS.OSCILLATOR.OSC1.glide:
-            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, [id]: Number(value)}}};
+        case ACTIONS.osc.glide:
+            return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], [id]: Number(value)}}};
 
-        case ACTIONS.OSCILLATOR.OSC1.pwm:
-            updateOscPwm(osc1.osc, value)
-            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, [id]: Number(value)}}}
+        case ACTIONS.osc.pwm:
+            oscillatorsArr[i].updateOscPwm(value)
+            return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], [id]: Number(value)}}}
         
-        case ACTIONS.OSCILLATOR.OSC1.oscFMDepth:
-            updateFMDepth(osc1.FMDepth, value)
-            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, [id]: Number(value)}}};
+        case ACTIONS.osc.oscFMDepth:
+            oscillatorsArr[i].updateFMDepth(value)
+            return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], [id]: Number(value)}}};
 
-        case ACTIONS.OSCILLATOR.OSC1.frequency:
-            let newFreq = updateOscFrequency(osc1.osc, state, actx.currentTime, midiToFreqArr, note, "osc1")
-            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: newFreq}}};
+        case ACTIONS.osc.frequency:
+            let newFreq = updateOscFrequency(oscillatorsArr[i].osc, state, actx.currentTime, midiToFreqArr, note, moduleName)
+            return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], frequency: newFreq}}};
             
-        case ACTIONS.OSCILLATOR.OSC1.offset:
+        case ACTIONS.osc.offset:
             let newValue
             if (value === "inc") {
-                newValue = state.oscSettings.osc1[id] + 1
+                newValue = state.oscSettings[moduleName][id] + 1
             }
             else {
-                newValue = state.oscSettings.osc1[id] - 1
+                newValue = state.oscSettings[moduleName][id] - 1
             }
-            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, [id]: Number(newValue)}}};
-
-        case ACTIONS.OSCILLATOR.OSC2.type:
-            updateOscType(id, osc2.osc, state)
-            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, type: id}}};
-
-        case ACTIONS.OSCILLATOR.OSC2.detune:
-            updateOscDetune(osc2.osc, value)
-            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
-
-        case ACTIONS.OSCILLATOR.OSC2.glide:
-            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
-
-        case ACTIONS.OSCILLATOR.OSC2.pwm:
-            updateOscPwm(osc2.osc, value)
-            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}}
-
-        case ACTIONS.OSCILLATOR.OSC2.oscFMDepth:
-            updateFMDepth(osc2.FMDepth, value)
-            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
-
-        case ACTIONS.OSCILLATOR.OSC2.frequency:
-            let newFreq2 = updateOscFrequency(osc2.osc, state, actx.currentTime, midiToFreqArr, note, "osc2")
-            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, frequency: newFreq2}}};
-            
-        case ACTIONS.OSCILLATOR.OSC2.offset:
-            let newValue2
-            if (value === "inc") {
-                newValue2 = state.oscSettings.osc2[id] + 1
-            }
-            else {
-                newValue2 = state.oscSettings.osc2[id] - 1
-            }
-            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(newValue2)}}};
+            return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], [id]: Number(newValue)}}};
 
         // LFO SETTINGS //
 
-        case ACTIONS.LFO.CHANGE_LFO1.frequency:
-            updateLfoFrequency(lfo1.osc, value)
-            return {...state, lfoSettings: {...state.lfoSettings, lfo1: {...state.lfoSettings.lfo1, [id]: Number(value)}}}
+        case ACTIONS.lfo.frequency:
+            updateLfoFrequency(lfosArr[i].osc, value)
+            return {...state, lfoSettings: {...state.lfoSettings, [moduleName]: {...state.lfoSettings[moduleName], [id]: Number(value)}}}
         
-        case ACTIONS.LFO.CHANGE_LFO1.type:
-            updateOscType(id, lfo1.osc, state)
-            return {...state, lfoSettings: {...state.lfoSettings, lfo1: {...state.lfoSettings.lfo1, type: id}}}
+        case ACTIONS.lfo.type:
+            updateOscType(id, lfosArr[i].osc, state)
+            return {...state, lfoSettings: {...state.lfoSettings, [moduleName]: {...state.lfoSettings[moduleName], type: id}}}
 
-        case ACTIONS.LFO.CHANGE_LFO1.lfoFMDepth:
-            updateFMDepth(lfo1.FMDepth, value)
-            return {...state, lfoSettings: {...state.lfoSettings, lfo1: {...state.lfoSettings.lfo1, [id]: Number(value)}}};
+        case ACTIONS.lfo.oscFMDepth:
+            updateFMDepth(lfosArr[i].FMDepth, value)
+            return {...state, lfoSettings: {...state.lfoSettings, [moduleName]: {...state.lfoSettings[moduleName], [id]: Number(value)}}};
         
-        case ACTIONS.LFO.CHANGE_LFO1.pwm:
-            updateOscPwm(lfo1.osc, value)
-            return {...state, lfoSettings: {...state.lfoSettings, lfo1: {...state.lfoSettings.lfo1, [id]: Number(value)}}}    
-        
-        case ACTIONS.LFO.CHANGE_LFO2.frequency:
-            updateLfoFrequency(lfo2.osc, value)
-            return {...state, lfoSettings: {...state.lfoSettings, lfo2: {...state.lfoSettings.lfo2, [id]: Number(value)}}}
-
-        case ACTIONS.LFO.CHANGE_LFO2.type:
-            updateOscType(id, lfo2.osc, state)
-            return {...state, lfoSettings: {...state.lfoSettings, lfo2: {...state.lfoSettings.lfo2, type: id}}}
-        
-        case ACTIONS.LFO.CHANGE_LFO2.lfoFMDepth:
-            updateFMDepth(lfo2.FMDepth, value)
-            return {...state, lfoSettings: {...state.lfoSettings, lfo2: {...state.lfoSettings.lfo2, [id]: Number(value)}}};
-        
-        case ACTIONS.LFO.CHANGE_LFO2.pwm:
-            updateOscPwm(lfo2.osc, value)
-            return {...state, lfoSettings: {...state.lfoSettings, lfo1: {...state.lfoSettings.lfo1, [id]: Number(value)}}}
+        case ACTIONS.lfo.pwm:
+            updateOscPwm(lfosArr[i].osc, value)
+            return {...state, lfoSettings: {...state.lfoSettings, [moduleName]: {...state.lfoSettings[moduleName], [id]: Number(value)}}}    
         
 
         // FILTER SETTINGS //
 
-        case ACTIONS.FILTER.CHANGE_FILTER.type:
-            filter.filter.type = id
-            return {...state, filterSettings: {...state.filterSettings, type: id}};
+        case ACTIONS.filter.type:
+            filtersArr[i].filter.type = id
+            return {...state, filterSettings: {...state.filterSettings, [moduleName]: {...state.filterSettings[moduleName], type: id}}};
 
-        case ACTIONS.FILTER.CHANGE_FILTER.frequency:
-            filter.filter.frequency.value = value
-            return {...state, filterSettings: {...state.filterSettings, [id]: Number(value) }};
+        case ACTIONS.filter.frequency:
+            filtersArr[i].filter.frequency.value = value
+            return {...state, filterSettings: {...state.filterSettings, [moduleName]: {...state.filterSettings[moduleName], [id]: Number(value) }}};
             
-        case ACTIONS.FILTER.CHANGE_FILTER.detune:
-            filter.filter.detune.value = value
-            return {...state, filterSettings: {...state.filterSettings, [id]: Number(value)}};
+        case ACTIONS.filter.detune:
+            filtersArr[i].filter.detune.value = value
+            return {...state, filterSettings: {...state.filterSettings, [moduleName]: {...state.filterSettings[moduleName], [id]: Number(value)}}};
 
-        case ACTIONS.FILTER.CHANGE_FILTER.Q:
-            filter.filter.Q.value = value
-            return {...state, filterSettings: {...state.filterSettings, [id]: Number(value)}};
+        case ACTIONS.filter.Q:
+            filtersArr[i].filter.Q.value = value
+            return {...state, filterSettings: {...state.filterSettings, [moduleName]: {...state.filterSettings[moduleName], [id]: Number(value)}}};
 
-        case ACTIONS.FILTER.CHANGE_FILTER.filterFMDepth:
-            filter.FMDepth.gain.value = value
-            return {...state, filterSettings: {...state.filterSettings, [id]: Number(value) }};
+        case ACTIONS.filter.freqFMDepth:
+            filtersArr[i].FMDepth.gain.value = value
+            return {...state, filterSettings: {...state.filterSettings, [moduleName]: {...state.filterSettings[moduleName], [id]: Number(value)}}};
         
 
         // ADSR SETTINGS //
 
-        case ACTIONS.ADSR.CHANGE_ADSR.time:
-            state.adsrSettings[id] = value
-            adsr.adsr[id] = value
-            return {...state, adsrSettings: {...state.adsrSettings, [id]: Number(value)}};
+        case ACTIONS.adsr.time:
+            state.adsrSettings[module][id] = value
+            adsrArr[i].adsr[id] = value
+            return {...state, adsrSettings: {...state.adsrSettings, [moduleName]: {...state.adsrSettings[moduleName], [id]: Number(value)}}};
         
-        case ACTIONS.ADSR.CHANGE_ADSR.gain:
-            updateADSRGain(adsr.adsr, stateKey, actx.currentTime, state)
-            return {...state, adsrSettings: {...state.adsrSettings, [id]: Number(value)}};
+        case ACTIONS.adsr.gain:
+            updateADSRGain(adsrArr[i].adsr, stateKey, actx.currentTime, state)
+            return {...state, adsrSettings: {...state.adsrSettings, [moduleName]: {...state.adsrSettings[moduleName], [id]: Number(value)}}};
     
         
 
@@ -268,21 +247,26 @@ export function reducer(state, action){
         case ACTIONS.SEQUENCER.step:
             const stepNote = state.sequencerSettings.sliders[value].note + 24 + (12 * state.sequencerSettings.sliders[value].octave)
             const bpmForClockWidth = (60 / state.synthSettings.bpm) / 16
-            const oscillators = [
-                {
-                    node: osc1.osc,
-                    name: "osc1"
-                },
-                {
-                    node: osc2.osc,
-                    name: "osc2"
-                }
-            ]
-            step(oscillators, adsr.adsr, time, state, midiToFreqArr, stepNote, bpmForClockWidth)
+            step(oscillatorsArr, adsrArr[i].adsr, time, state, midiToFreqArr, stepNote, bpmForClockWidth)
             return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note], oscADSRGain: vca.vca.gain.value}}};
         
         case ACTIONS.SEQUENCER.length:
             return {...state, sequencerSettings: {...state.sequencerSettings, length: value}}
+
+        case ACTIONS.effects[subtype]?.[id]:
+            const [ destructuredValue ] = value
+            if (subtype === 'reverb'){
+                if (id === 'decay'){
+                    effectsArr[i].effect.decay = destructuredValue
+                }
+                else if (id === 'preDelay'){
+                    effectsArr[i].effect.preDelay = destructuredValue
+                }
+                else {
+                    effectsArr[i].effect[id].value = value
+                }
+            }
+            return {...state, effectsSettings: {...state.effectsSettings, [moduleName]: {...state.effectsSettings[moduleName], [id]: Number(value)}}}
 
         // MATRIX SETTINGS //    
         case ACTIONS.MATRIX.connections:
@@ -309,18 +293,6 @@ export function reducer(state, action){
                 }
             }}
 
-        case ACTIONS.EFFECTS.reverb[id]:
-            if (id === 'decay'){
-            reverb.decay = value
-            }
-            else if (id === 'preDelay'){
-                reverb.preDelay = value
-            }
-            else {
-                reverb[id].value = value
-            } 
-            return {...state, effectsSettings: {...state.effectsSettings, reverb: {...state.effectsSettings.reverb, [id]: Number(value)}}}
-            
         default:
             console.log('error', action)
             return {...state};
@@ -339,7 +311,7 @@ function ModularBus (props) {
     const lfoRef = useRef([])
     const filterRef = useRef([])
     let adsrRef = useRef([])
-    let reverbRef = useRef([])
+    let effectsRef = useRef([])
     
     midiToFreqConverter()
 
@@ -378,18 +350,22 @@ function ModularBus (props) {
             },
         },
         filterSettings: {
-            frequency: filter.filter.frequency.value,
-            detune: filter.filter.detune.value,
-            type: filter.filter.type,
-            Q: filter.filter.Q.value,
-            filterFMDepth: filter.FMDepth.gain.value
+            filter1: {
+                frequency: filter1.filter.frequency.value,
+                detune: filter1.filter.detune.value,
+                type: filter1.filter.type,
+                Q: filter1.filter.Q.value,
+                freqFMDepth: filter1.FMDepth.gain.value
+            }
         },
         adsrSettings: {
-            attack: 0.01,
-            decay: 0.2,
-            sustain: 0.5,
-            release: 0.2,
-            gain: vca.vca.gain.value
+            adsr1: {
+                attack: 0.01,
+                decay: 0.2,
+                sustain: 0.5,
+                release: 0.2,
+                gain: vca.vca.gain.value
+            }
         },
         lfoSettings: {
             lfo1: {
@@ -406,7 +382,7 @@ function ModularBus (props) {
             }
         },
         effectsSettings: {
-            reverb: {
+            reverb1: {
                 decay: 2,
                 wet: 0,
                 preDelay: 0
@@ -463,14 +439,14 @@ function ModularBus (props) {
                 },
                 4: {
                     name: "filter",
-                    node: filter.filter,
+                    node: filter1.filter,
                     type: "audio source"
                 },
                 5: {
                     name: "adsr",
-                    node: adsr.adsr,
+                    node: adsr1.adsr,
                     type: "gain source",
-                    converter: adsr.converter
+                    converter: adsr1.converter
                 },
                 6: {
                     name: "vca output",
@@ -479,7 +455,7 @@ function ModularBus (props) {
                 },
                 7: {
                     name: "reverb",
-                    node: reverb,
+                    node: reverb1.effect,
                     type: "audio source"
                 }
             },
@@ -510,13 +486,13 @@ function ModularBus (props) {
                 },
                 4: {
                     name: "filter audio",
-                    node: filter.gainAdjust,
+                    node: filter1.gainAdjust,
                     type: "audio param",
                     connectedNodes: 0
                 },
                 5: {
                     name: "filter FM",
-                    node: filter.FMDepth,
+                    node: filter1.FMDepth,
                     type: "audio param",
                     connectedNodes: 0
                 },
@@ -534,13 +510,13 @@ function ModularBus (props) {
                 },
                 8: {
                     name: "reverb audio",
-                    node: reverbAudioGainBuffer,
+                    node: reverb1.reverbAudioGainBuffer,
                     type: "audio param",
                     connectedNodes: 0 
                 },
                 9: {
                     name: "reverb wet",
-                    node: reverbWetGainBuffer,
+                    node: reverb1.reverbWetGainBuffer,
                     type: "audio gain",
                     connectedNodes: 0 
                 },
@@ -559,7 +535,7 @@ function ModularBus (props) {
     })
 
     return (
-        <ModularBusContext.Provider value={{stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr, oscRef, lfoRef, filterRef, reverbRef, initialConnection}}>
+        <ModularBusContext.Provider value={{oscillatorsArr, filtersArr, lfosArr, adsrArr, effectsArr, stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr1, oscRef, lfoRef, filterRef, effectsRef, initialConnection}}>
         {props.children}
         </ModularBusContext.Provider>
     )

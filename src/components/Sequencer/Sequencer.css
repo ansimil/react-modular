@@ -76,10 +76,6 @@
   align-items: center;
 }
 
-.slidersContainer {
-  flex: 1;
-}
-
 .activeSeqSlider svg {
   background-color: rgb(65, 65, 65) !important;
 }

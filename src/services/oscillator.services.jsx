@@ -2,9 +2,9 @@ const updateOscDetune = (osc, value) => {
     osc.detune.value = value
 }
 
-const updateOscFrequency = (osc, state, timeNow, midiToFreqArr, note, name) => {
-    let glide = timeNow + state.oscSettings[name].glide
-    let newNote = note + state.oscSettings[name].semitone + (state.oscSettings[name].octave * 12)
+const updateOscFrequency = (osc, state, timeNow, midiToFreqArr, note, moduleName) => {
+    let glide = timeNow + state.oscSettings[moduleName].glide
+    let newNote = note + state.oscSettings[moduleName].semitone + (state.oscSettings[moduleName].octave * 12)
     if (newNote >= 127){
         newNote = 127
     }

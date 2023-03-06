@@ -1,9 +1,6 @@
 import './App.css';
-import { useRef } from 'react'
-import Oscillator from '../Oscillator/Oscillator';
-import Filter from '../Filter/Filter';
-import { ADSR } from '../ADSR/ADSR';
-import LFO from '../LFO/LFO'
+import { useRef, useContext } from 'react'
+import { ModularBusContext } from '../../contexts/ModularBusContext';
 import Matrix from '../Matrix/Matrix';
 import Keyboard from '../Keyboard/Keyboard';
 import Oscilloscope from '../Oscilloscope/Oscilloscope';
@@ -11,11 +8,12 @@ import ControlBar from '../ControlBar/ControlBar';
 import Sequencer from '../Sequencer/Sequencer';
 import ModuleContainer from '../ModuleContainer/ModuleContainer';
 import Navbar from '../Navbar/Navbar';
-import Reverb from '../Reverb/Reverb';
+import ModuleComp from '../ModuleComp/ModuleComp';
 
 
 
 function App() {
+  const { oscillatorsArr, filtersArr, lfosArr, adsrArr, effectsArr } = useContext(ModularBusContext)
   let keysAndSeqRef = useRef(null)
   let oscillatorsRef = useRef(null)
   let lfosRef = useRef(null)
@@ -37,26 +35,45 @@ function App() {
         <Sequencer />
       </ModuleContainer>
       
-      <ModuleContainer name={'_oscillators'} moduleClass={'oscillators'} locationRef={oscillatorsRef}>
-        <Oscillator oscNum={1}/>
-        <Oscillator oscNum={2}/>
+      <ModuleContainer name={'_oscillators'} moduleClass={'oscillator'} locationRef={oscillatorsRef}>
+        {oscillatorsArr.map((oscillator, i) => { 
+          return (
+            <ModuleComp key={oscillator.name} module={oscillator} i={i} /> 
+          )
+        })}
       </ModuleContainer>
     
       <ModuleContainer name={'_lfos'} moduleClass={'lfos'} locationRef={lfosRef}>
-        <LFO lfoNum={1} />
-        <LFO lfoNum={2} />
+        {lfosArr.map((lfo, i) => {
+          return (
+            <ModuleComp key={lfo.name} module={lfo} i={i} /> 
+          )
+        })}
       </ModuleContainer>
-
-      <ModuleContainer name={'_filter'} moduleClass={'filter'} locationRef={filterRef}>
-        <Filter />
+      
+      <ModuleContainer name={'_filters'} moduleClass={'filter'} locationRef={filterRef}>
+        {filtersArr.map((filter, i) => {          
+            return (
+              <ModuleComp key={filter.name} module={filter} i={i} /> 
+            )
+          })}
       </ModuleContainer>
         
       <ModuleContainer name={'_envelope'} moduleClass={'envelope'} locationRef={envelopeRef}>
-      <ADSR />
+      {adsrArr.map((adsr, i) => {          
+            return (
+              <ModuleComp key={adsr.name} module={adsr} i={i} /> 
+            )
+      })}
       </ModuleContainer>
 
       <ModuleContainer name={'_effects'} moduleClass={'effects'} locationRef={effectsLocationRef}>
-        <Reverb/>
+        {/* <Reverb/> */}
+      {effectsArr.map((effect, i) => {          
+          return (
+            <ModuleComp key={effect.name} module={effect} i={i} /> 
+          )
+       })}
       </ModuleContainer>
       
       <ModuleContainer name={'_oscilloscope'} moduleClass={'oscilloscope'} locationRef={oscilloscopeRef}>
