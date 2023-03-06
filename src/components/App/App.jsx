@@ -8,7 +8,6 @@ import ControlBar from '../ControlBar/ControlBar';
 import Sequencer from '../Sequencer/Sequencer';
 import ModuleContainer from '../ModuleContainer/ModuleContainer';
 import Navbar from '../Navbar/Navbar';
-import Reverb from '../Reverb/Reverb';
 import ModuleComp from '../ModuleComp/ModuleComp';
 
 

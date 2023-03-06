@@ -102,7 +102,7 @@ const midiToFreqConverter = () => {
 }
 
 export function reducer(state, action){
-    let { id, value, note, stateKey, i, time, moduleName, type, subtype } = action.payload
+    let { id, value, note, stateKey, i, time, moduleName, subtype } = action.payload
     switch (action.type) {
         // SYNTH SETTINGS //
         case ACTIONS.SYNTH.start:
