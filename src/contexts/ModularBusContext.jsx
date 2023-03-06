@@ -52,6 +52,7 @@ oscillatorsArr.push(osc1)
 let osc2 = new Oscillator(440, `osc${oscillatorsArr.length+1}`)
 oscillatorsArr.push(osc2)
 
+
 let lfo1 = new LFO(2, `lfo${lfosArr.length+1}`)
 lfosArr.push(lfo1)
 let lfo2 = new LFO(2, `lfo${lfosArr.length+1}`)
