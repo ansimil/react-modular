@@ -24,4 +24,16 @@ export class ADSR {
             ]
         }
     }
+
+    updateADSRGain(stateKey, timeNow){
+        if (stateKey) {  
+            this.adsr.triggerAttack(timeNow, 1)
+        }
+        if (!stateKey) {
+            // let multiplier = (meter.getValue() + 1) / 2
+            // let currentRelease = state.adsrSettings.release
+            // let newRelease = currentRelease * multiplier
+            this.adsr.triggerRelease(timeNow+0.05, 0.0001)
+        }
+    }
 }

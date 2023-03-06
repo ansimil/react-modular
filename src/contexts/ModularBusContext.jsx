@@ -4,15 +4,8 @@ import {
     setDisconnections 
 } from "../services/matrix.services";
 import { 
-    updateOscType, 
-    updateOscPwm, 
-    updateFMDepth,
-    updateLfoFrequency,
     updateOscFrequency
 } from "../services/oscillator.services";
-import { 
-    updateADSRGain 
-} from "../services/adsr.services";
 import { 
     step,
 } from "../services/sequencer.services";
@@ -173,19 +166,19 @@ export function reducer(state, action){
         // LFO SETTINGS //
 
         case ACTIONS.lfo.frequency:
-            updateLfoFrequency(lfosArr[i].osc, value)
+            lfosArr[i].updateLfoFrequency(value)
             return {...state, lfoSettings: {...state.lfoSettings, [moduleName]: {...state.lfoSettings[moduleName], [id]: Number(value)}}}
         
         case ACTIONS.lfo.type:
-            updateOscType(id, lfosArr[i].osc, state)
+            lfosArr[i].updateOscType(id, state)
             return {...state, lfoSettings: {...state.lfoSettings, [moduleName]: {...state.lfoSettings[moduleName], type: id}}}
 
         case ACTIONS.lfo.oscFMDepth:
-            updateFMDepth(lfosArr[i].FMDepth, value)
+            lfosArr[i].updateFMDepth(value)
             return {...state, lfoSettings: {...state.lfoSettings, [moduleName]: {...state.lfoSettings[moduleName], [id]: Number(value)}}};
         
         case ACTIONS.lfo.pwm:
-            updateOscPwm(lfosArr[i].osc, value)
+            lfosArr[i].updateOscPwm(value)
             return {...state, lfoSettings: {...state.lfoSettings, [moduleName]: {...state.lfoSettings[moduleName], [id]: Number(value)}}}    
         
 
@@ -220,7 +213,7 @@ export function reducer(state, action){
             return {...state, adsrSettings: {...state.adsrSettings, [moduleName]: {...state.adsrSettings[moduleName], [id]: Number(value)}}};
         
         case ACTIONS.adsr.gain:
-            updateADSRGain(adsrArr[i].adsr, stateKey, actx.currentTime, state)
+            adsrArr[i].updateADSRGain(stateKey, actx.currentTime, state)
             return {...state, adsrSettings: {...state.adsrSettings, [moduleName]: {...state.adsrSettings[moduleName], [id]: Number(value)}}};
     
         
