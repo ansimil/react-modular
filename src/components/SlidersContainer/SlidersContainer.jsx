@@ -13,11 +13,9 @@ const SlidersContainer = ({ module, i }) => {
     const change = (e, id) => {
         let value = e;
         if (subtype) {
-            console.log('fire subtype')
             updateState({type: ACTIONS[type][subtype][id], payload: {id, value, moduleName: name, i, type, subtype}})
         }
         else {
-            console.log('fire type')
             updateState({type: ACTIONS[type][id], payload: {id, value, moduleName: name, i, type, subtype}})
         }
     }

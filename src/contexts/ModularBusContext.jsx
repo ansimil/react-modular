@@ -5,7 +5,6 @@ import {
 } from "../services/matrix.services";
 import { 
     updateOscType, 
-    updateOscDetune, 
     updateOscPwm, 
     updateFMDepth,
     updateLfoFrequency,
@@ -57,7 +56,6 @@ let lfo1 = new LFO(2, `lfo${lfosArr.length+1}`)
 lfosArr.push(lfo1)
 let lfo2 = new LFO(2, `lfo${lfosArr.length+1}`)
 lfosArr.push(lfo2)
-console.log(lfosArr)
 
 let filter1 = new Filter(`filter${filtersArr.length+1}`)
 filtersArr.push(filter1)
@@ -66,14 +64,24 @@ let adsr1 = new ADSR(`adsr${adsrArr.length+1}`)
 adsrArr.push(adsr1)
 
 let vca = new VCA()
-let reverb1 = new Reverb(2, 'reverb1')
+
+function counter(){
+    let count = 0
+    if (effectsArr.length === 0){
+        return 1
+    }
+    effectsArr.forEach(effect => {
+        if (effect.subtype === 'reverb'){
+            count++
+        }
+    })
+
+    return count + 1
+    
+}
+let reverb1 = new Reverb(2, `reverb${counter()}`)
 effectsArr.push(reverb1)
-// let reverb = new Tone.Reverb(2)
-// reverb.wet.value = 0
-// let reverbWetGainBuffer = new Tone.Gain(1)
-// let reverbAudioGainBuffer = new Tone.Gain(1)
-// reverbWetGainBuffer.connect(reverb.wet)
-// reverbAudioGainBuffer.connect(reverb)
+
 
 let output = new Tone.Gain()
 let outputGain = new Tone.Gain()
@@ -129,24 +137,22 @@ export function reducer(state, action){
         // osc SETTINGS //
 
         case ACTIONS.osc.type:
-            updateOscType(id, oscillatorsArr[i].osc, state)
-            console.log(moduleName)
+            oscillatorsArr[i].updateOscType(id, state)
             return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], type: id}}};
 
         case ACTIONS.osc.detune:
-            console.log(moduleName, id, value)
-            updateOscDetune(oscillatorsArr[i].osc, value)
+            oscillatorsArr[i].updateOscDetune(value)
             return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], [id]: Number(value)}}};
         
         case ACTIONS.osc.glide:
             return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], [id]: Number(value)}}};
 
         case ACTIONS.osc.pwm:
-            updateOscPwm(oscillatorsArr[i].osc, value)
+            oscillatorsArr[i].updateOscPwm(value)
             return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], [id]: Number(value)}}}
         
         case ACTIONS.osc.oscFMDepth:
-            updateFMDepth(oscillatorsArr[i].FMDepth, value)
+            oscillatorsArr[i].updateFMDepth(value)
             return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], [id]: Number(value)}}};
 
         case ACTIONS.osc.frequency:

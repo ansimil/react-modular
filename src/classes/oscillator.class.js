@@ -35,4 +35,29 @@ export class Oscillator {
         ]
         }
     }
+
+    updateOscDetune(value){
+        this.osc.detune.value = value
+    }
+
+    updateOscType(id, state){
+        if (id === "pwm"){
+            this.osc.type = id
+            this.osc.modulationFrequency.value = state.oscSettings[this.name].pwm
+        }
+        this.osc.type = id
+    }
+
+    updateOscPwm(value){
+        if (value === "0" && this.osc.width) {
+            this.osc.width.value = 0.5
+        }
+        if (this.osc.type === "pwm") {
+            this.osc.modulationFrequency.value = value
+        }
+    }
+
+    updateFMDepth(value){
+        this.FMDepth.gain.value = value
+    }
 }
