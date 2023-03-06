@@ -1,8 +1,6 @@
 import './App.css';
 import { useRef, useContext } from 'react'
 import { ModularBusContext } from '../../contexts/ModularBusContext';
-import { ADSR } from '../ADSR/ADSR';
-import LFO from '../LFO/LFO'
 import Matrix from '../Matrix/Matrix';
 import Keyboard from '../Keyboard/Keyboard';
 import Oscilloscope from '../Oscilloscope/Oscilloscope';
@@ -16,7 +14,7 @@ import ModuleComp from '../ModuleComp/ModuleComp';
 
 
 function App() {
-  const { oscillatorsArr, filtersArr } = useContext(ModularBusContext)
+  const { oscillatorsArr, filtersArr, lfosArr, adsrArr, effectsArr } = useContext(ModularBusContext)
   let keysAndSeqRef = useRef(null)
   let oscillatorsRef = useRef(null)
   let lfosRef = useRef(null)
@@ -47,8 +45,11 @@ function App() {
       </ModuleContainer>
     
       <ModuleContainer name={'_lfos'} moduleClass={'lfos'} locationRef={lfosRef}>
-        <LFO lfoNum={1} />
-        <LFO lfoNum={2} />
+        {lfosArr.map((lfo, i) => {
+          return (
+            <ModuleComp key={lfo.name} module={lfo} i={i} /> 
+          )
+        })}
       </ModuleContainer>
       
       <ModuleContainer name={'_filters'} moduleClass={'filter'} locationRef={filterRef}>
@@ -60,11 +61,20 @@ function App() {
       </ModuleContainer>
         
       <ModuleContainer name={'_envelope'} moduleClass={'envelope'} locationRef={envelopeRef}>
-      <ADSR />
+      {adsrArr.map((adsr, i) => {          
+            return (
+              <ModuleComp key={adsr.name} module={adsr} i={i} /> 
+            )
+      })}
       </ModuleContainer>
 
       <ModuleContainer name={'_effects'} moduleClass={'effects'} locationRef={effectsLocationRef}>
-        <Reverb/>
+        {/* <Reverb/> */}
+      {effectsArr.map((effect, i) => {          
+          return (
+            <ModuleComp key={effect.name} module={effect} i={i} /> 
+          )
+       })}
       </ModuleContainer>
       
       <ModuleContainer name={'_oscilloscope'} moduleClass={'oscilloscope'} locationRef={oscilloscopeRef}>

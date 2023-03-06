@@ -11,13 +11,13 @@ const Filter = () => {
     const { filterSettings } = appState
     const change = (e, id) => {
         let value = e;
-        updateState({type: ACTIONS.filter.filter1[id], payload: { id, value }})
+        updateState({type: ACTIONS.filter[id], payload: { id, value }})
     }
 
     const changeType = e => {
         let { id } = e.target;
         setActiveType(id)
-        updateState({type: ACTIONS.filter.filter1.type, payload: { id }})
+        updateState({type: ACTIONS.filter.type, payload: { id }})
     }
   return (
     <div className='modulesContainer filterContainer'>

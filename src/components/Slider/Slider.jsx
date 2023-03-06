@@ -2,10 +2,10 @@ import { useEffect } from 'react'
 import Nexus from 'nexusui'
 import './Slider.css'
 
-const Slider = ({ module, label, valueLabel, unit, min, max, step, values, sliderRef, id, changeFunction, i}) => {
+const Slider = ({ name, label, valueLabel, unit, min, max, step, values, sliderRef, id, changeFunction}) => {
     
     useEffect(()=>{
-        let multislider = new Nexus.Multislider(`#${module}${id}`, {
+        let multislider = new Nexus.Multislider(`#${name}${id}`, {
             'size': [30,150],
             'numberOfSliders': 1,
             'min': min,
@@ -17,7 +17,7 @@ const Slider = ({ module, label, valueLabel, unit, min, max, step, values, slide
         })
         multislider.setSlider(0, values)
         multislider.on("change", (e) => {
-            changeFunction(e, id, module, i)
+            changeFunction(e, id)
         })
         multislider.bars[0].attributes[5].value = "#fafdd1"
         multislider.caps[0].attributes[4].value = "#000"
@@ -30,7 +30,7 @@ const Slider = ({ module, label, valueLabel, unit, min, max, step, values, slide
     <div className={`sliderContainer ${id}`}>
       <label className="sliderLabel"><p>{label}</p></label>
       <p className="valueIndicator">{`${valueLabel}${unit}`}</p>
-      <div className="sliderInnerContainer sliderHover" id={`${module}${id}`}></div>
+      <div className="sliderInnerContainer sliderHover" id={`${name}${id}`}></div>
     </div>
   )
 }

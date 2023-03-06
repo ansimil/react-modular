@@ -1,9 +1,11 @@
-import { Filter} from "./filterClass";
-import { Oscillator } from "./oscillatorClass";
+import { Filter} from "./filter.class";
+import { Oscillator } from "./oscillator.class";
 import { VCA } from "./vca.class";
 import { ADSR } from "./adsr.class";
 import { Slider } from "./slider.class";
 import { Selector } from "./selector.class";
+import { LFO } from "./lfo.class";
+import { Reverb } from "./reverb.class";
 
 export {
     Filter,
@@ -11,5 +13,7 @@ export {
     VCA,
     ADSR,
     Slider,
-    Selector
+    Selector,
+    LFO,
+    Reverb
 }

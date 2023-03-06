@@ -1,6 +1,5 @@
 import * as Tone from 'tone'
 import { Slider, Selector } from './classes'
-// import { updateOscFrequency } from '../services/oscillator.services'
 
 export class Oscillator {
     constructor(initFreq, actionsSelector){

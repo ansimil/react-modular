@@ -21,7 +21,7 @@ export class Filter {
         this.settings = {
             slidersArr: [
                 new Slider("frequency", "filter", "CUTOFF", 10, 10000, 0.001, "Hz"),
-                new Slider("detune", "filter", "FINE", 0, 10, 0.001, "cts"),
+                new Slider("detune", "filter", "FINE", 0, 100, 0.001, "cts"),
                 new Slider("Q", "filter", "RES", 0, 10, 0.001, ""),
                 new Slider("freqFMDepth", "filter", "FM Depth", 0, 2500, 0.001, "")
             ],

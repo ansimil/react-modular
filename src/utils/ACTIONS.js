@@ -6,43 +6,31 @@ export const ACTIONS = {
         bpm: "change_synth_bpm"
     },
     osc: {
-            type: "change_osc1_type",
-            detune: "change_osc1_detune",
-            frequency: "change_osc1_frequency",
-            oscFMDepth: "change_osc1_FMDepth",
-            oscADSRGain: "change_osc1_ADSR_gain",
-            glide: "change_osc1_glide",
-            pwm: "change_osc1_pwm",
-            offset: "change_osc1_offset"
+            type: "change_osc_type",
+            detune: "change_osc_detune",
+            frequency: "change_osc_frequency",
+            oscFMDepth: "change_osc_FMDepth",
+            oscADSRGain: "change_osc_ADSR_gain",
+            glide: "change_osc_glide",
+            pwm: "change_osc_pwm",
+            offset: "change_osc_offset"
     },
     filter: {
-        filter1: {
-            type: "change_filter_type",
-            frequency: "change_filter_frequency",
-            detune: "change_filter_detune",
-            Q: "change_filter_Q",
-            freqFMDepth: "change_freqFMDepth"
-        }
+        type: "change_filter_type",
+        frequency: "change_filter_frequency",
+        detune: "change_filter_detune",
+        Q: "change_filter_Q",
+        freqFMDepth: "change_freqFMDepth"
     },
-    ADSR: {
-        CHANGE_ADSR: {
-            time:"change_adsr_time",
-            gain: "change_adsr_gain"
-        }
+    adsr: {
+        time:"change_adsr_time",
+        gain: "change_adsr_gain"
     },
-    LFO: {
-        CHANGE_LFO1: {
-            type: "change_lfo1_type",
-            frequency: "change_lfo1_detune",
-            lfoFMDepth: "change_lfo1_FMDepth",
-            pwm: "change_lfo1_pwm"
-        },
-        CHANGE_LFO2: {
-            type: "change_lfo2_type",
-            frequency: "change_lfo2_frequency",
-            lfoFMDepth: "change_lfo2_FMDepth",
-            pwm: "change_lfo2_pwm"
-        }
+    lfo: {
+        type: "change_lfo_type",
+        frequency: "change_lfo_detune",
+        lfoFMDepth: "change_lfo_FMDepth",
+        pwm: "change_lfo_pwm"
     },
     SEQUENCER: {
         note: "change_step_note",
@@ -58,7 +46,7 @@ export const ACTIONS = {
         connections: "change_connections",
         setConnections: "set_connections"
     },
-    EFFECTS: {
+    effects: {
         reverb: {
             decay: "change_reverb_decay",
             wet: "change_reverb_wet",

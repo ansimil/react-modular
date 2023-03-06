@@ -12,7 +12,7 @@ const AdditionalSettingsContainer = ({ module, i }) => {
         {incDecArr.map((incDec, i) => {
             const value = appState[`${type}Settings`][moduleName][incDec.name]
             return (
-                <IncDec key={i} updateState={updateState} value={value} moduleName={moduleName} label={incDec.name} i={i} />
+                <IncDec key={i} updateState={updateState} value={value} moduleName={moduleName} type={type} label={incDec.name} i={i} />
             )
         })}
     </div>

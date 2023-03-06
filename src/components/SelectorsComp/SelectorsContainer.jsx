@@ -12,7 +12,7 @@ const SelectorsContainer = ({ module, i }) => {
 
     const change = (e, toChange, i) => {
         let { id } = e.target;
-        updateState({type: ACTIONS[moduleType][name][toChange], payload: {id, i, module:name}})
+        updateState({type: ACTIONS[moduleType][toChange], payload: {id, i, moduleName:name, type: moduleType}})
     }
 
   return (

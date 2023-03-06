@@ -101,9 +101,9 @@ const Keyboard = () => {
 
     const handleKeyboard = (e) => {  
         const { note, state } = e
-        updateState({type: ACTIONS.osc.frequency, payload: {note, i:0, module:"osc1"}})
-        updateState({type: ACTIONS.osc.frequency, payload: {note, i:1, module:"osc2"}})
-        updateState({type: ACTIONS.ADSR.CHANGE_ADSR.gain, payload: {stateKey: state}})
+        updateState({type: ACTIONS.osc.frequency, payload: {note, i:0, moduleName:"osc1"}})
+        updateState({type: ACTIONS.osc.frequency, payload: {note, i:1, moduleName:"osc2"}})
+        updateState({type: ACTIONS.adsr.gain, payload: {stateKey: state, i:0}})
     }
 
 

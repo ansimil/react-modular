@@ -4,7 +4,7 @@ import { handleMouseEvent } from '../../services/general.services'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
 
 
-const IncDec = ({value, label, moduleName, i}) => {
+const IncDec = ({value, label, moduleName, i, type}) => {
     const { stateHook } = useContext(ModularBusContext)
     const [ , updateState ] = stateHook
 
@@ -15,7 +15,7 @@ const IncDec = ({value, label, moduleName, i}) => {
             <button
             id={label} 
             className={`inc-dec-btn dec-btn dec-btn${moduleName}${label} btn`}
-            onClick={(e)=> updateState({type: ACTIONS.osc[moduleName].offset, payload: {value: "dec", id:e.target.id, i, module:moduleName}})}
+            onClick={(e)=> updateState({type: ACTIONS.osc.offset, payload: {value: "dec", id:e.target.id, i, moduleName, type}})}
             onMouseDown={
                 () => handleMouseEvent(`dec-btn${moduleName}${label}`, true)
             }
@@ -29,7 +29,7 @@ const IncDec = ({value, label, moduleName, i}) => {
             <button
             id={label}
             className={`inc-dec-btn inc-btn inc-btn${moduleName}${label} btn`}
-            onClick={(e)=> updateState({type: ACTIONS.osc[moduleName].offset, payload: {value: "inc", id:e.target.id, i, module:moduleName}})}
+            onClick={(e)=> updateState({type: ACTIONS.osc.offset, payload: {value: "inc", id:e.target.id, i, moduleName}})}
             onMouseDown={
                 () => handleMouseEvent(`inc-btn${moduleName}${label}`, true)
             }
