@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
 import IncDec from '../IncDec/IncDec'
 
-const AdditionalSettingsContainer = ({ module }) => {
+const AdditionalSettingsContainer = ({ module, i }) => {
     const { stateHook } = useContext(ModularBusContext)
     const [ appState, updateState ] = stateHook
     const { incDecArr } = module.settings
@@ -12,7 +12,7 @@ const AdditionalSettingsContainer = ({ module }) => {
         {incDecArr.map((incDec, i) => {
             const value = appState[`${type}Settings`][moduleName][incDec.name]
             return (
-                <IncDec key={i} updateState={updateState} value={value} oscNum={moduleName} label={incDec.name} />
+                <IncDec key={i} updateState={updateState} value={value} moduleName={moduleName} label={incDec.name} i={i} />
             )
         })}
     </div>

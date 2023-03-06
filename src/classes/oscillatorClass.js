@@ -1,4 +1,5 @@
 import * as Tone from 'tone'
+import { Slider, Selector } from './classes'
 // import { updateOscFrequency } from '../services/oscillator.services'
 
 export class Oscillator {
@@ -13,64 +14,18 @@ export class Oscillator {
         this.converter = new Tone.AudioToGain()
         this.FMDepth.connect(this.osc.detune)
         this.settings = {
-            slidersArr: [{
-                id: "detune",
-                module: actionsSelector,
-                label: "DETUNE",
-                min: 0,
-                max: 5,
-                step: 0.001,
-                unit: "cts"
-            },
-            {
-                id: "pwm",
-                module: actionsSelector,
-                label: "PWM",
-                min: 0,
-                max: 40,
-                step: 0.001,
-                unit: "Hz"
-            },
-            {
-                id: "glide",
-                module: actionsSelector,
-                label: "GLIDE",
-                min: 0,
-                max: 5,
-                step: 0.001,
-                unit: "s"
-            },
-            {
-                id: "oscFMDepth",
-                module: actionsSelector,
-                label: "FM DEPTH",
-                min: 0,
-                max: 5,
-                step: 0.001,
-                unit: ""
-            }],
+            slidersArr: [
+                new Slider("detune", actionsSelector, "DETUNE", 0, 100, 0.001, "cts"),
+                new Slider("pwm", actionsSelector, "PWM", 0, 40, 0.001, "Hz"),
+                new Slider("glide", actionsSelector, "GLIDE", 0, 5, 0.001, "s"),
+                new Slider("oscFMDepth", actionsSelector, "FM DEPTH", 0, 2500, 0.001, "")   
+            ],
             selectorsArr: [
-            {
-                id: "sine",
-                label: "SINE",
-                type: "type"
-            },
-            {
-                id: "triangle",
-                label: "TRI",
-                type: "type"
-            },
-            {
-                id: "pwm",
-                label: "PULS",
-                type: "type"
-            },
-            {
-                id: "sawtooth",
-                label: "SAW",
-                type: "type"
-            }
-        ],
+                new Selector("sine", "SINE", "type"),
+                new Selector("triangle", "TRI", "type"),
+                new Selector("pwm", "PULS", "type"),
+                new Selector("sawtooth", "SAW", "type")
+            ],
         incDecArr: [
             {
                 name: "octave"

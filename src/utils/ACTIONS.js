@@ -6,7 +6,6 @@ export const ACTIONS = {
         bpm: "change_synth_bpm"
     },
     osc: {
-        osc1: {
             type: "change_osc1_type",
             detune: "change_osc1_detune",
             frequency: "change_osc1_frequency",
@@ -15,25 +14,14 @@ export const ACTIONS = {
             glide: "change_osc1_glide",
             pwm: "change_osc1_pwm",
             offset: "change_osc1_offset"
-        },
-        osc2: {
-            type: "change_osc2_type",
-            detune: "change_osc2_detune",
-            frequency: "change_osc2_frequency",
-            oscFMDepth: "change_osc2_FMDepth",
-            oscADSRGain: "change_osc2_ADSR_gain",
-            glide: "change_osc2_glide",
-            pwm: "change_osc2_pwm",
-            offset: "change_osc2_offset"
-        }
     },
-    FILTER: {
-        CHANGE_FILTER: {
+    filter: {
+        filter1: {
             type: "change_filter_type",
             frequency: "change_filter_frequency",
             detune: "change_filter_detune",
             Q: "change_filter_Q",
-            filterFMDepth: "change_filterFMDepth"
+            freqFMDepth: "change_freqFMDepth"
         }
     },
     ADSR: {

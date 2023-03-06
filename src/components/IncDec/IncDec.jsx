@@ -4,8 +4,7 @@ import { handleMouseEvent } from '../../services/general.services'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
 
 
-const IncDec = ({value, label, oscNum}) => {
-    
+const IncDec = ({value, label, moduleName, i}) => {
     const { stateHook } = useContext(ModularBusContext)
     const [ , updateState ] = stateHook
 
@@ -15,13 +14,13 @@ const IncDec = ({value, label, oscNum}) => {
             <div className="inc-dec-btns-container">
             <button
             id={label} 
-            className={`inc-dec-btn dec-btn dec-btn${oscNum}${label} btn`}
-            onClick={(e)=> updateState({type: ACTIONS.osc[oscNum].offset, payload: {value: "dec", id:e.target.id}})}
+            className={`inc-dec-btn dec-btn dec-btn${moduleName}${label} btn`}
+            onClick={(e)=> updateState({type: ACTIONS.osc[moduleName].offset, payload: {value: "dec", id:e.target.id, i, module:moduleName}})}
             onMouseDown={
-                () => handleMouseEvent(`dec-btn${oscNum}${label}`, true)
+                () => handleMouseEvent(`dec-btn${moduleName}${label}`, true)
             }
             onMouseUp={
-                () => handleMouseEvent(`dec-btn${oscNum}${label}`, false)
+                () => handleMouseEvent(`dec-btn${moduleName}${label}`, false)
             }
             >
             -
@@ -29,13 +28,13 @@ const IncDec = ({value, label, oscNum}) => {
             <p className="inc-dec-indicator">{value}</p>
             <button
             id={label}
-            className={`inc-dec-btn inc-btn inc-btn${oscNum}${label} btn`}
-            onClick={(e)=> updateState({type: ACTIONS.osc[oscNum].offset, payload: {value: "inc", id:e.target.id}})}
+            className={`inc-dec-btn inc-btn inc-btn${moduleName}${label} btn`}
+            onClick={(e)=> updateState({type: ACTIONS.osc[moduleName].offset, payload: {value: "inc", id:e.target.id, i, module:moduleName}})}
             onMouseDown={
-                () => handleMouseEvent(`inc-btn${oscNum}${label}`, true)
+                () => handleMouseEvent(`inc-btn${moduleName}${label}`, true)
             }
             onMouseUp={
-                () => handleMouseEvent(`inc-btn${oscNum}${label}`, false)
+                () => handleMouseEvent(`inc-btn${moduleName}${label}`, false)
             }
             >
             +

@@ -54,8 +54,8 @@ lfosArr.push(lfo1)
 let lfo2 = new Oscillator(2)
 lfosArr.push(lfo2, `lfo${lfosArr.length+1}`)
 
-let filter = new Filter()
-filtersArr.push(filter, `filter`)
+let filter1 = new Filter(`filter${filtersArr.length+1}`)
+filtersArr.push(filter1)
 
 let adsr = new ADSR()
 let vca = new VCA()
@@ -93,8 +93,8 @@ const midiToFreqConverter = () => {
 }
 
 export function reducer(state, action){
-    let { id, value, note, stateKey, i, time } = action.payload
-
+    let { id, value, note, stateKey, i, time, module } = action.payload
+    console.log(action)
     switch (action.type) {
         // SYNTH SETTINGS //
         case ACTIONS.SYNTH.start:
@@ -120,71 +120,73 @@ export function reducer(state, action){
 
         // osc SETTINGS //
 
-        case ACTIONS.osc.osc1.type:
-            updateOscType(id, osc1.osc, state)
-            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, type: id}}};
+        case ACTIONS.osc.type:
+            updateOscType(id, oscillatorsArr[i].osc, state)
+            console.log(module)
+            return {...state, oscSettings: {...state.oscSettings, [module]: {...state.oscSettings[module], type: id}}};
 
-        case ACTIONS.osc.osc1.detune:
-            updateOscDetune(osc1.osc, value)
-            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, [id]: Number(value)}}};
+        case ACTIONS.osc.detune:
+            updateOscDetune(oscillatorsArr[i].osc, value)
+            return {...state, oscSettings: {...state.oscSettings, [module]: {...state.oscSettings[module], [id]: Number(value)}}};
         
-        case ACTIONS.osc.osc1.glide:
-            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, [id]: Number(value)}}};
+        case ACTIONS.osc.glide:
+            return {...state, oscSettings: {...state.oscSettings, [module]: {...state.oscSettings[module], [id]: Number(value)}}};
 
-        case ACTIONS.osc.osc1.pwm:
-            updateOscPwm(osc1.osc, value)
-            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, [id]: Number(value)}}}
+        case ACTIONS.osc.pwm:
+            updateOscPwm(oscillatorsArr[i].osc, value)
+            return {...state, oscSettings: {...state.oscSettings, [module]: {...state.oscSettings[module], [id]: Number(value)}}}
         
-        case ACTIONS.osc.osc1.oscFMDepth:
-            updateFMDepth(osc1.FMDepth, value)
-            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, [id]: Number(value)}}};
+        case ACTIONS.osc.oscFMDepth:
+            updateFMDepth(oscillatorsArr[i].FMDepth, value)
+            return {...state, oscSettings: {...state.oscSettings, [module]: {...state.oscSettings[module], [id]: Number(value)}}};
 
-        case ACTIONS.osc.osc1.frequency:
-            let newFreq = updateOscFrequency(osc1.osc, state, actx.currentTime, midiToFreqArr, note, "osc1")
-            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: newFreq}}};
+        case ACTIONS.osc.frequency:
+            console.log(module)
+            let newFreq = updateOscFrequency(oscillatorsArr[i].osc, state, actx.currentTime, midiToFreqArr, note, module)
+            return {...state, oscSettings: {...state.oscSettings, [module]: {...state.oscSettings[module], frequency: newFreq}}};
             
-        case ACTIONS.osc.osc1.offset:
+        case ACTIONS.osc.offset:
             let newValue
             if (value === "inc") {
-                newValue = state.oscSettings.osc1[id] + 1
+                newValue = state.oscSettings[module][id] + 1
             }
             else {
-                newValue = state.oscSettings.osc1[id] - 1
+                newValue = state.oscSettings[module][id] - 1
             }
-            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, [id]: Number(newValue)}}};
+            return {...state, oscSettings: {...state.oscSettings, [module]: {...state.oscSettings[module], [id]: Number(newValue)}}};
 
-        case ACTIONS.osc.osc2.type:
-            updateOscType(id, osc2.osc, state)
-            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, type: id}}};
+        // case ACTIONS.osc.osc2.type:
+        //     updateOscType(id, osc2.osc, state)
+        //     return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, type: id}}};
 
-        case ACTIONS.osc.osc2.detune:
-            updateOscDetune(osc2.osc, value)
-            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
+        // case ACTIONS.osc.osc2.detune:
+        //     updateOscDetune(osc2.osc, value)
+        //     return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
 
-        case ACTIONS.osc.osc2.glide:
-            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
+        // case ACTIONS.osc.osc2.glide:
+        //     return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
 
-        case ACTIONS.osc.osc2.pwm:
-            updateOscPwm(osc2.osc, value)
-            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}}
+        // case ACTIONS.osc.osc2.pwm:
+        //     updateOscPwm(osc2.osc, value)
+        //     return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}}
 
-        case ACTIONS.osc.osc2.oscFMDepth:
-            updateFMDepth(osc2.FMDepth, value)
-            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
+        // case ACTIONS.osc.osc2.oscFMDepth:
+        //     updateFMDepth(osc2.FMDepth, value)
+        //     return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(value)}}};
 
-        case ACTIONS.osc.osc2.frequency:
-            let newFreq2 = updateOscFrequency(osc2.osc, state, actx.currentTime, midiToFreqArr, note, "osc2")
-            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, frequency: newFreq2}}};
+        // case ACTIONS.osc.osc2.frequency:
+        //     let newFreq2 = updateOscFrequency(osc2.osc, state, actx.currentTime, midiToFreqArr, note, "osc2")
+        //     return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, frequency: newFreq2}}};
             
-        case ACTIONS.osc.osc2.offset:
-            let newValue2
-            if (value === "inc") {
-                newValue2 = state.oscSettings.osc2[id] + 1
-            }
-            else {
-                newValue2 = state.oscSettings.osc2[id] - 1
-            }
-            return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(newValue2)}}};
+        // case ACTIONS.osc.osc2.offset:
+        //     let newValue2
+        //     if (value === "inc") {
+        //         newValue2 = state.oscSettings.osc2[id] + 1
+        //     }
+        //     else {
+        //         newValue2 = state.oscSettings.osc2[id] - 1
+        //     }
+        //     return {...state, oscSettings: {...state.oscSettings, osc2: {...state.oscSettings.osc2, [id]: Number(newValue2)}}};
 
         // LFO SETTINGS //
 
@@ -223,25 +225,25 @@ export function reducer(state, action){
 
         // FILTER SETTINGS //
 
-        case ACTIONS.FILTER.CHANGE_FILTER.type:
-            filter.filter.type = id
-            return {...state, filterSettings: {...state.filterSettings, type: id}};
+        case ACTIONS.filter.filter1.type:
+            filter1.filter.type = id
+            return {...state, filterSettings: {...state.filterSettings, filter1: {...state.filterSettings.filter1, type: id}}};
 
-        case ACTIONS.FILTER.CHANGE_FILTER.frequency:
-            filter.filter.frequency.value = value
-            return {...state, filterSettings: {...state.filterSettings, [id]: Number(value) }};
+        case ACTIONS.filter.filter1.frequency:
+            filter1.filter.frequency.value = value
+            return {...state, filterSettings: {...state.filterSettings, filter1: {...state.filterSettings.filter1, [id]: Number(value) }}};
             
-        case ACTIONS.FILTER.CHANGE_FILTER.detune:
-            filter.filter.detune.value = value
-            return {...state, filterSettings: {...state.filterSettings, [id]: Number(value)}};
+        case ACTIONS.filter.filter1.detune:
+            filter1.filter.detune.value = value
+            return {...state, filterSettings: {...state.filterSettings, filter1: {...state.filterSettings.filter1, [id]: Number(value)}}};
 
-        case ACTIONS.FILTER.CHANGE_FILTER.Q:
-            filter.filter.Q.value = value
-            return {...state, filterSettings: {...state.filterSettings, [id]: Number(value)}};
+        case ACTIONS.filter.filter1.Q:
+            filter1.filter.Q.value = value
+            return {...state, filterSettings: {...state.filterSettings, filter1: {...state.filterSettings.filter1, [id]: Number(value)}}};
 
-        case ACTIONS.FILTER.CHANGE_FILTER.filterFMDepth:
-            filter.FMDepth.gain.value = value
-            return {...state, filterSettings: {...state.filterSettings, [id]: Number(value) }};
+        case ACTIONS.filter.filter1.freqFMDepth:
+            filter1.FMDepth.gain.value = value
+            return {...state, filterSettings: {...state.filterSettings, filter1: {...state.filterSettings.filter1, [id]: Number(value)}}};
         
 
         // ADSR SETTINGS //
@@ -389,11 +391,13 @@ function ModularBus (props) {
             },
         },
         filterSettings: {
-            frequency: filter.filter.frequency.value,
-            detune: filter.filter.detune.value,
-            type: filter.filter.type,
-            Q: filter.filter.Q.value,
-            filterFMDepth: filter.FMDepth.gain.value
+            filter1: {
+                frequency: filter1.filter.frequency.value,
+                detune: filter1.filter.detune.value,
+                type: filter1.filter.type,
+                Q: filter1.filter.Q.value,
+                freqFMDepth: filter1.FMDepth.gain.value
+            }
         },
         adsrSettings: {
             attack: 0.01,
@@ -474,7 +478,7 @@ function ModularBus (props) {
                 },
                 4: {
                     name: "filter",
-                    node: filter.filter,
+                    node: filter1.filter,
                     type: "audio source"
                 },
                 5: {
@@ -521,13 +525,13 @@ function ModularBus (props) {
                 },
                 4: {
                     name: "filter audio",
-                    node: filter.gainAdjust,
+                    node: filter1.gainAdjust,
                     type: "audio param",
                     connectedNodes: 0
                 },
                 5: {
                     name: "filter FM",
-                    node: filter.FMDepth,
+                    node: filter1.FMDepth,
                     type: "audio param",
                     connectedNodes: 0
                 },
@@ -570,7 +574,7 @@ function ModularBus (props) {
     })
 
     return (
-        <ModularBusContext.Provider value={{oscillatorsArr, stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr, oscRef, lfoRef, filterRef, reverbRef, initialConnection}}>
+        <ModularBusContext.Provider value={{oscillatorsArr, filtersArr, stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr, oscRef, lfoRef, filterRef, reverbRef, initialConnection}}>
         {props.children}
         </ModularBusContext.Provider>
     )

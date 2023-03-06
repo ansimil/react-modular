@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import Nexus from 'nexusui'
 import './Slider.css'
 
-const Slider = ({ module, label, valueLabel, unit, min, max, step, values, sliderRef, id, changeFunction}) => {
+const Slider = ({ module, label, valueLabel, unit, min, max, step, values, sliderRef, id, changeFunction, i}) => {
     
     useEffect(()=>{
         let multislider = new Nexus.Multislider(`#${module}${id}`, {
@@ -17,7 +17,7 @@ const Slider = ({ module, label, valueLabel, unit, min, max, step, values, slide
         })
         multislider.setSlider(0, values)
         multislider.on("change", (e) => {
-            changeFunction(e, id)
+            changeFunction(e, id, module, i)
         })
         multislider.bars[0].attributes[5].value = "#fafdd1"
         multislider.caps[0].attributes[4].value = "#000"

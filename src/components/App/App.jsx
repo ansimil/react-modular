@@ -1,8 +1,6 @@
 import './App.css';
 import { useRef, useContext } from 'react'
 import { ModularBusContext } from '../../contexts/ModularBusContext';
-import Oscillator from '../Oscillator/Oscillator';
-import Filter from '../Filter/Filter';
 import { ADSR } from '../ADSR/ADSR';
 import LFO from '../LFO/LFO'
 import Matrix from '../Matrix/Matrix';
@@ -18,7 +16,7 @@ import ModuleComp from '../ModuleComp/ModuleComp';
 
 
 function App() {
-  const { oscillatorsArr } = useContext(ModularBusContext)
+  const { oscillatorsArr, filtersArr } = useContext(ModularBusContext)
   let keysAndSeqRef = useRef(null)
   let oscillatorsRef = useRef(null)
   let lfosRef = useRef(null)
@@ -40,14 +38,10 @@ function App() {
         <Sequencer />
       </ModuleContainer>
       
-      <ModuleContainer name={'_oscillators'} moduleClass={'oscillators'} locationRef={oscillatorsRef}>
-        <Oscillator oscNum={1}/>
-        <Oscillator oscNum={2}/>
-      </ModuleContainer>
-      <ModuleContainer name={'oscillators2'} moduleClass={'oscillator'}>
-        {oscillatorsArr.map(oscillator => {          
+      <ModuleContainer name={'_oscillators'} moduleClass={'oscillator'} locationRef={oscillatorsRef}>
+        {oscillatorsArr.map((oscillator, i) => { 
           return (
-            <ModuleComp key={oscillator.name} module={oscillator}/> 
+            <ModuleComp key={oscillator.name} module={oscillator} i={i} /> 
           )
         })}
       </ModuleContainer>
@@ -56,9 +50,13 @@ function App() {
         <LFO lfoNum={1} />
         <LFO lfoNum={2} />
       </ModuleContainer>
-
-      <ModuleContainer name={'_filter'} moduleClass={'filter'} locationRef={filterRef}>
-        <Filter />
+      
+      <ModuleContainer name={'_filters'} moduleClass={'filter'} locationRef={filterRef}>
+        {filtersArr.map((filter, i) => {          
+            return (
+              <ModuleComp key={filter.name} module={filter} i={i} /> 
+            )
+          })}
       </ModuleContainer>
         
       <ModuleContainer name={'_envelope'} moduleClass={'envelope'} locationRef={envelopeRef}>

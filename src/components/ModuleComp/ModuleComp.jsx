@@ -1,14 +1,13 @@
 import SlidersContainer from '../SlidersContainer/SlidersContainer'
 import ModuleInfo from '../ModuleInfo.jsx/ModuleInfo'
-import SelectorsComp from '../SelectorsComp/SelectorsComp'
+import SelectorsContainer from '../SelectorsComp/SelectorsContainer'
 import AdditionalSettingsContainer from '../AdditionalSettingsContainer/AdditionalSettingsContainer'
 
-const ModuleComp = ({ module }) => {
+const ModuleComp = ({ module, i }) => {
     const { slidersArr } = module.settings
     const { selectorsArr } = module.settings
     const { incDecArr } = module.settings
     const { name } = module
-
   return (
     <div key={name} className="module-container">
 
@@ -16,10 +15,10 @@ const ModuleComp = ({ module }) => {
 
         <div className="module-settings-container">
             <div className="module-settings-inner">
-                {slidersArr && <SlidersContainer module={module}/>}
+                {slidersArr && <SlidersContainer module={module} i={i} />}
                 {(selectorsArr || incDecArr) && <div className="module-right-side-container">
-                {selectorsArr && <SelectorsComp module={module} />}
-                {incDecArr && <AdditionalSettingsContainer module={module} />}
+                {selectorsArr && <SelectorsContainer module={module} i={i} />}
+                {incDecArr && <AdditionalSettingsContainer module={module} i={i} />}
                 </div>}
             </div>
         </div>

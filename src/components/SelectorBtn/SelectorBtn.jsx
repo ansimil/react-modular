@@ -1,13 +1,13 @@
 import React from 'react'
 
-const SelectorBtn = ({label, id, type, change, activeType, name, toChange}) => {
+const SelectorBtn = ({label, id, type, change, activeType, name, toChange, i}) => {
   return (
     <button
     key={id} 
     id={id}
     className={activeType === id ? "btn selector-btn activeBtn": "btn selector-btn"}
     onClick={(e)=>{
-        change(e, toChange, name)
+        change(e, toChange, i)
     }}
     >
     {label}
