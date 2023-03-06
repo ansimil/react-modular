@@ -1,5 +1,5 @@
 const handleMouseEvent = (classname, down) => {
-    let el = document.getElementsByClassName(classname)
+    const el = document.getElementsByClassName(classname)
         if (down) {
             el[0].classList.add("activeBtn")
         }
