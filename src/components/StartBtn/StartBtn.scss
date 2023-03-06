@@ -10,16 +10,63 @@
 
 .startBtnInner {
     margin-left: 2rem;
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.started {
+    flex-direction: row-reverse;
+}
+
+.startBtnDiv {
+    flex: 4
+}
+
+.startBtnDiv img {
+    width: 25px;
+    height: 25px
+}
+
+.startBtnOff {
+    flex: 1;
+    background-color: red;
+    color: transparent;
+    min-height: 38px;
+    border: solid black 1px;
+    border-left: solid black 0.5px;
+    box-shadow: inset 0px 0px 8px rgba(0,0,0,0.4);
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.startBtnOn {
+    flex: 1;
+    background-color: rgb(49, 172, 49);
+    color: transparent;
+    min-height: 38px;
+    border: solid black 1px;
+    border-left: solid black 0.5px;
+    box-shadow: inset 0px 0px 8px rgba(0,0,0,0.4);
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
 }
 
 .startBtn {
     width: 40px;
     height: 40px;
     padding: 0.8rem 0.3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(81, 81, 81);;
+    // box-shadow: inset 0px 0px 5px rgba(0,0,0,0.7)
 }
 
 .activeStartBtn {
-    background-color: rgb(1, 169, 13);
+    background-color: rgb(1, 169, 13)
 }
 
 .activeStopBtn {

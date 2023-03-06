@@ -1,6 +1,8 @@
 import { useContext } from 'react'
 import { ACTIONS } from '../../utils/ACTIONS'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
+import powerOn from '../../assets/icons/power-blue-icon3.png'
+import powerOff from '../../assets/icons/power-grey-icon.png'
 import './StartBtn.css'
 
 const StartBtn = () => {
@@ -9,44 +11,34 @@ const StartBtn = () => {
     const { synthSettings } = appState
 
     const change = e => {
-        let { id, value } = e.target;
-        updateState({type: ACTIONS.SYNTH[id], payload: { id, value }})
+        let id
+        if (synthSettings.start) {
+          id = 'stop'
+        }
+        else {
+          id = 'start'
+        }
+        updateState({type: ACTIONS.SYNTH[id], payload: { id }})
     }
 
   return (
     <div className="startBtnContainer">
     
-        <div className="startBtnInner">
-            <button
-            id="start"
-            onClick={change}
-            className={synthSettings.start ? "startBtn activeStartBtn endBtnLeft": "startBtn endBtnLeft"}
-            >
-            ON
-            </button>
+        <div className={synthSettings.start ? "startBtnInner started" : "startBtnInner"}>
+            <div className="startBtnDiv">
+              <button
+              id="start"
+              onClick={change}
+              className={synthSettings.start ? "startBtn activeBtn endBtnRight": "startBtn endBtnLeft"}
+              >
+              <img src={synthSettings.start ? powerOn : powerOff} alt="power-icon" /> 
+              </button>
+            </div>
             
-            <button
-            id="stop"
-            onClick={change}
-            className={!synthSettings.start ? "startBtn activeStopBtn endBtnRight": "startBtn endBtnRight"}
-            >
-            OFF
-            </button>
+            <div className={synthSettings.start ? "startBtnOn" : "startBtnOff"}>
+            r
+            </div>
         </div>
-        {/* <div className="sliderContainer">
-                <label className="sliderLabel"><p>GAIN</p></label>
-                <p>{(Math.round(synthSettings.outputGain * 100) / 10)}</p>
-                <input
-                className="outputGainSlider slider"
-                id="outputGain"
-                type="range" 
-                min={0} 
-                max={1}
-                step={0.0001} 
-                value={synthSettings.outputGain} 
-                onChange={change}
-                />
-            </div> */}
     </div>
   )
 }
