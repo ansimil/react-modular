@@ -1,15 +1,13 @@
-.randomSequenceContainer {
+.random-sequencer-container, .random-gatesbtn-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     border: black solid 0.5px;
-    background-color: rgb(57, 57, 57);
+    background-color: rgb(44, 44, 44);
     border-radius: 3px;
     box-shadow: inset 0px 0px 10px rgba(0,0,0,0.5);
-    width: 90%;
-    margin-left: 5%;
-    margin-top: 0.5rem
+    width: 30%;
 }
 
 .randomSequenceBtn {
@@ -27,4 +25,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex: 1
 }
+

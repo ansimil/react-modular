@@ -23,7 +23,10 @@ export const ACTIONS = {
         freqFMDepth: "change_freqFMDepth"
     },
     adsr: {
-        time:"change_adsr_time",
+        attack:"change_adsr_attack",
+        decay:"change_adsr_decay",
+        sustain:"change_adsr_sustain",
+        release:"change_adsr_release",
         gain: "change_adsr_gain"
     },
     lfo: {
@@ -40,7 +43,12 @@ export const ACTIONS = {
         direction: "change_sequencer_direction",
         length: "change_sequencer_length",
         updateStepValue: "update_sequencer_step_value",
-        random: "change_sequencer_random"
+        random: "change_sequencer_random",
+        randomNotes: {
+            notes: "change_sequencer_random_notes",
+            scale: "change_sequencer_random_notes_scale",
+            root: "change_sequencer_random_notes_root"
+        }
     },
     MATRIX: {
         connections: "change_connections",
