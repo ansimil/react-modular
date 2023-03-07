@@ -19,6 +19,15 @@
   height: 10%;
 }
 
+.modalContainer .startBtnContainer {
+  justify-content: center;
+}
+
+.modalContainer .startBtnInner {
+  margin: 0;
+  margin-top: 1rem;
+}
+
 .rodal-dialog {
   display: flex;
   justify-content: center;
