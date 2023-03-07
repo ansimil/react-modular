@@ -9,9 +9,9 @@ const RandomSequenceBtn = () => {
     const [ appState, updateState ] = stateHook
 
   return (
-    <div className="randomSequenceContainer">
-        <div className="lengthLabel">
-            <p>RANDOM SEQ</p>
+    <div className="random-sequencer-container sequencer-settings-small">
+        <div className="seq-settings-label-div">
+            <p className="seq-settings-label">RANDOM SEQ</p>
         </div>
         <div className="randomSequenceBtnsContainer">
         <button

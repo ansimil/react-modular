@@ -14,9 +14,9 @@ const Matrix = ( { matrixLocationRef } ) => {
     }
 
     useEffect(()=>{
-        let rows = 8
-        let columns = 11
-        let width = 300
+        let rows = Object.keys(appState.matrixSettings.outputs).length
+        let columns = Object.keys(appState.matrixSettings.inputs).length
+        let width = 40 * rows
         let height = (width/rows)*columns
 
         let matrix = new Nexus.Sequencer("#matrix", {

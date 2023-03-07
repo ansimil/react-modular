@@ -63,7 +63,7 @@ $containerBorderRadius: 3px;
 }
 
 .verticalLabels {
-    height: 300px;
+    height: 320px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -73,12 +73,12 @@ $containerBorderRadius: 3px;
 }
 
 .horizontalLabels {
-    width: 412.5px;
+    width: 439.5px;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     margin-bottom: 0;
-    margin-left: 52%;
+    margin-left: 51%;
     margin-top: 5rem;
 }
 
@@ -117,8 +117,7 @@ $containerBorderRadius: 3px;
 .outputsLabel {
     transform: rotate(270deg);
     margin-bottom: 1.7rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding: 1rem;
     margin-right: -22px;
     border: solid black 1px;
     border-radius: 3px;
@@ -126,8 +125,7 @@ $containerBorderRadius: 3px;
 
 .inputsLabel {
     margin-left: 8rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding: 1rem;
     border: solid black 1px;
     border-radius: 3px;
 }

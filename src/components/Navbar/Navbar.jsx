@@ -1,7 +1,7 @@
 import { handleMouseEvent } from '../../services/general.services'
 import './Navbar.css'
 
-const Navbar = ({keysAndSeqRef, oscillatorsRef, lfosRef, filterRef, envelopeRef, oscilloscopeRef, matrixLocationRef, effectsLocationRef}) => {
+const Navbar = ({seqRef, oscillatorsRef, lfosRef, filterRef, envelopeRef, oscilloscopeRef, matrixLocationRef, effectsLocationRef, keysRef}) => {
 
     const scrollTo = (ref) => {
         const { current } = ref
@@ -32,18 +32,18 @@ const Navbar = ({keysAndSeqRef, oscillatorsRef, lfosRef, filterRef, envelopeRef,
         </button>
 
         <button 
-        className="btn navbar-btn keys-seq-navbar-btn" 
+        className="btn navbar-btn seq-navbar-btn" 
         onClick={
-            ()=>{scrollTo(keysAndSeqRef)}
+            ()=>{scrollTo(seqRef)}
         }
         onMouseDown={()=>{
-            handleMouseEvent("keys-seq-navbar-btn", true)
+            handleMouseEvent("seq-navbar-btn", true)
         }}
         onMouseUp={()=>{
-            handleMouseEvent("keys-seq-navbar-btn", false)
+            handleMouseEvent("seq-navbar-btn", false)
         }}
         >
-        _keys + _seq
+        _seq
         </button>
 
         <button 
@@ -134,6 +134,20 @@ const Navbar = ({keysAndSeqRef, oscillatorsRef, lfosRef, filterRef, envelopeRef,
         }}
         >
         _oscilloscope
+        </button>
+        <button 
+        className="btn navbar-btn keys-navbar-btn" 
+        onClick={
+            ()=>{scrollTo(keysRef)}
+        }
+        onMouseDown={()=>{
+            handleMouseEvent("keys-navbar-btn", true)
+        }}
+        onMouseUp={()=>{
+            handleMouseEvent("keys-navbar-btn", false)
+        }}
+        >
+        _keys
         </button>
     </div>
   )

@@ -6,9 +6,9 @@ $moduleMinHeight: 400px;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    min-width: 500px;
-    max-width: 900px;
-    width: 61%;
+    min-width: 900px;
+    max-width: 1200px;
+    width: 85%;
     min-height: $moduleMinHeight;
     border-radius: 3px;
     overflow: hidden;
@@ -20,8 +20,8 @@ $moduleMinHeight: 400px;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex: 1 1;
-    min-width: 100%;
+    width: 100%;
+    flex: 1;
 }
 
 .sequencerSettingsContainer {
@@ -29,14 +29,19 @@ $moduleMinHeight: 400px;
     justify-content: center;
     align-items: center;
     height: 101%;
+    width: 450px;
 }
 
-.sequencerSettingsInner {
+.sequencer-settings-inner {
     min-height: 97%;
     width: 97%;
     border: solid black 1px;
     border-radius: 3px;
     background-color: rgb(44, 44, 44);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .sequencerNotesGates {
@@ -77,10 +82,7 @@ $moduleMinHeight: 400px;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.slidersContainer {
-    flex: 1
+    flex: 1;
 }
 
 .activeSeqSlider svg {
@@ -162,8 +164,4 @@ $moduleMinHeight: 400px;
 
 #sequencer rect:hover {
     stroke: #fafdd1
-}
-
-.sequencerSettingsContainer {
-    width: 200px;
 }

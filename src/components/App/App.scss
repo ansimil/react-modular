@@ -14,6 +14,10 @@ $containerBorderRadius: 3px;
     font-family: "lightFont";
     src: url('../../assets/fonts/rubik/static/Rubik-Light.ttf');
 }
+
+p {
+    margin: 0
+}
   
 .App-header {
     background-color: #282c34;
@@ -41,7 +45,8 @@ $containerBorderRadius: 3px;
     border: solid black 1px;
     padding: 0.7rem 0.4rem;
     min-width: 50px;
-    text-align: center
+    text-align: center;
+    border-radius: 3px;
 }
 
 .inc-dec-btns-container {
@@ -102,7 +107,7 @@ $containerBorderRadius: 3px;
     padding-bottom: 0.2rem;
 }
 
-.waveselect-btn {
+.waveselect-btn, .selector-btn {
     font-size: 0.7rem;
     min-width: 40px;
     max-width: 40px;
@@ -121,10 +126,8 @@ $containerBorderRadius: 3px;
 }
 
 .activeBtn {
-    // background-color: black !important;
     background-color: #1e1e1e !important;
-    // color: rgb(222, 222, 222)
-    color: rgb(179, 227, 252);
+    color: rgb(179, 227, 252) !important;
 }
 
 .middleBtn {
@@ -157,7 +160,7 @@ $containerBorderRadius: 3px;
     background-color: rgb(222, 222, 222);
 }
 
-.modulesContainer {
+.modulesContainer, .module-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -191,7 +194,7 @@ $containerBorderRadius: 3px;
     border: black solid 0.5px
 }
 
-.waveSelectContainer {
+.waveSelectContainer, .selectors-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -204,7 +207,7 @@ $containerBorderRadius: 3px;
     justify-content: center
 }
 
-.moduleSettingsContainer {
+.moduleSettingsContainer, .module-settings-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -212,7 +215,7 @@ $containerBorderRadius: 3px;
     min-width: 100%;
 }
 
-.moduleSettingsInner {
+.moduleSettingsInner, .module-settings-inner {
     display: flex;
     width: 99%;
     height: 97%;
@@ -221,7 +224,7 @@ $containerBorderRadius: 3px;
     background-color: rgb(44,44,44);
 }
 
-.moduleSettingsInner .slidersContainer {
+.moduleSettingsInner .slidersContainer, .module-settings-inner .sliders-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -232,25 +235,26 @@ $containerBorderRadius: 3px;
     margin-top: 0.75%;
     border-radius: 3px;
     box-shadow: inset 0px 0px 8px rgba(0,0,0,0.4);
+    flex: 1
 }
 
-.slidersContainer div:nth-last-child(n+2) {
+.slidersContainer div:nth-last-child(n+2), .sliders-container div:nth-last-child(n+2) {
     border-right: solid black 0.5px
 }
 
-.moduleSettingsInner .sliderContainer {
+.moduleSettingsInner .sliderContainer, .module-settings-inner .sliderContainer {
     border: none;
     background-color: rgb(44,44,44);
     row-gap: 0.3rem;
 }
 
-.moduleSettingsInner .sliderLabel {
+.moduleSettingsInner .sliderLabel, .module-settings-inner .sliderLabel {
     border-radius: 3px;
     border: solid black 0.5px;
     box-shadow: inset 0px 0px 3px rgba(0,0,0,0.5);
 }
 
-.moduleInfo {
+.moduleInfo, .module-info-container {
     width: 100%;
     max-height: 30px;
     min-height: 30px;
@@ -263,7 +267,7 @@ $containerBorderRadius: 3px;
     border-bottom: solid black 0.5px;
 }
 
-.moduleInfoInner {
+.moduleInfoInner, .module-info-inner {
     margin-left: 1rem;
     display: flex;
     justify-content: center;
@@ -276,7 +280,7 @@ $containerBorderRadius: 3px;
     box-shadow: inset 0px 0px 3px rgba(0,0,0,0.5);
 }
 
-.moduleInfo p {
+.moduleInfo p, .module-info-container p {
     padding: 0.1rem 0.5rem;
     margin: 0;
     color: black;
@@ -347,7 +351,7 @@ $containerBorderRadius: 3px;
     margin-top: 6px;
 }
 
-.rightSideContainer {
+.rightSideContainer, .module-right-side-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -391,12 +395,160 @@ $containerBorderRadius: 3px;
     box-shadow: inset 0px 0px 3px rgba(0,0,0,0.5);
 }
 
+.sequencer-settings-inner-inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: black solid 0.5px;
+    background-color: rgb(44, 44, 44);
+    border-radius: 3px;
+    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+    width: 98%;
+    flex: 1;
+}
+
 #nexus-ui-sequencer-1 {
     border: black solid 1px;
     padding: 0.5rem
 }
 
+.seq-settings-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    max-height: 25px;
+    height: 60%;
+    width: 100%;
+    max-width: 60px;
+    background-color: rgb(117, 117, 117);
+    border-radius: 3px;
+    border: solid black 0.5px;
+    box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.5);
+    font-size: 0.5rem !important;
+    padding: 0.2rem;
+    margin: 0
+}
 
+.seq-settings-label-div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
 
+.randomize-gates-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // height: 30px;
+    padding: 0.3rem 0.5rem !important
+}
+
+.randomize-gates-btn p {
+    font-size: 0.5rem;
+    padding: 0
+}
+
+.randomize-gates-btn-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.randomize-notes-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    // flex-wrap: wrap;
+    border: black solid 0.5px;
+    background-color: rgb(44, 44, 44);
+    border-radius: 3px;
+    box-shadow: inset 0px 0px 10px rgba(0,0,0,0.5);
+    width: 90%;
+}
+
+.randomize-notes-container .seq-settings-label-div {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.scale-btns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.2rem
+}
+
+.randomize-notes-container .selector-btn {
+    width: 20px;
+    max-height: 20px;
+    margin-bottom: 0.5rem;
+}
+
+.randomize-notes-container .root-note-btn {
+    max-width: 20px !important;
+    min-width: 20px !important
+}
+
+.root-btns {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.2rem;
+    margin-bottom: 0.3rem;
+}
+
+.sequencer-settings-small {
+    min-width: 130px;
+    min-height: 85px
+}
+
+.sequencer-settings-medium {
+    width: 200px;
+    min-height: 130px;
+}
+
+.sequencer-settings-topthird {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex: 1;
+    width: 100%;
+}
+
+.sequencer-settings-middlethird {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex: 1;
+    width: 100%;
+}
+
+.sequencer-settings-bottomthird {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex: 1;
+    width: 100%;
+}
+
+.randomize-notes-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3rem
+} 
+
+.set-random-notes {
+    padding: 0.3rem 0.5rem !important;
+    font-size: 0.5rem;
+    margin-bottom: 0.5rem;
+}
 
 

@@ -65,9 +65,9 @@ const SeqLength = () => {
     }
 
   return (
-    <div className="sequencerLengthContainer">
-        <div className="lengthLabel">
-            <p>LENGTH</p>
+    <div className="sequencer-length-container sequencer-settings-small">
+        <div className="seq-settings-label-div">
+            <p className="seq-settings-label">LENGTH</p>
         </div>
         <div className="lengthBtnsContainer">
             <button
