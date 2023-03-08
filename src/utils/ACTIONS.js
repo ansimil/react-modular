@@ -35,6 +35,7 @@ export const ACTIONS = {
         pwm: "change_lfo_pwm"
     },
     SEQUENCER: {
+        currentTrack: "change_current_track",
         note: "change_step_note",
         octave: "change_step_octave",
         step: "trigger_step",
