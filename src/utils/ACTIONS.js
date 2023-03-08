@@ -10,7 +10,6 @@ export const ACTIONS = {
             detune: "change_osc_detune",
             frequency: "change_osc_frequency",
             oscFMDepth: "change_osc_FMDepth",
-            oscADSRGain: "change_osc_ADSR_gain",
             glide: "change_osc_glide",
             pwm: "change_osc_pwm",
             offset: "change_osc_offset"
