@@ -57,7 +57,7 @@ filtersArr.push(filter1)
 let adsr1 = new ADSR(`adsr${adsrArr.length+1}`)
 adsrArr.push(adsr1)
 
-let vca = new VCA()
+let vca1 = new VCA()
 
 function counter(){
     let count = 0
@@ -173,7 +173,7 @@ export function reducer(state, action){
             lfosArr[i].updateOscType(id, state)
             return {...state, lfoSettings: {...state.lfoSettings, [moduleName]: {...state.lfoSettings[moduleName], type: id}}}
 
-        case ACTIONS.lfo.oscFMDepth:
+        case ACTIONS.lfo.lfoFMDepth:
             lfosArr[i].updateFMDepth(value)
             return {...state, lfoSettings: {...state.lfoSettings, [moduleName]: {...state.lfoSettings[moduleName], [id]: Number(value)}}};
         
@@ -207,9 +207,10 @@ export function reducer(state, action){
 
         // ADSR SETTINGS //
 
-        case ACTIONS.adsr.time:
-            state.adsrSettings[module][id] = value
+        case ACTIONS.adsr[id]:
+            state.adsrSettings[moduleName][id] = value
             adsrArr[i].adsr[id] = value
+            console.log(adsrArr[i].adsr)
             return {...state, adsrSettings: {...state.adsrSettings, [moduleName]: {...state.adsrSettings[moduleName], [id]: Number(value)}}};
         
         case ACTIONS.adsr.gain:
@@ -236,24 +237,36 @@ export function reducer(state, action){
 
         case ACTIONS.SEQUENCER.random:
             return {...state, sequencerSettings: {...state.sequencerSettings, random: value}}
+
+        case ACTIONS.SEQUENCER.randomNotes.notes:
+            return {...state, sequencerSettings: {...state.sequencerSettings, sliders: {...state.sequencerSettings.sliders, [id]: {...state.sequencerSettings.sliders[id], note: value}}}}
+        
+        case ACTIONS.SEQUENCER.randomNotes.scale:
+            return {...state, sequencerSettings: {...state.sequencerSettings, randomNotes: {...state.sequencerSettings.randomNotes, scale: id}}}
+        
+        case ACTIONS.SEQUENCER.randomNotes.root:
+            return {...state, sequencerSettings: {...state.sequencerSettings, randomNotes: {...state.sequencerSettings.randomNotes, root: id}}}    
             
         case ACTIONS.SEQUENCER.step:
             const stepNote = state.sequencerSettings.sliders[value].note + 24 + (12 * state.sequencerSettings.sliders[value].octave)
             const bpmForClockWidth = (60 / state.synthSettings.bpm) / 16
-            step(oscillatorsArr, adsrArr[i].adsr, time, state, midiToFreqArr, stepNote, bpmForClockWidth)
-            return {...state, oscSettings: {...state.oscSettings, osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note], oscADSRGain: vca.vca.gain.value}}};
+            step(oscillatorsArr, adsrArr[0].adsr, time, state, midiToFreqArr, stepNote, bpmForClockWidth)
+
+            return {...state, oscSettings: {...state.oscSettings, 
+                osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note]}},
+            vcaSettings: {...state.vcaSettings, vca1: {...state.vcaSettings.vca1, gain: vca1.vca.gain.value}}
+            };
         
         case ACTIONS.SEQUENCER.length:
             return {...state, sequencerSettings: {...state.sequencerSettings, length: value}}
 
         case ACTIONS.effects[subtype]?.[id]:
-            const [ destructuredValue ] = value
             if (subtype === 'reverb'){
                 if (id === 'decay'){
-                    effectsArr[i].effect.decay = destructuredValue
+                    effectsArr[i].effect.decay = value
                 }
                 else if (id === 'preDelay'){
-                    effectsArr[i].effect.preDelay = destructuredValue
+                    effectsArr[i].effect.preDelay = value
                 }
                 else {
                     effectsArr[i].effect[id].value = value
@@ -325,7 +338,6 @@ function ModularBus (props) {
                 detune: osc1.osc.detune.value,
                 type: osc1.osc.type,
                 oscFMDepth: osc1.FMDepth.gain.value,
-                oscADSRGain: vca.vca.gain.value,
                 glide: 0.00,
                 pwm: 0,
                 octave: 0,
@@ -357,7 +369,7 @@ function ModularBus (props) {
                 decay: 0.2,
                 sustain: 0.5,
                 release: 0.2,
-                gain: vca.vca.gain.value
+                gain: vca1.vca.gain.value
             }
         },
         lfoSettings: {
@@ -374,6 +386,11 @@ function ModularBus (props) {
                 pwm: 0
             }
         },
+        vcaSettings: {
+            vca1: {
+                gain: vca1.vca.gain.value
+            }
+        },
         effectsSettings: {
             reverb1: {
                 decay: 2,
@@ -383,28 +400,32 @@ function ModularBus (props) {
         },
         sequencerSettings: {
             sliders: {
-                0:{note:0,octave:4},
-                1:{note:0,octave:4},
-                2:{note:0,octave:4},
-                3:{note:0,octave:4},
-                4:{note:0,octave:4},
-                5:{note:0,octave:4},
-                6:{note:0,octave:4},
-                7:{note:0,octave:4},
-                8:{note:0,octave:4},
-                9:{note:0,octave:4},
-                10:{note:0,octave:4},
-                11:{note:0,octave:4},
-                12:{note:0,octave:4},
-                13:{note:0,octave:4},
-                14:{note:0,octave:4},
-                15:{note:0,octave:4},
+                0:{note:0,octave:3},
+                1:{note:0,octave:3},
+                2:{note:0,octave:3},
+                3:{note:0,octave:3},
+                4:{note:0,octave:3},
+                5:{note:0,octave:3},
+                6:{note:0,octave:3},
+                7:{note:0,octave:3},
+                8:{note:0,octave:3},
+                9:{note:0,octave:3},
+                10:{note:0,octave:3},
+                11:{note:0,octave:3},
+                12:{note:0,octave:3},
+                13:{note:0,octave:3},
+                14:{note:0,octave:3},
+                15:{note:0,octave:3},
             },
             step: -1,
             player: "stopped",
             direction: "up",
             length: 16,
-            random: false
+            random: false,
+            randomNotes: {
+                root: "a",
+                scale: "all"
+            }
         },
         matrixSettings: {
             outputs: {
@@ -443,7 +464,7 @@ function ModularBus (props) {
                 },
                 6: {
                     name: "vca output",
-                    node: vca.vca,
+                    node: vca1.vca,
                     type: "audio source"
                 },
                 7: {
@@ -491,13 +512,13 @@ function ModularBus (props) {
                 },
                 6: {
                     name: "vca audio",
-                    node: vca.audioGainAdjust,
+                    node: vca1.audioGainAdjust,
                     type: "audio param",
                     connectedNodes: 0,
                 },
                 7: {
                     name: "vca ctrl",
-                    node: vca.ctrlGainAdjust,
+                    node: vca1.ctrlGainAdjust,
                     type: "audio gain",
                     connectedNodes: 0 
                 },

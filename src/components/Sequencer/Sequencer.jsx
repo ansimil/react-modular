@@ -4,6 +4,8 @@ import { ModularBusContext } from '../../contexts/ModularBusContext'
 import SeqLength from '../SeqLength/SeqLength'
 import SevenSegDisplay from '../SevenSegDisplay/SevenSegDisplay'
 import RandomSequenceBtn from '../RandomSequenceBtn/RandomSequenceBtn'
+import RandomGatesBtn from '../RandomGatesBtn/RandomGatesBtn'
+import RandomizeNotes from '../RandomizeNotes/RandomizeNotes'
 import { handleMouseEvent } from '../../services/general.services'
 import * as Tone from 'tone'
 import Nexus from 'nexusui'
@@ -30,6 +32,10 @@ const Sequencer = () => {
     11: "B"
   }
 
+  const randomizeGates = () => {
+    sequencerRef.current.matrix.populate.row(0, [0.5])
+  }
+
   const handleInc = (id, i) => {
     if (appState.sequencerSettings.sliders[i].octave < 6){
     let value = appState.sequencerSettings.sliders[i].octave + 1
@@ -45,7 +51,13 @@ const Sequencer = () => {
   }
 
   const change = (e, i) => {
-    const [ value ] = e
+    let value
+    if (Array.isArray(e)){
+      [ value ] = e
+    }
+    else {
+      value = e.value
+    }
     updateState({type: ACTIONS.SEQUENCER.note, payload: {value, i}})
   }
 
@@ -54,9 +66,11 @@ const Sequencer = () => {
     const { value } = sequencerRef.current.stepper
     
     updateState({type: ACTIONS.SEQUENCER.updateStepValue, payload: {value}})
+    
     if (sequencerRef.current.cells[value]._state.state) {
       updateState({type: ACTIONS.SEQUENCER.step, payload: {value, time}})
     }
+
     seqSlidersRef.current.forEach(slider => {
       if (slider.parent.id === `slider${value}`){
         slider.parent.className = "activeSeqSlider"
@@ -203,10 +217,21 @@ const Sequencer = () => {
         
       </div>
       <div className="sequencerSettingsContainer">
-        <div className="sequencerSettingsInner">
+        <div className="sequencer-settings-inner">
           <SevenSegDisplay />
-          <SeqLength/>
-          <RandomSequenceBtn/>
+          <div className="sequencer-settings-inner-inner">
+            <div className="sequencer-settings-topthird">
+            <SeqLength />
+            <RandomSequenceBtn />
+            <RandomGatesBtn randomizeFunc={randomizeGates}/>
+            </div>
+            <div className="sequencer-settings-middlethird">
+            <RandomizeNotes seqSlidersRef={seqSlidersRef}/>
+            </div>
+            <div className="sequencer-settings-bottomthird">
+
+            </div>
+          </div>
         </div>
       </div>
       </div>

@@ -14,7 +14,8 @@ import ModuleComp from '../ModuleComp/ModuleComp';
 
 function App() {
   const { oscillatorsArr, filtersArr, lfosArr, adsrArr, effectsArr } = useContext(ModularBusContext)
-  let keysAndSeqRef = useRef(null)
+  let seqRef = useRef(null)
+  let keysRef = useRef(null)
   let oscillatorsRef = useRef(null)
   let lfosRef = useRef(null)
   let filterRef = useRef(null)
@@ -27,11 +28,10 @@ function App() {
   return (
     <div className="App">
       <ControlBar />
-      <Navbar keysAndSeqRef={keysAndSeqRef} oscillatorsRef={oscillatorsRef} lfosRef={lfosRef} filterRef={filterRef} envelopeRef={envelopeRef} oscilloscopeRef={oscilloscopeRef} matrixLocationRef={matrixLocationRef} effectsLocationRef={effectsLocationRef}/>
+      <Navbar seqRef={seqRef} oscillatorsRef={oscillatorsRef} lfosRef={lfosRef} filterRef={filterRef} envelopeRef={envelopeRef} oscilloscopeRef={oscilloscopeRef} matrixLocationRef={matrixLocationRef} effectsLocationRef={effectsLocationRef} keysRef={keysRef}/>
       <Matrix matrixLocationRef={matrixLocationRef}/>   
       
-      <ModuleContainer name={'_keys + _seq'} moduleClass={'keysAndSeq'} locationRef={keysAndSeqRef}>
-        <Keyboard />
+      <ModuleContainer name={'_seq'} moduleClass={'seq'} locationRef={seqRef}>
         <Sequencer />
       </ModuleContainer>
       
@@ -78,6 +78,10 @@ function App() {
       
       <ModuleContainer name={'_oscilloscope'} moduleClass={'oscilloscope'} locationRef={oscilloscopeRef}>
         <Oscilloscope size={[500,225]} id={"large"} />
+      </ModuleContainer>
+
+      <ModuleContainer name={'_keys'} moduleClass={'keys'} locationRef={keysRef}>
+       <Keyboard/>
       </ModuleContainer>
       
       
