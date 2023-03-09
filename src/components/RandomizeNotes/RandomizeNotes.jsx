@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
 import { ACTIONS } from '../../utils/ACTIONS'
+import { handleMouseEvent } from '../../services/general.services'
 
 const RandomizeNotes = ({seqSlidersRef}) => {
     // const [scale, setScale] = useState("all")
@@ -49,7 +50,7 @@ const RandomizeNotes = ({seqSlidersRef}) => {
             }
             seqSlidersRef.current[i].setSlider(0, finalNote)
             seqSlidersRef.current[i].render()
-            updateState({type: ACTIONS.SEQUENCER.randomNotes.notes, payload: {value: finalNote, id: i}})
+            updateState({type: ACTIONS.SEQUENCER.randomNotes.notes, payload: {value: finalNote, i: i}})
         })
     }
 
@@ -103,6 +104,12 @@ const RandomizeNotes = ({seqSlidersRef}) => {
         </div>
         <button
         className="btn endBtnLeft endBtnRight set-random-notes"
+        onMouseDown={()=>{
+            handleMouseEvent("set-random-notes", true)
+        }}
+        onMouseUp={()=>{
+            handleMouseEvent("set-random-notes", false)
+        }}
         onClick={()=>{
             let scale = pickNotes(sequencerSettings.randomNotes.scale)
             setSliders(scale)

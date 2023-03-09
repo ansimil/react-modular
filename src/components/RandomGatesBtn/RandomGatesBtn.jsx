@@ -1,4 +1,5 @@
 import React from 'react'
+import { handleMouseEvent } from '../../services/general.services'
 
 const RandomGatesBtn = ({randomizeFunc}) => {
   return (
@@ -10,6 +11,12 @@ const RandomGatesBtn = ({randomizeFunc}) => {
           <button 
           className="randomize-gates-btn btn"
           onClick={randomizeFunc}
+          onMouseDown={()=>{
+            handleMouseEvent("randomize-gates-btn", true)
+          }}
+          onMouseUp={()=>{
+            handleMouseEvent("randomize-gates-btn", false)
+          }}
           >
           <p>RANDOMIZE</p>
           </button>

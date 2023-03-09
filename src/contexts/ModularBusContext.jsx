@@ -227,10 +227,10 @@ export function reducer(state, action){
             return {...state, sequencerSettings: {...state.sequencerSettings, direction: value}}
 
         case ACTIONS.SEQUENCER.octave:
-            return {...state, sequencerSettings: {...state.sequencerSettings, sliders: {...state.sequencerSettings.sliders, [i]: {...state.sequencerSettings.sliders[i], octave: value}}}}
+            return {...state, sequencerSettings: {...state.sequencerSettings, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders[i], octave: value}}}}}
         
         case ACTIONS.SEQUENCER.note:
-            return {...state, sequencerSettings: {...state.sequencerSettings, sliders: {...state.sequencerSettings.sliders, [i]: {...state.sequencerSettings.sliders[i], note: value}}}}
+            return {...state, sequencerSettings: {...state.sequencerSettings, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders[i], note: value}}}}}
         
         case ACTIONS.SEQUENCER.updateStepValue:
             return {...state, sequencerSettings: {...state.sequencerSettings, step: value}}
@@ -238,8 +238,11 @@ export function reducer(state, action){
         case ACTIONS.SEQUENCER.random:
             return {...state, sequencerSettings: {...state.sequencerSettings, random: value}}
 
+        case ACTIONS.SEQUENCER.currentTrack: 
+            return {...state, sequencerSettings: {...state.sequencerSettings, currentTrack: value}}
+
         case ACTIONS.SEQUENCER.randomNotes.notes:
-            return {...state, sequencerSettings: {...state.sequencerSettings, sliders: {...state.sequencerSettings.sliders, [id]: {...state.sequencerSettings.sliders[id], note: value}}}}
+            return {...state, sequencerSettings: {...state.sequencerSettings, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders[i], note: value}}}}}
         
         case ACTIONS.SEQUENCER.randomNotes.scale:
             return {...state, sequencerSettings: {...state.sequencerSettings, randomNotes: {...state.sequencerSettings.randomNotes, scale: id}}}
@@ -248,7 +251,7 @@ export function reducer(state, action){
             return {...state, sequencerSettings: {...state.sequencerSettings, randomNotes: {...state.sequencerSettings.randomNotes, root: id}}}    
             
         case ACTIONS.SEQUENCER.step:
-            const stepNote = state.sequencerSettings.sliders[value].note + 24 + (12 * state.sequencerSettings.sliders[value].octave)
+            const stepNote = state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders[value].note + 24 + (12 * state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders[value].octave)
             const bpmForClockWidth = (60 / state.synthSettings.bpm) / 16
             step(oscillatorsArr, adsrArr[0].adsr, time, state, midiToFreqArr, stepNote, bpmForClockWidth)
 
@@ -399,31 +402,54 @@ function ModularBus (props) {
             }
         },
         sequencerSettings: {
-            sliders: {
-                0:{note:0,octave:3},
-                1:{note:0,octave:3},
-                2:{note:0,octave:3},
-                3:{note:0,octave:3},
-                4:{note:0,octave:3},
-                5:{note:0,octave:3},
-                6:{note:0,octave:3},
-                7:{note:0,octave:3},
-                8:{note:0,octave:3},
-                9:{note:0,octave:3},
-                10:{note:0,octave:3},
-                11:{note:0,octave:3},
-                12:{note:0,octave:3},
-                13:{note:0,octave:3},
-                14:{note:0,octave:3},
-                15:{note:0,octave:3},
+            track1: {
+                sliders: {
+                    0:{note:0,octave:3},
+                    1:{note:0,octave:3},
+                    2:{note:0,octave:3},
+                    3:{note:0,octave:3},
+                    4:{note:0,octave:3},
+                    5:{note:0,octave:3},
+                    6:{note:0,octave:3},
+                    7:{note:0,octave:3},
+                    8:{note:0,octave:3},
+                    9:{note:0,octave:3},
+                    10:{note:0,octave:3},
+                    11:{note:0,octave:3},
+                    12:{note:0,octave:3},
+                    13:{note:0,octave:3},
+                    14:{note:0,octave:3},
+                    15:{note:0,octave:3},
+                }
             },
+            track2: {
+                sliders: {
+                    0:{note:0,octave:3},
+                    1:{note:0,octave:3},
+                    2:{note:0,octave:3},
+                    3:{note:0,octave:3},
+                    4:{note:0,octave:3},
+                    5:{note:0,octave:3},
+                    6:{note:0,octave:3},
+                    7:{note:0,octave:3},
+                    8:{note:0,octave:3},
+                    9:{note:0,octave:3},
+                    10:{note:0,octave:3},
+                    11:{note:0,octave:3},
+                    12:{note:0,octave:3},
+                    13:{note:0,octave:3},
+                    14:{note:0,octave:3},
+                    15:{note:0,octave:3},
+                }
+            },
+            currentTrack: 1,
             step: -1,
             player: "stopped",
             direction: "up",
             length: 16,
             random: false,
             randomNotes: {
-                root: "a",
+                root: "c",
                 scale: "all"
             }
         },
