@@ -12,15 +12,16 @@ const Matrix = ( { matrixLocationRef } ) => {
     const changeConnections = e => {
         updateState({type: ACTIONS.MATRIX.connections, payload: {value: e} })
     }
-
+    let sqSize = 40
+    let rows = Object.keys(appState.matrixSettings.outputs).length
+    let columns = Object.keys(appState.matrixSettings.inputs).length
+    let width = sqSize * columns
+    let height = sqSize * rows
+    
     useEffect(()=>{
-        let rows = Object.keys(appState.matrixSettings.outputs).length
-        let columns = Object.keys(appState.matrixSettings.inputs).length
-        let width = 40 * rows
-        let height = (width/rows)*columns
-
+        console.log(width)
         let matrix = new Nexus.Sequencer("#matrix", {
-            "size": [height, width],
+            "size": [width, height],
             "rows": rows,
             "columns": columns 
         })
@@ -44,35 +45,47 @@ const Matrix = ( { matrixLocationRef } ) => {
     <div ref={matrixLocationRef} className='matrixContainer'>
         <div className='matrixContainerInner'>
         <div className="inputsLabel"><p>inputs</p></div>
-            <div className="horizontalLabels">
-                <div className="horizontalLabel"><p>osc1FM</p></div>
-                <div className="horizontalLabel"><p>osc2FM</p></div>
-                <div className="horizontalLabel"><p>lfo1FM</p></div>
-                <div className="horizontalLabel"><p>lfo2FM</p></div>
-                <div className="horizontalLabel"><p>filter</p></div>
-                <div className="horizontalLabel"><p>filterFM</p></div>
-                <div className="horizontalLabel"><p>vca audio</p></div> 
-                <div className="horizontalLabel"><p>vca ctrl.</p></div>
-                <div className="horizontalLabel"><p>reverb audio</p></div>
-                <div className="horizontalLabel"><p>reverb wet</p></div>
-                <div className="horizontalLabel"><p>output</p></div>
-            </div>
-            <div className="matrixInner">
-            <div className="outputsLabel"><p>outputs</p></div>
-            <div className='verticalLabels'>
-                <div className="verticalLabel">osc1</div>
-                <div className="verticalLabel">osc2</div>
-                <div className="verticalLabel">lfo1</div>
-                <div className="verticalLabel">lfo2</div>
-                <div className="verticalLabel">filter</div>
-                <div className="verticalLabel">env</div>
-                <div className="verticalLabel">vca</div>
-                <div className="verticalLabel">reverb</div> 
-            </div>
-            <div id="matrix"></div>
-    
-            </div>
+            <table>
+                <thead>
+                
+                        <tr className="horizontal-labels">
+                            <th></th> 
+                            <th></th>
+                            <th style={{display: "flex"}}>
+                            {Object.keys(appState.matrixSettings.inputs).map(input => {
+                                const name = appState.matrixSettings.inputs[input].name
+                                return (
+                                        <div className="horizontal-label"><span className="horizontal-span">{name}</span></div>
+                                )
+                            })
+                            }
+                            </th>
+                        </tr>
+                
+                </thead>
+                <tbody>
+                    <tr>
+                        <td className="outputsLabel"><p>outputs</p></td>
+                            <td>
+                            <div className='verticalLabels' style={{"height": `${height}px`}}>
+                                {Object.keys(appState.matrixSettings.outputs).map(output => {
+                                    const name = appState.matrixSettings.outputs[output].name
+                                    return (
+                                        <td className="vertical-label"><span className="vertical-span">{name}</span></td> 
+                                    )
+                                })
+                                }
+                            </div>
+                            </td>
+                            <td>
+                            <div id="matrix"></div>
+                            </td>
+                        
+                    </tr>
+                </tbody>
+            </table>
         </div>
+      
     </div>
   )
 }

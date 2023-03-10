@@ -497,7 +497,19 @@ function ModularBus (props) {
                     name: "reverb",
                     node: reverb1.effect,
                     type: "audio source"
-                }
+                },
+                // 8: {
+                //     name: "hello"
+                // },
+                // 9: {
+                //     name: "hello"
+                // },
+                // 10: {
+                //     name: "hello"
+                // },
+                // 11: {
+                //     name: "hello"
+                // }
             },
             inputs: {
                 0: {
@@ -565,7 +577,13 @@ function ModularBus (props) {
                     node: outputGain,
                     type: "audio param",
                     connectedNodes: 0
-                }
+                },
+                // 11: {
+                //     name: "hello"
+                // },
+                // 12: {
+                //     name: "hello"
+                // }
             },
             initialConnections: [
                 ...initialConnection
