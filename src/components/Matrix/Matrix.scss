@@ -42,11 +42,11 @@ $containerBorderRadius: 3px;
     align-items: center;
     width: 45px;
     position: relative;
-    height: 37.75px
+    height: 40px;
 }
 
 .vertical-span {
-    bottom: 45%;
+    bottom: 30%;
     right: 15%;
     position: absolute;
     transform: rotate(-45deg);
@@ -56,15 +56,12 @@ $containerBorderRadius: 3px;
 }
 
 .verticalLabels {
-    margin-bottom: 27%;
+    display: table-row;
 }
-
 
 .horizontalLabel p {
     margin: 0
 }
-
-
 
 .horizontal-label {
     height: 110px;

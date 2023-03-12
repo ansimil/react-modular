@@ -51,7 +51,28 @@ const setDisconnections = (tuple, state) => {
             
 }
 
+const setInitialIOState = (modulesArr) => {
+    let inputs = []
+    let outputs = []
+
+    modulesArr.forEach((moduleSet, i) => {
+        moduleSet.forEach(module => {
+            module.settings.matrixIOs.inputs.forEach(input => {
+            inputs.push(input)
+        })
+        })
+        moduleSet.forEach(module => {
+            module.settings.matrixIOs.outputs?.forEach(output => {
+            outputs.push(output)
+        })
+        })
+    })
+    console.log([inputs, outputs])
+    return [inputs, outputs]
+}
+
 export {
     setConnections,
-    setDisconnections
+    setDisconnections,
+    setInitialIOState
 }

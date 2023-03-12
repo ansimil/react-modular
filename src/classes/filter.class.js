@@ -19,6 +19,29 @@ export class Filter {
         this.QDepth.connect(this.filter.Q)
         this.filter.Q.value = 0
         this.settings = {
+            matrixIOs: {
+                inputs: [
+                    {
+                        name: `${actionsSelector} audio`,
+                        node: this.gainAdjust,
+                        type: "audio param",
+                        connectedNodes: 0
+                    },
+                    {
+                        name: `${actionsSelector} FM`,
+                        node: this.FMDepth,
+                        type: "audio param",
+                        connectedNodes: 0
+                    }
+                ],
+                outputs: [
+                    {
+                        name: actionsSelector,
+                        node: this.filter,
+                        type: "audio source"
+                    }
+            ]
+            },
             slidersArr: [
                 new Slider("frequency", "filter", "CUTOFF", 10, 10000, 0.001, "Hz"),
                 new Slider("detune", "filter", "FINE", 0, 100, 0.001, "cts"),

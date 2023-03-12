@@ -1,7 +1,8 @@
 import { createContext, useReducer, useRef } from "react";
 import { 
     setConnections,
-    setDisconnections 
+    setDisconnections,
+    setInitialIOState 
 } from "../services/matrix.services";
 import { 
     updateOscFrequency
@@ -18,7 +19,8 @@ import {
     VCA,
     ADSR,
     LFO,
-    Reverb
+    Reverb,
+    Output
 } from "../classes/classes";
 import { 
     ACTIONS
@@ -34,30 +36,39 @@ const actx = new Tone.Context()
 const out = actx.destination
 Tone.setContext(actx)
 
+let modulesArr = []
 let oscillatorsArr = []
 let lfosArr = []
 let filtersArr = []
 let adsrArr = []
+let vcasArr = []
 let effectsArr = []
+let outputsArr = []
 
 let osc1 = new Oscillator(440, `osc${oscillatorsArr.length+1}`)
 oscillatorsArr.push(osc1)
 let osc2 = new Oscillator(440, `osc${oscillatorsArr.length+1}`)
 oscillatorsArr.push(osc2)
-
+modulesArr.push(oscillatorsArr)
 
 let lfo1 = new LFO(2, `lfo${lfosArr.length+1}`)
 lfosArr.push(lfo1)
 let lfo2 = new LFO(2, `lfo${lfosArr.length+1}`)
 lfosArr.push(lfo2)
+modulesArr.push(lfosArr)
+
 
 let filter1 = new Filter(`filter${filtersArr.length+1}`)
 filtersArr.push(filter1)
+modulesArr.push(filtersArr)
 
 let adsr1 = new ADSR(`adsr${adsrArr.length+1}`)
 adsrArr.push(adsr1)
+modulesArr.push(adsrArr)
 
-let vca1 = new VCA()
+let vca1 = new VCA(`vca${vcasArr.length+1}`)
+vcasArr.push(vca1)
+modulesArr.push(vcasArr)
 
 function counter(){
     let count = 0
@@ -75,23 +86,28 @@ function counter(){
 }
 let reverb1 = new Reverb(2, `reverb${counter()}`)
 effectsArr.push(reverb1)
+modulesArr.push(effectsArr)
+
+let output1 = new Output(`output${outputsArr.length+1}`)
+outputsArr.push(output1)
+modulesArr.push(outputsArr)
+
+output1.output.connect(out)
 
 
-let output = new Tone.Gain()
-let outputGain = new Tone.Gain()
-output.gain.setValueAtTime(0.00001, actx.currentTime)
-outputGain.gain.setValueAtTime(1.0, actx.currentTime)
-outputGain.connect(output)
-output.connect(out)
+const IOs = setInitialIOState(modulesArr)
+const inputs = IOs[0]
+const outputs = IOs[1]
+
 
 // Connection chain //
 const initialConnection = [
     [4,0],
-    [6,4],
-    [10,6],
+    [7,4],
+    [11,6],
     [0,2],
     [2,3],
-    [7,5]
+    [8,5]
 ]
 
 let connectionChain = []
@@ -109,17 +125,17 @@ export function reducer(state, action){
         // SYNTH SETTINGS //
         case ACTIONS.SYNTH.start:
             startContext(osc1.osc, osc2.osc, lfo1.osc, lfo2.osc)
-            output.gain.setValueAtTime(output.gain.value, actx.currentTime)
-            output.gain.linearRampToValueAtTime(0.2, actx.currentTime + smoothing)
+            output1.output.gain.setValueAtTime(output1.output.gain.value, actx.currentTime)
+            output1.output.gain.linearRampToValueAtTime(1, actx.currentTime + smoothing)
             return {...state, synthSettings: {...state.synthSettings, start: true, startCount: 1}}
 
         case ACTIONS.SYNTH.stop:
-            output.gain.setValueAtTime(output.gain.value, actx.currentTime)
-            output.gain.linearRampToValueAtTime(0.0001, actx.currentTime + smoothing)
+            output1.output.gain.setValueAtTime(output1.output.gain.value, actx.currentTime)
+            output1.output.gain.linearRampToValueAtTime(0.0001, actx.currentTime + smoothing)
             return {...state, synthSettings: {...state.synthSettings, start: false}}
         
         case ACTIONS.SYNTH.outputGain:
-            outputGain.gain.linearRampToValueAtTime(value, actx.currentTime + 0.005)
+            output1.gain.linearRampToValueAtTime(value, actx.currentTime + 0.005)
             return {...state, synthSettings: {...state.synthSettings, [id]: Number(value)}}
 
         case ACTIONS.SYNTH.bpm:
@@ -284,7 +300,7 @@ export function reducer(state, action){
             let connectionsResponse
             if (cellState) {
                 connectionChain.push(tuple)
-                connectionsResponse = setConnections(tuple, state, output, out)
+                connectionsResponse = setConnections(tuple, state, output1.output, out)
             }
             else {
                 connectionsResponse = setDisconnections(tuple, state)
@@ -325,14 +341,14 @@ function ModularBus (props) {
     midiToFreqConverter()
 
     const connectToOscilloscope = () => {
-        oscilloscopeRef.current.connect(outputGain)
+        oscilloscopeRef.current.connect(output1.output)
     }
 
     const stateHook = useReducer(reducer, {
         synthSettings: {
             start: false,
             startCount: 0,
-            outputGain: outputGain.gain.value,
+            outputGain: output1.output.gain.value,
             bpm: 120
         },
         oscSettings: {
@@ -454,137 +470,8 @@ function ModularBus (props) {
             }
         },
         matrixSettings: {
-            outputs: {
-                0: {
-                    name: "osc1",
-                    node: osc1.osc,
-                    type: "audio source",
-                    converter: osc1.converter
-                },
-                1: {
-                    name: "osc2",
-                    node: osc2.osc,
-                    type: "audio source",
-                    converter: osc2.converter
-                },
-                2: {
-                    name: "lfo1",
-                    node: lfo1.osc,
-                    type: "audio source"
-                },
-                3: {
-                    name: "lfo2",
-                    node: lfo2.osc,
-                    type: "audio source"
-                },
-                4: {
-                    name: "filter",
-                    node: filter1.filter,
-                    type: "audio source"
-                },
-                5: {
-                    name: "adsr",
-                    node: adsr1.adsr,
-                    type: "gain source",
-                    converter: adsr1.converter
-                },
-                6: {
-                    name: "vca output",
-                    node: vca1.vca,
-                    type: "audio source"
-                },
-                7: {
-                    name: "reverb",
-                    node: reverb1.effect,
-                    type: "audio source"
-                },
-                // 8: {
-                //     name: "hello"
-                // },
-                // 9: {
-                //     name: "hello"
-                // },
-                // 10: {
-                //     name: "hello"
-                // },
-                // 11: {
-                //     name: "hello"
-                // }
-            },
-            inputs: {
-                0: {
-                    name: "osc1 FM",
-                    node: osc1.FMDepth,
-                    type: "audio param",
-                    connectedNodes: 0
-                },
-                1: {
-                    name: "osc2 FM",
-                    node: osc2.FMDepth,
-                    type: "audio param",
-                    connectedNodes: 0
-                },
-                2: {
-                    name: "lfo1 FM",
-                    node: lfo1.FMDepth,
-                    type: "audio param",
-                    connectedNodes: 0
-                },
-                3: {
-                    name: "lfo2 FM",
-                    node: lfo2.FMDepth,
-                    type: "audio param",
-                    connectedNodes: 0
-                },
-                4: {
-                    name: "filter audio",
-                    node: filter1.gainAdjust,
-                    type: "audio param",
-                    connectedNodes: 0
-                },
-                5: {
-                    name: "filter FM",
-                    node: filter1.FMDepth,
-                    type: "audio param",
-                    connectedNodes: 0
-                },
-                6: {
-                    name: "vca audio",
-                    node: vca1.audioGainAdjust,
-                    type: "audio param",
-                    connectedNodes: 0,
-                },
-                7: {
-                    name: "vca ctrl",
-                    node: vca1.ctrlGainAdjust,
-                    type: "audio gain",
-                    connectedNodes: 0 
-                },
-                8: {
-                    name: "reverb audio",
-                    node: reverb1.reverbAudioGainBuffer,
-                    type: "audio param",
-                    connectedNodes: 0 
-                },
-                9: {
-                    name: "reverb wet",
-                    node: reverb1.reverbWetGainBuffer,
-                    type: "audio gain",
-                    connectedNodes: 0 
-                },
-                10: {
-                    name: "output",
-                    node: outputGain,
-                    type: "audio param",
-                    connectedNodes: 0
-                },
-                // 11: {
-                //     name: "hello"
-                // },
-                // 12: {
-                //     name: "hello"
-                // }
-            },
+            outputs: {...outputs},
+            inputs: {...inputs},
             initialConnections: [
                 ...initialConnection
             ],

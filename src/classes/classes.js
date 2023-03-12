@@ -6,6 +6,7 @@ import { Slider } from "./slider.class";
 import { Selector } from "./selector.class";
 import { LFO } from "./lfo.class";
 import { Reverb } from "./reverb.class";
+import { Output } from "./output.class";
 
 export {
     Filter,
@@ -15,5 +16,6 @@ export {
     Slider,
     Selector,
     LFO,
-    Reverb
+    Reverb,
+    Output
 }

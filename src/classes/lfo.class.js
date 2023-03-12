@@ -13,6 +13,23 @@ export class LFO {
         this.converter = new Tone.AudioToGain()
         this.FMDepth.connect(this.osc.detune)
         this.settings = {
+            matrixIOs: {
+                inputs: [
+                    {
+                        name: `${actionsSelector} FM`,
+                        node: this.FMDepth,
+                        type: "audio param",
+                        connectedNodes: 0
+                    }
+                ],
+                outputs: [
+                    {
+                        name: actionsSelector,
+                        node: this.osc,
+                        type: "audio source"
+                    }
+                ]
+            },
             slidersArr: [
                 new Slider("frequency", actionsSelector, "COARSE", 0.10, 40, 0.001, "Hz"),
                 new Slider("pwm", actionsSelector, "PWM", 0, 40, 0.001, "Hz"),

@@ -13,6 +13,24 @@ export class Oscillator {
         this.converter = new Tone.AudioToGain()
         this.FMDepth.connect(this.osc.detune)
         this.settings = {
+            matrixIOs: {
+                    inputs: [
+                        {
+                            name: `${actionsSelector} FM`,
+                            node: this.FMDepth,
+                            type: "audio param",
+                            connectedNodes: 0
+                        }   
+                    ],
+                    outputs: [
+                        {
+                            name: actionsSelector,
+                            node: this.osc,
+                            type: "audio source",
+                            converter: this.converter
+                        },
+                    ]
+            },
             slidersArr: [
                 new Slider("detune", actionsSelector, "DETUNE", 0, 100, 0.001, "cts"),
                 new Slider("pwm", actionsSelector, "PWM", 0, 40, 0.001, "Hz"),
