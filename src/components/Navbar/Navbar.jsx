@@ -1,5 +1,5 @@
 import { handleMouseEvent } from '../../services/general.services'
-import React from 'react'
+import { forwardRef } from 'react'
 import './Navbar.css'
 
 const Navbar = ({seqRef, oscillatorsRef, lfosRef, filterRef, envelopeRef, oscilloscopeRef, matrixLocationRef, effectsLocationRef, keysRef, vcaRef}) => {
@@ -14,7 +14,7 @@ const Navbar = ({seqRef, oscillatorsRef, lfosRef, filterRef, envelopeRef, oscill
         })
     }
 
-    const NavbarBtn = React.forwardRef( (props, ref) => {
+    const NavbarBtn = forwardRef((props, ref) => {
         return (
         <button 
         className={`btn navbar-btn ${props.name}-navbar-btn`}
