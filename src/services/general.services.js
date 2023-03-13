@@ -8,6 +8,16 @@ const handleMouseEvent = (classname, down) => {
         }
 }
 
+const setModuleInitialState = (modulesArr) => {
+    let modules = {}
+    modulesArr.forEach(module => {
+        modules = {...modules, [module.name]: module.initialState}
+    })
+    return modules
+}
+
+
 export {
-    handleMouseEvent
+    handleMouseEvent,
+    setModuleInitialState
 }

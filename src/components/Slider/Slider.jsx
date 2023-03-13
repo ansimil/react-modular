@@ -2,8 +2,7 @@ import { useEffect } from 'react'
 import Nexus from 'nexusui'
 import './Slider.css'
 
-const Slider = ({ name, label, valueLabel, unit, min, max, step, values, sliderRef, id, changeFunction}) => {
-    
+const Slider = ({ name, label, valueLabel, unit, min, max, step, values, valueMultiplier, sliderRef, id, changeFunction}) => {
     useEffect(()=>{
         let multislider = new Nexus.Multislider(`#${name}${id}`, {
             'size': [30,150],
@@ -29,7 +28,7 @@ const Slider = ({ name, label, valueLabel, unit, min, max, step, values, sliderR
   return (
     <div className={`sliderContainer ${id}`}>
       <label className="sliderLabel"><p>{label}</p></label>
-      <p className="valueIndicator">{`${valueLabel}${unit}`}</p>
+      <p className="valueIndicator">{`${(valueLabel * valueMultiplier).toFixed(2)}${unit}`}</p>
       <div className="sliderInnerContainer sliderHover" id={`${name}${id}`}></div>
     </div>
   )

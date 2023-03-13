@@ -26,13 +26,16 @@ export const ACTIONS = {
         decay:"change_adsr_decay",
         sustain:"change_adsr_sustain",
         release:"change_adsr_release",
-        gain: "change_adsr_gain"
+        trigger: "trigger_adsr"
     },
     lfo: {
         type: "change_lfo_type",
         frequency: "change_lfo_detune",
         lfoFMDepth: "change_lfo_FMDepth",
         pwm: "change_lfo_pwm"
+    },
+    vca: {
+        gain: "change_vca_gain"
     },
     SEQUENCER: {
         currentTrack: "change_current_track",

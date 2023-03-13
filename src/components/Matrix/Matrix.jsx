@@ -12,14 +12,13 @@ const Matrix = ( { matrixLocationRef } ) => {
     const changeConnections = e => {
         updateState({type: ACTIONS.MATRIX.connections, payload: {value: e} })
     }
-    let sqSize = 40
+    let sqSize = 400/Object.keys(appState.matrixSettings.outputs).length
     let rows = Object.keys(appState.matrixSettings.outputs).length
     let columns = Object.keys(appState.matrixSettings.inputs).length
     let width = sqSize * columns
     let height = sqSize * rows
     
     useEffect(()=>{
-        console.log(width)
         let matrix = new Nexus.Sequencer("#matrix", {
             "size": [width, height],
             "rows": rows,
@@ -52,10 +51,10 @@ const Matrix = ( { matrixLocationRef } ) => {
                             <th></th> 
                             <th></th>
                             <th style={{display: "flex"}}>
-                            {Object.keys(appState.matrixSettings.inputs).map(input => {
+                            {Object.keys(appState.matrixSettings.inputs).map((input, i) => {
                                 const name = appState.matrixSettings.inputs[input].name
                                 return (
-                                        <div className="horizontal-label"><span className="horizontal-span">{name}</span></div>
+                                        <div key={i} className="horizontal-label" style={{"width": `${sqSize}px`}}><span className="horizontal-span" style={{fontSize: `${0.025*sqSize}rem`}}>{name}</span></div>
                                 )
                             })
                             }
@@ -66,20 +65,20 @@ const Matrix = ( { matrixLocationRef } ) => {
                 <tbody>
                     <tr>
                         <td className="outputsLabel"><p>outputs</p></td>
-                            <td>
-                            <div className='verticalLabels' style={{"height": `${height}px`}}>
-                                {Object.keys(appState.matrixSettings.outputs).map(output => {
-                                    const name = appState.matrixSettings.outputs[output].name
-                                    return (
-                                        <td className="vertical-label"><span className="vertical-span">{name}</span></td> 
-                                    )
-                                })
-                                }
-                            </div>
-                            </td>
-                            <td>
+                            
+                        <td className='verticalLabels' style={{"height": `${height}px`}}>
+                            {Object.keys(appState.matrixSettings.outputs).map((output, i) => {
+                                const name = appState.matrixSettings.outputs[output].name
+                                return (
+                                    <div key={i} className="vertical-label" style={{height: sqSize}}><span className="vertical-span" style={{fontSize: `${0.025*sqSize}rem`}}>{name}</span></div> 
+                                )
+                            })
+                            }
+                        </td>
+                            
+                        <td>
                             <div id="matrix"></div>
-                            </td>
+                        </td>
                         
                     </tr>
                 </tbody>
