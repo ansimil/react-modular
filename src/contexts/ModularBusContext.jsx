@@ -119,11 +119,12 @@ const initialAdsrState = setModuleInitialState(adsrArr)
 // Connection chain //
 const initialConnection = [
     [4,0],
-    [7,4],
-    [17,6],
+    [6,4],
+    [14,6],
     [0,2],
     [2,3],
-    [8,5]
+    [7,5],
+    [16,10]
 ]
 
 let connectionChain = []
@@ -221,19 +222,19 @@ export function reducer(state, action){
             return {...state, filterSettings: {...state.filterSettings, [moduleName]: {...state.filterSettings[moduleName], type: id}}};
 
         case ACTIONS.filter.frequency:
-            filtersArr[i].filter.frequency.value = value
+            filtersArr[i].filter.frequency.rampTo(value, 0.1, actx.currentTime)
             return {...state, filterSettings: {...state.filterSettings, [moduleName]: {...state.filterSettings[moduleName], [id]: Number(value) }}};
             
         case ACTIONS.filter.detune:
-            filtersArr[i].filter.detune.value = value
+            filtersArr[i].filter.detune.rampTo(value, 0.1, actx.currentTime)
             return {...state, filterSettings: {...state.filterSettings, [moduleName]: {...state.filterSettings[moduleName], [id]: Number(value)}}};
 
         case ACTIONS.filter.Q:
-            filtersArr[i].filter.Q.value = value
+            filtersArr[i].filter.Q.rampTo(value, 0.1, actx.currentTime)
             return {...state, filterSettings: {...state.filterSettings, [moduleName]: {...state.filterSettings[moduleName], [id]: Number(value)}}};
 
         case ACTIONS.filter.freqFMDepth:
-            filtersArr[i].FMDepth.gain.value = value
+            filtersArr[i].FMDepth.gain.rampTo(value, 0.1, actx.currentTime)
             return {...state, filterSettings: {...state.filterSettings, [moduleName]: {...state.filterSettings[moduleName], [id]: Number(value)}}};
         
 
@@ -252,7 +253,7 @@ export function reducer(state, action){
         // VCA SETTINGS //    
 
         case ACTIONS.vca.gain:
-            vcasArr[i].vca.gain.value = value
+            vcasArr[i].vca.gain.rampTo(value, 0.1, actx.currentTime)
             return {...state, vcaSettings: {...state.vcaSettings, [moduleName]: {...state.vcaSettings[moduleName], [id]: Number(value)}}};
     
         
@@ -310,7 +311,7 @@ export function reducer(state, action){
                     effectsArr[i].effect.preDelay = value
                 }
                 else {
-                    effectsArr[i].effect[id].value = value
+                    effectsArr[i].effect[id].rampTo(value, 0.1, actx.currentTime)
                 }
             }
             return {...state, effectsSettings: {...state.effectsSettings, [moduleName]: {...state.effectsSettings[moduleName], [id]: Number(value)}}}

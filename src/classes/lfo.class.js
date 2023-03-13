@@ -26,7 +26,8 @@ export class LFO {
                     {
                         name: actionsSelector,
                         node: this.osc,
-                        type: "audio source"
+                        type: "audio source",
+                        converter: this.converter
                     }
                 ]
             },
