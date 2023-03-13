@@ -22,7 +22,7 @@ export class VCA {
                     {
                         name: `${actionsSelector} ctrl`,
                         node: this.ctrlGainAdjust,
-                        type: "audio gain",
+                        type: "gain param",
                         connectedNodes: 0 
                     }
                 ],

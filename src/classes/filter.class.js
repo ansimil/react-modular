@@ -18,6 +18,7 @@ export class Filter {
         this.FMDepth.connect(this.filter.detune)
         this.QDepth.connect(this.filter.Q)
         this.filter.Q.value = 0
+        this.converter = new Tone.AudioToGain()
         this.settings = {
             matrixIOs: {
                 inputs: [
@@ -38,7 +39,8 @@ export class Filter {
                     {
                         name: actionsSelector,
                         node: this.filter,
-                        type: "audio source"
+                        type: "audio source",
+                        converter: this.converter
                     }
             ]
             },

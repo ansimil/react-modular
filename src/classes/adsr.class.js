@@ -18,11 +18,11 @@ export class ADSR {
         this.settings = {
             matrixIOs: {
                 inputs: [
-                    {
-                        name: `${name} input`,
-                        node: this.adsr,
-                        type: "gain param"
-                    }
+                    // {
+                    //     name: `${name} input`,
+                    //     node: this.adsr,
+                    //     type: "gain param"
+                    // }
                 ],
                 outputs: [
                     {
