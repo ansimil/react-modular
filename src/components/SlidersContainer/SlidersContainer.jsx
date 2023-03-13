@@ -24,10 +24,10 @@ const SlidersContainer = ({ module, i }) => {
     <div className="sliders-container">
 
         {slidersArr.map((slider, i) => {
-            const {module, label, unit, min, max, step, id} = slider
+            const {module, label, unit, min, max, step, id, valueMultiplier} = slider
             const sliderState = appState[`${type}Settings`][name]
             return (
-                <Slider key={`${module}${label}${i}`} name={name} label={label} valueLabel={(sliderState[id]).toFixed(2)} unit={unit} min={min} max={max} step={step} values={sliderState[id]} sliderRef={context[`${type}Ref`]} id={id} changeFunction={change} />
+                <Slider key={`${module}${label}${i}`} name={name} label={label} valueLabel={(sliderState[id])} unit={unit} min={min} max={max} step={step} values={sliderState[id]} sliderRef={context[`${type}Ref`]} id={id} changeFunction={change} valueMultiplier={valueMultiplier}/>
             )
         })}
 

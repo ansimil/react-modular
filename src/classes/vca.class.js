@@ -1,4 +1,5 @@
 import * as Tone from 'tone'
+import { Slider } from './slider.class'
 
 export class VCA {
     constructor(actionsSelector){
@@ -27,13 +28,19 @@ export class VCA {
                 ],
                 outputs: [
                     {
-                        name: `${actionsSelector} output`,
+                        name: `${actionsSelector}`,
                         node: this.vca,
                         type: "audio source"
                     }
                 ]
-            }
+            },
+            slidersArr: [
+                new Slider("gain", actionsSelector, "LEVEL", 0, 1, 0.001, "", 100)
+            ]
 
+        }
+        this.initialState = {
+            gain: this.vca.gain.value
         }
     }
     

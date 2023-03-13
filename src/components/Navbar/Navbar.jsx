@@ -1,7 +1,7 @@
 import { handleMouseEvent } from '../../services/general.services'
 import './Navbar.css'
 
-const Navbar = ({seqRef, oscillatorsRef, lfosRef, filterRef, envelopeRef, oscilloscopeRef, matrixLocationRef, effectsLocationRef, keysRef}) => {
+const Navbar = ({seqRef, oscillatorsRef, lfosRef, filterRef, envelopeRef, oscilloscopeRef, matrixLocationRef, effectsLocationRef, keysRef, vcaRef}) => {
 
     const scrollTo = (ref) => {
         const { current } = ref

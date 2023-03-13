@@ -156,9 +156,7 @@ p {
   align-items: center;
   flex-direction: column;
   min-height: 300px;
-  min-width: 500px;
   max-width: 600px;
-  width: 42%;
   background-color: rgb(57, 57, 57);
   overflow: hidden;
   border-radius: 3px;

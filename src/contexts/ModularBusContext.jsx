@@ -13,6 +13,9 @@ import {
 import { 
     startContext 
 } from "../services/context.services";
+import {
+    setModuleInitialState
+} from "../services/general.services"
 import { 
     Oscillator,
     Filter,
@@ -68,6 +71,12 @@ modulesArr.push(adsrArr)
 
 let vca1 = new VCA(`vca${vcasArr.length+1}`)
 vcasArr.push(vca1)
+let vca2 = new VCA(`vca${vcasArr.length+1}`)
+vcasArr.push(vca2)
+let vca3 = new VCA(`vca${vcasArr.length+1}`)
+vcasArr.push(vca3)
+let vca4 = new VCA(`vca${vcasArr.length+1}`)
+vcasArr.push(vca4)
 modulesArr.push(vcasArr)
 
 function counter(){
@@ -99,12 +108,19 @@ const IOs = setInitialIOState(modulesArr)
 const inputs = IOs[0]
 const outputs = IOs[1]
 
+const initialOscState = setModuleInitialState(oscillatorsArr)
+const initialFilterState = setModuleInitialState(filtersArr)
+const initialLfoState = setModuleInitialState(lfosArr)
+const initialVcaState = setModuleInitialState(vcasArr)
+const initialEffectsState = setModuleInitialState(effectsArr)
+const initialAdsrState = setModuleInitialState(adsrArr)
+
 
 // Connection chain //
 const initialConnection = [
     [4,0],
     [7,4],
-    [11,6],
+    [17,6],
     [0,2],
     [2,3],
     [8,5]
@@ -229,9 +245,15 @@ export function reducer(state, action){
             console.log(adsrArr[i].adsr)
             return {...state, adsrSettings: {...state.adsrSettings, [moduleName]: {...state.adsrSettings[moduleName], [id]: Number(value)}}};
         
-        case ACTIONS.adsr.gain:
+        case ACTIONS.adsr.trigger:    
             adsrArr[i].updateADSRGain(stateKey, actx.currentTime, state)
-            return {...state, adsrSettings: {...state.adsrSettings, [moduleName]: {...state.adsrSettings[moduleName], [id]: Number(value)}}};
+            return {...state}
+
+        // VCA SETTINGS //    
+
+        case ACTIONS.vca.gain:
+            vcasArr[i].vca.gain.value = value
+            return {...state, vcaSettings: {...state.vcaSettings, [moduleName]: {...state.vcaSettings[moduleName], [id]: Number(value)}}};
     
         
 
@@ -335,6 +357,7 @@ function ModularBus (props) {
     const oscRef = useRef([])
     const lfoRef = useRef([])
     const filterRef = useRef([])
+    const vcaRef = useRef([])
     let adsrRef = useRef([])
     let effectsRef = useRef([])
     
@@ -351,72 +374,12 @@ function ModularBus (props) {
             outputGain: output1.output.gain.value,
             bpm: 120
         },
-        oscSettings: {
-            osc1: {
-                frequency: osc1.osc.frequency.value,
-                detune: osc1.osc.detune.value,
-                type: osc1.osc.type,
-                oscFMDepth: osc1.FMDepth.gain.value,
-                glide: 0.00,
-                pwm: 0,
-                octave: 0,
-                semitone: 0
-            },
-            osc2: {
-                frequency: osc2.osc.frequency.value,
-                detune: osc2.osc.detune.value,
-                type: osc2.osc.type,
-                oscFMDepth: osc2.FMDepth.gain.value,
-                glide: 0.00,
-                pwm: 0,
-                octave: 0,
-                semitone: 0
-            },
-        },
-        filterSettings: {
-            filter1: {
-                frequency: filter1.filter.frequency.value,
-                detune: filter1.filter.detune.value,
-                type: filter1.filter.type,
-                Q: filter1.filter.Q.value,
-                freqFMDepth: filter1.FMDepth.gain.value
-            }
-        },
-        adsrSettings: {
-            adsr1: {
-                attack: 0.01,
-                decay: 0.2,
-                sustain: 0.5,
-                release: 0.2,
-                gain: vca1.vca.gain.value
-            }
-        },
-        lfoSettings: {
-            lfo1: {
-                frequency: lfo1.osc.frequency.value,
-                type: lfo1.osc.type,
-                lfoFMDepth: lfo1.FMDepth.gain.value,
-                pwm: 0
-            },
-            lfo2: {
-                frequency: lfo2.osc.frequency.value,
-                type: lfo2.osc.type,
-                lfoFMDepth: lfo2.FMDepth.gain.value,
-                pwm: 0
-            }
-        },
-        vcaSettings: {
-            vca1: {
-                gain: vca1.vca.gain.value
-            }
-        },
-        effectsSettings: {
-            reverb1: {
-                decay: 2,
-                wet: 0,
-                preDelay: 0
-            }
-        },
+        oscSettings: {...initialOscState},
+        filterSettings: {...initialFilterState},
+        adsrSettings: {...initialAdsrState},
+        lfoSettings: {...initialLfoState},
+        vcaSettings: {...initialVcaState},
+        effectsSettings: {...initialEffectsState},
         sequencerSettings: {
             track1: {
                 sliders: {
@@ -480,7 +443,7 @@ function ModularBus (props) {
     })
 
     return (
-        <ModularBusContext.Provider value={{oscillatorsArr, filtersArr, lfosArr, adsrArr, effectsArr, stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr1, oscRef, lfoRef, filterRef, effectsRef, initialConnection}}>
+        <ModularBusContext.Provider value={{oscillatorsArr, filtersArr, lfosArr, adsrArr, vcasArr, effectsArr, stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr1, oscRef, lfoRef, filterRef, vcaRef, effectsRef, initialConnection}}>
         {props.children}
         </ModularBusContext.Provider>
     )

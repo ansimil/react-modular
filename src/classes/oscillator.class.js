@@ -32,10 +32,10 @@ export class Oscillator {
                     ]
             },
             slidersArr: [
-                new Slider("detune", actionsSelector, "DETUNE", 0, 100, 0.001, "cts"),
-                new Slider("pwm", actionsSelector, "PWM", 0, 40, 0.001, "Hz"),
-                new Slider("glide", actionsSelector, "GLIDE", 0, 5, 0.001, "s"),
-                new Slider("oscFMDepth", actionsSelector, "FM DEPTH", 0, 2500, 0.001, "")   
+                new Slider("detune", actionsSelector, "DETUNE", 0, 100, 0.001, "cts", 1),
+                new Slider("pwm", actionsSelector, "PWM", 0, 40, 0.001, "Hz", 1),
+                new Slider("glide", actionsSelector, "GLIDE", 0, 5, 0.001, "s", 1),
+                new Slider("oscFMDepth", actionsSelector, "FM DEPTH", 0, 2500, 0.001, "", 1)   
             ],
             selectorsArr: [
                 new Selector("sine", "SINE", "type"),
@@ -53,7 +53,14 @@ export class Oscillator {
         ]
         }
         this.initialState = {
-            
+            frequency: this.osc.frequency.value,
+            detune: this.osc.detune.value,
+            type: this.osc.type,
+            oscFMDepth: this.FMDepth.gain.value,
+            glide: 0.00,
+            pwm: 0,
+            octave: 0,
+            semitone: 0
         }
     }
 

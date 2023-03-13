@@ -9,7 +9,7 @@ const ModuleComp = ({ module, i }) => {
     const { incDecArr } = module.settings
     const { name } = module
   return (
-    <div key={name} className="module-container">
+    <div key={name} className="module-container" style={{minWidth: `${slidersArr.length*150}px`}}>
 
         {name && <ModuleInfo moduleName={name}/>}
 

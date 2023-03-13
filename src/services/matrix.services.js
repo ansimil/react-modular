@@ -67,7 +67,6 @@ const setInitialIOState = (modulesArr) => {
         })
         })
     })
-    console.log([inputs, outputs])
     return [inputs, outputs]
 }
 

@@ -34,11 +34,17 @@ export class ADSR {
                 ]
             },
             slidersArr: [
-                new Slider("attack", this.type, "A", 0.01, 5, 0.001, "s"),
-                new Slider("decay", this.type, "D", 0.01, 5, 0.001, "s"),
-                new Slider("sustain", this.type, "S", 0, 1, 0.001, ""),
-                new Slider("release", this.type, "R", 0.01, 5, 0.001, "s")
+                new Slider("attack", this.type, "A", 0.01, 5, 0.001, "s", 1),
+                new Slider("decay", this.type, "D", 0.01, 5, 0.001, "s", 1),
+                new Slider("sustain", this.type, "S", 0, 1, 0.001, "", 1),
+                new Slider("release", this.type, "R", 0.01, 5, 0.001, "s", 1)
             ]
+        }
+        this.initialState = {
+            attack: 0.01,
+            decay: 0.2,
+            sustain: 0.5,
+            release: 0.2,
         }
     }
 
