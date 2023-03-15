@@ -53,9 +53,11 @@ const PlayerControls = () => {
           className={appState.sequencerSettings.player === 'stopped' ? "playerBtn endBtnRight activeBtn" : "playerBtn endBtnRight" }
           onClick={
             ()=>{
-              sequencerRef.current[0].stepper.value = lengthMap[appState.sequencerSettings.length].up.max
-              sequencerRef.current[0].next()
-              sequencerRef.current[0].stepper.value = lengthMap[appState.sequencerSettings.length].up.max
+              sequencerRef.current.forEach(track => {
+                track.stepper.value = lengthMap[appState.sequencerSettings.length].up.max
+                track.next()
+                track.stepper.value = lengthMap[appState.sequencerSettings.length].up.max
+              })
               Tone.Transport.stop()
               updateState({type: ACTIONS.SEQUENCER.player, payload: {value: 'stopped'}})
               updateState({type: ACTIONS.SEQUENCER.updateStepValue, payload: {value: 0}})
@@ -74,7 +76,15 @@ const PlayerControls = () => {
           className={appState.sequencerSettings.direction === "up" ? "playerBtn endBtnLeft activeBtn": "playerBtn endBtnLeft"}
           onClick={
             ()=>{
-                sequencerRef.current[0].stepper.max = 16; sequencerRef.current[0].stepper.mode = 'up'
+                let currentFirstTrackStep
+                sequencerRef.current.forEach((track, i) => {
+                  if (i === 0) {
+                    currentFirstTrackStep = track.stepper.value
+                  }
+                  track.stepper.max = 16;
+                  track.stepper.mode = 'up'
+                  track.stepper.value = currentFirstTrackStep
+                })
                 updateState({type: ACTIONS.SEQUENCER.direction, payload: {value: "up"}})
                 updateState({type: ACTIONS.SEQUENCER.random, payload: {value: false}})
                 }
@@ -90,7 +100,15 @@ const PlayerControls = () => {
           className={appState.sequencerSettings.direction === "down" ? "playerBtn endBtnRight activeBtn": "playerBtn endBtnRight"}
           onClick={
             ()=>{
-                sequencerRef.current[0].stepper.max = 15; sequencerRef.current[0].stepper.mode = 'down'
+              let currentFirstTrackStep
+              sequencerRef.current.forEach((track, i) => {
+                  if (i === 0) {
+                    currentFirstTrackStep = track.stepper.value
+                  }
+                  track.stepper.max = 15;
+                  track.stepper.mode = 'down'
+                  track.stepper.value = currentFirstTrackStep
+                })
                 updateState({type: ACTIONS.SEQUENCER.direction, payload: {value: "down"}})
                 updateState({type: ACTIONS.SEQUENCER.random, payload: {value: false}})
                 }

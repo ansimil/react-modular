@@ -6,6 +6,7 @@ import SevenSegDisplay from '../SevenSegDisplay/SevenSegDisplay'
 import RandomSequenceBtn from '../RandomSequenceBtn/RandomSequenceBtn'
 import RandomGatesBtn from '../RandomGatesBtn/RandomGatesBtn'
 import RandomizeNotes from '../RandomizeNotes/RandomizeNotes'
+import TrackAssignmentComp from '../TrackAssignmentComp/TrackAssignmentComp'
 import { handleMouseEvent } from '../../services/general.services'
 import * as Tone from 'tone'
 import Nexus from 'nexusui'
@@ -16,8 +17,7 @@ const Sequencer = () => {
   // eslint-disable-next-line
   const [appState, updateState] = stateHook
   const { sequencerSettings } = appState
-  const arr = Object.keys(sequencerSettings.track1.sliders)
-
+  const arr = Object.keys(sequencerSettings.tracks.track1.sliders)
   const notesObject = {
     0: "C",
     1: "C#",
@@ -34,7 +34,9 @@ const Sequencer = () => {
   }
 
   const randomizeGates = () => {
-    sequencerRef.current.matrix.populate.row(0, [0.5])
+    sequencerRef.current.forEach(track => {
+      track.matrix.populate.row(0, [0.5])
+    })
   }
 
   const handleInc = (id, i) => {
@@ -63,9 +65,20 @@ const Sequencer = () => {
   }
 
   const handleStep = () => {
+    const randStep = Math.floor(Math.random()*16)
+
+    console.log(sequencerSettings.random)
+    if (sequencerSettings.random){
+      sequencerRef.current.forEach(track => {
+        track.stepper.value = randStep
+        track.next()
+      })
+    }
+    else {
     sequencerRef.current.forEach(track => {
       track.next()
     })
+    }
   }
 
   const handleTrigger = (time) => {
@@ -101,8 +114,27 @@ const Sequencer = () => {
   }
 
   useEffect(()=>{
-    const sequencerWidth = 600
+    Tone.Transport.cancel(0)
     const [bpm] = document.getElementsByClassName('bpmIndicator')
+    Tone.Transport.scheduleRepeat(()=>{
+      if (bpm.classList.length > 1) {
+        bpm.classList.remove('activeBpmIndicator')
+      }
+      else {
+        bpm.classList.add('activeBpmIndicator')
+      }
+    }, "32n")
+
+
+    Tone.Transport.scheduleRepeat((time) => { 
+        handleStep()
+        handleTrigger(time)
+    }, "16n")
+  // eslint-disable-next-line
+  },[sequencerSettings.random])
+
+  useEffect(()=>{
+    const sequencerWidth = 600
 
     if (sequencerRef.current){
       sequencerRef.current.forEach((track)=>{
@@ -114,22 +146,7 @@ const Sequencer = () => {
         slider.destroy()
       })
     }
-    
-    Tone.Transport.scheduleRepeat(()=>{
-      if (bpm.classList.length > 1) {
-        bpm.classList.remove('activeBpmIndicator')
-      }
-      else {
-        bpm.classList.add('activeBpmIndicator')
-      }
-    }, "32n")
-
-
-    Tone.Transport.scheduleRepeat(function(time){ 
-        handleStep()
-        handleTrigger(time)
-    }, "16n")
-
+    let tracks = []
     let track1 = new Nexus.Sequencer("#seq-track1", {
       "size": [sequencerWidth,37.5],
       "mode": "toggle",
@@ -137,7 +154,7 @@ const Sequencer = () => {
       "columns": 16,
       "paddingColumn": 2
     })
-
+    tracks.push(track1)
     let track2 = new Nexus.Sequencer("#seq-track2", {
       "size": [sequencerWidth,37.5],
       "mode": "toggle",
@@ -145,6 +162,7 @@ const Sequencer = () => {
       "columns": 16,
       "paddingColumn": 2
     })
+    tracks.push(track2)
 
     let sliders = []
     arr.forEach(i => {
@@ -154,7 +172,7 @@ const Sequencer = () => {
         'min': 0,
         'max': 11,
         'step': 1,
-        'values': [[sequencerSettings[`track${appState.sequencerSettings.currentTrack}`].sliders[i].note]],
+        'values': [[sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].note]],
         'smoothing': 0,
         'mode': 'bar'
       })
@@ -168,13 +186,12 @@ const Sequencer = () => {
     })
     seqSlidersRef.current = sliders
 
-    track1.interval.rate = 60 / appState.synthSettings.bpm * 1000
-    track1.colors.accent = "#000"
-    track1.colors.mediumLight = "#fafdd1"
-    track2.interval.rate = 60 / appState.synthSettings.bpm * 1000
-    track2.colors.accent = "#000"
-    track2.colors.mediumLight = "#fafdd1"
-    sequencerRef.current = [track1, track2]
+    tracks.forEach(track => {
+      track.interval.rate = 60 / appState.synthSettings.bpm * 1000
+      track.colors.accent = "#000"
+      track.colors.mediumLight = "#fafdd1"
+    })
+    sequencerRef.current = tracks
   // eslint-disable-next-line
   },[])
 
@@ -202,7 +219,7 @@ const Sequencer = () => {
             <div className="sequencerNotes">
               {arr.map(i => {
                 return (
-                  <p key={i}>{notesObject[sequencerSettings[`track${appState.sequencerSettings.currentTrack}`].sliders[i].note]}</p>
+                  <p key={i}>{notesObject[sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].note]}</p>
                 )
               })}
             </div>
@@ -210,10 +227,10 @@ const Sequencer = () => {
             {arr.map(i => {
                 return (
                   <div key={i} className="noteOctaveInner">
-                    <p>{sequencerSettings[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave}</p>
+                    <p>{sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave}</p>
                     <div className="bpmIncDecContainer">
                       <button
-                      disabled={sequencerSettings[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave >= 6 ? true: ""}
+                      disabled={sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave >= 6 ? true: ""}
                       className={`bpmBtn bpmTopBtn octave-up-${i}`} 
                       onClick={()=> {
                         handleInc("octave", i)
@@ -228,7 +245,7 @@ const Sequencer = () => {
                       +
                       </button>
                       <button
-                      disabled={sequencerSettings[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave <= 1 ? true: ""}
+                      disabled={sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave <= 1 ? true: ""}
                       className={`bpmBtn bpmBtmBtn octave-down-${i}`}
                       onClick={()=> {
                         handleDec("octave", i)
@@ -251,6 +268,9 @@ const Sequencer = () => {
           </div>
         
       </div>
+
+      {sequencerRef.current && <TrackAssignmentComp sequencerRef={sequencerRef} />}
+
       <div className="sequencerSettingsContainer">
         <div className="sequencer-settings-inner">
           <SevenSegDisplay />

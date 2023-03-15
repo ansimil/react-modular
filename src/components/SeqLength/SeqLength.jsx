@@ -51,16 +51,19 @@ const SeqLength = () => {
     const [appState, updateState] = stateHook
 
     const changeSeqLength = (length) => {
-        if (sequencerRef.current.stepper.mode === "up"){
-            sequencerRef.current.stepper.min = lengthMap[length].up.min
-            sequencerRef.current.stepper.max = lengthMap[length].up.max
-
+        if (sequencerRef.current[0].stepper.mode === "up"){
+            sequencerRef.current.forEach(track => {
+                track.stepper.min = lengthMap[length].up.min
+                track.stepper.max = lengthMap[length].up.max
+            })
         }
         else if (sequencerRef.current.stepper.mode === "down"){
-            sequencerRef.current.stepper.min = lengthMap[length].down.min
-            sequencerRef.current.stepper.max = lengthMap[length].down.max
+            sequencerRef.current.forEach(track => {
+                track.stepper.min = lengthMap[length].down.min
+                track.stepper.max = lengthMap[length].down.max
+            })
         }
-        console.log('mode', sequencerRef.current.stepper.mode, 'min', sequencerRef.current.stepper.min, 'max', sequencerRef.current.stepper.max)
+        // console.log('mode', sequencerRef.current.stepper.mode, 'min', sequencerRef.current.stepper.min, 'max', sequencerRef.current.stepper.max)
         updateState({type: ACTIONS.SEQUENCER.length, payload:  {value: length}})
     }
 

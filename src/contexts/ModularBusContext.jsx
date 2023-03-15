@@ -67,6 +67,8 @@ modulesArr.push(filtersArr)
 
 let adsr1 = new ADSR(`adsr${adsrArr.length+1}`)
 adsrArr.push(adsr1)
+let adsr2 = new ADSR(`adsr${adsrArr.length+1}`)
+adsrArr.push(adsr2)
 modulesArr.push(adsrArr)
 
 let vca1 = new VCA(`vca${vcasArr.length+1}`)
@@ -108,6 +110,9 @@ const IOs = setInitialIOState(modulesArr)
 const inputs = IOs[0]
 const outputs = IOs[1]
 
+
+
+
 const initialOscState = setModuleInitialState(oscillatorsArr)
 const initialFilterState = setModuleInitialState(filtersArr)
 const initialLfoState = setModuleInitialState(lfosArr)
@@ -120,11 +125,11 @@ const initialAdsrState = setModuleInitialState(adsrArr)
 const initialConnection = [
     [4,0],
     [6,4],
-    [14,6],
+    [14,7],
     [0,2],
     [2,3],
     [7,5],
-    [16,10]
+    [16,11]
 ]
 
 let connectionChain = []
@@ -266,10 +271,10 @@ export function reducer(state, action){
             return {...state, sequencerSettings: {...state.sequencerSettings, direction: value}}
 
         case ACTIONS.SEQUENCER.octave:
-            return {...state, sequencerSettings: {...state.sequencerSettings, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders[i], octave: value}}}}}
+            return {...state, sequencerSettings: {...state.sequencerSettings, tracks: {...state.sequencerSettings.tracks, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders[i], octave: value}}}}}} 
         
         case ACTIONS.SEQUENCER.note:
-            return {...state, sequencerSettings: {...state.sequencerSettings, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders[i], note: value}}}}}
+            return {...state, sequencerSettings: {...state.sequencerSettings, tracks: {...state.sequencerSettings.tracks, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders[i], note: value}}}}}}
         
         case ACTIONS.SEQUENCER.updateStepValue:
             return {...state, sequencerSettings: {...state.sequencerSettings, step: value}}
@@ -279,6 +284,43 @@ export function reducer(state, action){
 
         case ACTIONS.SEQUENCER.currentTrack: 
             return {...state, sequencerSettings: {...state.sequencerSettings, currentTrack: value}}
+        
+        case ACTIONS.SEQUENCER.assignNoteGate:
+            console.log(value, id, i)
+            let noteGateMap = {
+                note: "assignedNotes",
+                gate: "assignedGates"
+            }
+            let newTrackValue
+            let trackState
+            let tracksObj = {}
+            Object.keys(state.sequencerSettings.tracks).forEach(track => {
+                // console.log(track, `track${i}`)
+                if (track === `track${i}`) {
+                    newTrackValue = [...state.sequencerSettings.tracks[track][noteGateMap[id]], value]
+                    trackState = {...state.sequencerSettings.tracks[track], [noteGateMap[id]]: newTrackValue}
+                    if (Object.keys(tracksObj).length === 0){
+                        tracksObj = {...state.sequencerSettings.tracks, [track]: trackState}
+                    }
+                    else {
+                        tracksObj = {...tracksObj, [track]: trackState}
+                    }  
+                }
+                else {
+                    newTrackValue = [...state.sequencerSettings.tracks[track][noteGateMap[id]]].filter(noteGate => {
+                        return noteGate !== value
+                    })
+                    trackState = {...state.sequencerSettings.tracks[track], [noteGateMap[id]]: newTrackValue}
+                    if (Object.keys(tracksObj).length === 0){
+                        tracksObj = {...state.sequencerSettings.tracks, [track]: trackState}
+                    }
+                    else {
+                        tracksObj = {...tracksObj, [track]: trackState}
+                    }   
+                }   
+            })
+            // return {...state}
+            return {...state, sequencerSettings: {...state.sequencerSettings, tracks: {...tracksObj}}}
 
         case ACTIONS.SEQUENCER.randomNotes.notes:
             return {...state, sequencerSettings: {...state.sequencerSettings, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders[i], note: value}}}}}
@@ -362,6 +404,7 @@ function ModularBus (props) {
     let adsrRef = useRef([])
     let effectsRef = useRef([])
     
+
     midiToFreqConverter()
 
     const connectToOscilloscope = () => {
@@ -382,45 +425,51 @@ function ModularBus (props) {
         vcaSettings: {...initialVcaState},
         effectsSettings: {...initialEffectsState},
         sequencerSettings: {
-            track1: {
-                sliders: {
-                    0:{note:0,octave:3},
-                    1:{note:0,octave:3},
-                    2:{note:0,octave:3},
-                    3:{note:0,octave:3},
-                    4:{note:0,octave:3},
-                    5:{note:0,octave:3},
-                    6:{note:0,octave:3},
-                    7:{note:0,octave:3},
-                    8:{note:0,octave:3},
-                    9:{note:0,octave:3},
-                    10:{note:0,octave:3},
-                    11:{note:0,octave:3},
-                    12:{note:0,octave:3},
-                    13:{note:0,octave:3},
-                    14:{note:0,octave:3},
-                    15:{note:0,octave:3},
-                }
-            },
-            track2: {
-                sliders: {
-                    0:{note:0,octave:3},
-                    1:{note:0,octave:3},
-                    2:{note:0,octave:3},
-                    3:{note:0,octave:3},
-                    4:{note:0,octave:3},
-                    5:{note:0,octave:3},
-                    6:{note:0,octave:3},
-                    7:{note:0,octave:3},
-                    8:{note:0,octave:3},
-                    9:{note:0,octave:3},
-                    10:{note:0,octave:3},
-                    11:{note:0,octave:3},
-                    12:{note:0,octave:3},
-                    13:{note:0,octave:3},
-                    14:{note:0,octave:3},
-                    15:{note:0,octave:3},
-                }
+            tracks: {
+                track1: {
+                    sliders: {
+                        0:{note:0,octave:3, active: false},
+                        1:{note:0,octave:3, active: false},
+                        2:{note:0,octave:3, active: false},
+                        3:{note:0,octave:3, active: false},
+                        4:{note:0,octave:3, active: false},
+                        5:{note:0,octave:3, active: false},
+                        6:{note:0,octave:3, active: false},
+                        7:{note:0,octave:3, active: false},
+                        8:{note:0,octave:3, active: false},
+                        9:{note:0,octave:3, active: false},
+                        10:{note:0,octave:3, active: false},
+                        11:{note:0,octave:3, active: false},
+                        12:{note:0,octave:3, active: false},
+                        13:{note:0,octave:3, active: false},
+                        14:{note:0,octave:3, active: false},
+                        15:{note:0,octave:3, active: false},
+                    },
+                    assignedNotes: ["osc1"],
+                    assignedGates: ["adsr1"]
+                },
+                track2: {
+                    sliders: {
+                        0:{note:0,octave:3, active: false},
+                        1:{note:0,octave:3, active: false},
+                        2:{note:0,octave:3, active: false},
+                        3:{note:0,octave:3, active: false},
+                        4:{note:0,octave:3, active: false},
+                        5:{note:0,octave:3, active: false},
+                        6:{note:0,octave:3, active: false},
+                        7:{note:0,octave:3, active: false},
+                        8:{note:0,octave:3, active: false},
+                        9:{note:0,octave:3, active: false},
+                        10:{note:0,octave:3, active: false},
+                        11:{note:0,octave:3, active: false},
+                        12:{note:0,octave:3, active: false},
+                        13:{note:0,octave:3, active: false},
+                        14:{note:0,octave:3, active: false},
+                        15:{note:0,octave:3, active: false},
+                    },
+                    assignedNotes: ["osc2"],
+                    assignedGates: ["adsr2"]
+                },
             },
             currentTrack: 1,
             step: -1,
@@ -442,6 +491,7 @@ function ModularBus (props) {
             currentConnections: []
         }
     })
+
 
     return (
         <ModularBusContext.Provider value={{oscillatorsArr, filtersArr, lfosArr, adsrArr, vcasArr, effectsArr, stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr1, oscRef, lfoRef, filterRef, vcaRef, effectsRef, initialConnection}}>

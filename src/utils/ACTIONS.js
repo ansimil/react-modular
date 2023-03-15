@@ -51,7 +51,8 @@ export const ACTIONS = {
             notes: "change_sequencer_random_notes",
             scale: "change_sequencer_random_notes_scale",
             root: "change_sequencer_random_notes_root"
-        }
+        },
+        assignNoteGate: "change_sequencer_assigned_note_gate"
     },
     MATRIX: {
         connections: "change_connections",
