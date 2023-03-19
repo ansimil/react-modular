@@ -67,7 +67,6 @@ const Sequencer = () => {
   const handleStep = () => {
     const randStep = Math.floor(Math.random()*16)
 
-    console.log(sequencerSettings.random)
     if (sequencerSettings.random){
       sequencerRef.current.forEach(track => {
         track.stepper.value = randStep
@@ -83,12 +82,19 @@ const Sequencer = () => {
 
   const handleTrigger = (time) => {
     const { value } = sequencerRef.current[0].stepper
-    
+    const highSteps = []
     updateState({type: ACTIONS.SEQUENCER.updateStepValue, payload: {value}})
     
-    if (sequencerRef.current[0].cells[value]._state.state) {
-      updateState({type: ACTIONS.SEQUENCER.step, payload: {value, time}})
-    }
+    sequencerRef.current.forEach(track => {
+      if (track.cells[value]._state.state) {
+        highSteps.push(1)
+      }
+      else {
+        highSteps.push(0)
+      }
+    })
+    
+    updateState({type: ACTIONS.SEQUENCER.trigger, payload: {value, time, highSteps}})
 
     seqSlidersRef.current.forEach(slider => {
       if (slider.parent.id === `slider${value}`){
@@ -108,7 +114,7 @@ const Sequencer = () => {
   const loadTrackSliders = (e) => {
       const { id } = e.target
       seqSlidersRef.current.forEach((slider, i) => {
-        slider.setSlider(0, sequencerSettings[`track${id}`].sliders[i].note)
+        slider.setSlider(0, sequencerSettings.tracks[`track${id}`].sliders[i].note)
         slider.render()
       })
   }

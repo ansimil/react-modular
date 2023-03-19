@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
 import { ACTIONS } from '../../utils/ACTIONS'
+import './TrackAssignmentComp.css'
 
 const TrackAssignmentComp = ({sequencerRef}) => {
     const { stateHook, oscillatorsArr, adsrArr } = useContext(ModularBusContext)

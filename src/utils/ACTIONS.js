@@ -41,7 +41,7 @@ export const ACTIONS = {
         currentTrack: "change_current_track",
         note: "change_step_note",
         octave: "change_step_octave",
-        step: "trigger_step",
+        trigger: "trigger_step",
         player: "change_sequencer_player",
         direction: "change_sequencer_direction",
         length: "change_sequencer_length",

@@ -142,7 +142,7 @@ const midiToFreqConverter = () => {
 }
 
 export function reducer(state, action){
-    let { id, value, note, stateKey, i, time, moduleName, subtype } = action.payload
+    let { id, value, note, stateKey, i, time, moduleName, subtype, highSteps } = action.payload
     switch (action.type) {
         // SYNTH SETTINGS //
         case ACTIONS.SYNTH.start:
@@ -271,10 +271,10 @@ export function reducer(state, action){
             return {...state, sequencerSettings: {...state.sequencerSettings, direction: value}}
 
         case ACTIONS.SEQUENCER.octave:
-            return {...state, sequencerSettings: {...state.sequencerSettings, tracks: {...state.sequencerSettings.tracks, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders[i], octave: value}}}}}} 
+            return {...state, sequencerSettings: {...state.sequencerSettings, tracks: {...state.sequencerSettings.tracks, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[i], octave: value}}}}}} 
         
         case ACTIONS.SEQUENCER.note:
-            return {...state, sequencerSettings: {...state.sequencerSettings, tracks: {...state.sequencerSettings.tracks, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders[i], note: value}}}}}}
+            return {...state, sequencerSettings: {...state.sequencerSettings, tracks: {...state.sequencerSettings.tracks, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[i], note: value}}}}}}
         
         case ACTIONS.SEQUENCER.updateStepValue:
             return {...state, sequencerSettings: {...state.sequencerSettings, step: value}}
@@ -295,7 +295,6 @@ export function reducer(state, action){
             let trackState
             let tracksObj = {}
             Object.keys(state.sequencerSettings.tracks).forEach(track => {
-                // console.log(track, `track${i}`)
                 if (track === `track${i}`) {
                     newTrackValue = [...state.sequencerSettings.tracks[track][noteGateMap[id]], value]
                     trackState = {...state.sequencerSettings.tracks[track], [noteGateMap[id]]: newTrackValue}
@@ -319,7 +318,6 @@ export function reducer(state, action){
                     }   
                 }   
             })
-            // return {...state}
             return {...state, sequencerSettings: {...state.sequencerSettings, tracks: {...tracksObj}}}
 
         case ACTIONS.SEQUENCER.randomNotes.notes:
@@ -331,10 +329,14 @@ export function reducer(state, action){
         case ACTIONS.SEQUENCER.randomNotes.root:
             return {...state, sequencerSettings: {...state.sequencerSettings, randomNotes: {...state.sequencerSettings.randomNotes, root: id}}}    
             
-        case ACTIONS.SEQUENCER.step:
-            const stepNote = state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders[value].note + 24 + (12 * state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders[value].octave)
+        case ACTIONS.SEQUENCER.trigger:
+            const stepNote = state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[value].note + 24 + (12 * state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[value].octave)
             const bpmForClockWidth = (60 / state.synthSettings.bpm) / 16
-            step(oscillatorsArr, adsrArr[0].adsr, time, state, midiToFreqArr, stepNote, bpmForClockWidth)
+            highSteps.forEach((track, i) => {
+                if (track) {
+                    step(oscillatorsArr, adsrArr, time, state, midiToFreqArr, stepNote, bpmForClockWidth, i+1)
+                }
+            })
 
             return {...state, oscSettings: {...state.oscSettings, 
                 osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note]}},
