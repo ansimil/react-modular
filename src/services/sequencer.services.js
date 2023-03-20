@@ -1,8 +1,9 @@
-const step = (oscillatorsArr, adsrArr, timeNow, state, midiToFreqArr, note, bpmForClockWidth, trackTriggering) => {
+const step = (oscillatorsArr, adsrArr, timeNow, state, midiToFreqArr, step, bpmForClockWidth, trackTriggering) => {
     let glideValue
     let newNote
     Object.keys(state.sequencerSettings.tracks).forEach(track => {
         state.sequencerSettings.tracks[track].assignedNotes.forEach(assignedOsc => {
+            const note = state.sequencerSettings.tracks[track].sliders[step].note + 24 + (12 * state.sequencerSettings.tracks[track].sliders[step].octave)
             oscillatorsArr.forEach(osc => {
                 if (osc.name === assignedOsc) {
                     glideValue = timeNow + state.oscSettings[osc.name].glide

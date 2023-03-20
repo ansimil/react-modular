@@ -48,7 +48,7 @@ export class Filter {
                 new Slider("frequency", "filter", "CUTOFF", 10, 10000, 0.001, "Hz", 1),
                 new Slider("detune", "filter", "FINE", 0, 100, 0.001, "cts", 1),
                 new Slider("Q", "filter", "RES", 0, 10, 0.001, "", 1),
-                new Slider("freqFMDepth", "filter", "FM Depth", 0, 2500, 0.001, "", 1)
+                new Slider("freqFMDepth", "filter", "FM DEPTH", 0, 2500, 0.001, "", 1)
             ],
             selectorsArr: [
                 new Selector("lowpass", "LP", "type"),

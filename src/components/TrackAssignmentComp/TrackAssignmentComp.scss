@@ -1,11 +1,60 @@
 .track-assignment-container {
     min-height: 98%;
-    width: 97%;
+    width: 250px;
     border: solid black 1px;
     border-radius: 3px;
     background-color: rgb(44, 44, 44);
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 }
+
+.track-assignments {
+    margin-top: 0.5rem;
+    border: solid black 0.5px;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.7rem;
+    box-shadow: inset 0px 0px 10px rgba(0,0,0,0.5);
+}
+
+.note-selector-options, .gate-selector-options {
+    font-family: lightFont;
+    font-size: 0.8rem;
+}
+
+.track-notes-gates-selectors {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem
+}
+
+.note-selector-options, .gate-selector-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: solid black 0.5px;
+    border-radius: 3px;
+    padding: 0.3rem 0.6rem;
+    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.4);
+}
+
+.note-selector-options label, .gate-selector-options label {
+    color: rgb(222, 222, 222);
+    font-family: mainFont;
+}
+
+input[type='radio'] {
+    accent-color: #fafdd1;
+}
+
+.note-selector-options > p, .gate-selector-options > p {
+    margin-bottom: 0.5rem;
+}
+

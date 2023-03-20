@@ -288,8 +288,6 @@ const Sequencer = () => {
             </div>
             <div className="sequencer-settings-middlethird">
             <RandomizeNotes seqSlidersRef={seqSlidersRef}/>
-            </div>
-            <div className="sequencer-settings-bottomthird">
             <div style={{"display": "flex"}}>
               <button
               className="btn selector-btn"
@@ -312,6 +310,9 @@ const Sequencer = () => {
               Track 2
               </button>
             </div>
+            </div>
+            <div className="sequencer-settings-bottomthird">
+            
             </div>
           </div>
         </div>

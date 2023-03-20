@@ -5,8 +5,10 @@ const setConnections = (tuple, state) => {
 
         if ((nodeToConnect.type === "gain source" && nodeToConnectTo.type === "audio param") || (nodeToConnect.type === "audio source" && nodeToConnectTo.type === "gain param")) {
             console.log(nodeToConnect.name, 'connects to converter, connects to', nodeToConnectTo.name)
+            nodeToConnect.node.output.output.rampTo(0,0.01,0)
             nodeToConnect.node.connect(nodeToConnect.converter)
             nodeToConnect.converter.connect(nodeToConnectTo.node)
+            nodeToConnect.node.output.output.rampTo(1,0.01,0)
             updateConnectionCount = (nodeToConnectTo.connectedNodes) + 1
         }
         else {

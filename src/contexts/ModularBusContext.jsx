@@ -321,7 +321,7 @@ export function reducer(state, action){
             return {...state, sequencerSettings: {...state.sequencerSettings, tracks: {...tracksObj}}}
 
         case ACTIONS.SEQUENCER.randomNotes.notes:
-            return {...state, sequencerSettings: {...state.sequencerSettings, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings[`track${state.sequencerSettings.currentTrack}`].sliders[i], note: value}}}}}
+            return {...state, sequencerSettings: {...state.sequencerSettings, tracks: {...state.sequencerSettings.tracks, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[i], note: value}}}}}}
         
         case ACTIONS.SEQUENCER.randomNotes.scale:
             return {...state, sequencerSettings: {...state.sequencerSettings, randomNotes: {...state.sequencerSettings.randomNotes, scale: id}}}
@@ -330,11 +330,10 @@ export function reducer(state, action){
             return {...state, sequencerSettings: {...state.sequencerSettings, randomNotes: {...state.sequencerSettings.randomNotes, root: id}}}    
             
         case ACTIONS.SEQUENCER.trigger:
-            const stepNote = state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[value].note + 24 + (12 * state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[value].octave)
             const bpmForClockWidth = (60 / state.synthSettings.bpm) / 16
             highSteps.forEach((track, i) => {
                 if (track) {
-                    step(oscillatorsArr, adsrArr, time, state, midiToFreqArr, stepNote, bpmForClockWidth, i+1)
+                    step(oscillatorsArr, adsrArr, time, state, midiToFreqArr, value, bpmForClockWidth, i+1)
                 }
             })
 
@@ -395,7 +394,6 @@ function ModularBus (props) {
     
     let matrixRef = useRef(null)
     let keyboardRef = useRef(null)
-    
     let oscilloscopeRef = useRef(null)
     let sequencerRef = useRef(null)
     let seqSlidersRef = useRef(null)
