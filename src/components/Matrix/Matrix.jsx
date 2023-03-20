@@ -10,6 +10,12 @@ const Matrix = ( { matrixLocationRef } ) => {
     const [appState, updateState] = stateHook
 
     const changeConnections = e => {
+        console.log(e)
+        matrixRef.current?.cells.forEach(cell => {
+            if (cell.row === e.row && cell.column === e.row && e.state) {
+                cell.element.children[0].style.fill = "#000"
+            }
+        })
         updateState({type: ACTIONS.MATRIX.connections, payload: {value: e} })
     }
     let sqSize = 400/Object.keys(appState.matrixSettings.outputs).length
@@ -17,6 +23,48 @@ const Matrix = ( { matrixLocationRef } ) => {
     let columns = Object.keys(appState.matrixSettings.inputs).length
     let width = sqSize * columns
     let height = sqSize * rows
+
+    const highlightRowsColumns = (cell) => {
+        let row = cell.row
+        let column = cell.column
+        const verticalLabels = document.getElementsByClassName('verticalLabels')[0].childNodes
+        const horizontalLabels = Array.from(document.getElementsByClassName('horizontal-label'))
+        matrixRef.current.cells.forEach(cell => {
+            if (!cell._state.state) {
+                cell.element.children[0].style.fill = "#fff"
+            }
+            else if (cell._state.state) {
+                cell.element.children[0].style.fill = "#000"
+            }
+        })
+        verticalLabels.forEach((label, i) => {
+            if (i === cell.row) {
+                label.style.color = "#b3e3fc"
+            }
+            else {
+                label.style.color = "#000"
+            }
+        })
+        horizontalLabels.forEach((label, i) => {
+            if (i === cell.column) {
+                label.style.color = "#b3e3fc"
+            }
+            else {
+                label.style.color = "#000"
+            }
+        })
+        matrixRef.current.cells.forEach(cell => {
+            if ((cell.row === row || cell.column === column) && !cell._state.state) {
+                cell.element.children[0].style.fill = "#fafdd1" 
+            }
+        })
+        if (!cell._state.state || !cell.state) {
+            cell.element.children[0].style.fill = "#f7ff61"
+        }
+        if (cell._state.state || cell.state) {
+            cell.element.children[0].style.fill = "#393939"
+        }
+    }
     
     useEffect(()=>{
         let matrix = new Nexus.Sequencer("#matrix", {
@@ -34,14 +82,47 @@ const Matrix = ( { matrixLocationRef } ) => {
         initialConnection.forEach(connection => {
             matrix.matrix.toggle.cell(...connection)
         })
+        matrix.cells.forEach(cell => {
+            cell.element.addEventListener("mouseover", (e) => {
+                highlightRowsColumns(cell)
+            })
+        })
         matrixRef.current = matrix
+        console.log(matrixRef.current)
         // eslint-disable-next-line
     },[])
 
    
 
   return (
-    <div ref={matrixLocationRef} className='matrixContainer'>
+    <div 
+    ref={matrixLocationRef} 
+    className='matrixContainer' 
+    onMouseOver={(e) => {
+        const verticalLabels = document.getElementsByClassName('verticalLabels')[0].childNodes
+        const horizontalLabels = Array.from(document.getElementsByClassName('horizontal-label'))
+        
+        if (e.target.nodeName !== "rect") {
+        matrixRef.current?.cells.forEach(cell => {
+            if (cell._state.state) {
+                cell.element.children[0].style.fill = "#000"
+            }
+            else {
+                cell.element.children[0].style.fill = "#fff"
+            }
+        })
+        }
+        if (e.target.nodeName !== "rect" && e.target.nodeName !== "svg"){
+            verticalLabels.forEach((label) => {
+            label.style.color = "#000"
+        })
+        horizontalLabels.forEach((label) => {
+            label.style.color = "#000"
+        })
+        }
+        // console.log(e.target)
+    }}
+    >
         <div className='matrixContainerInner'>
         <div className="inputsLabel"><p>inputs</p></div>
             <table>
