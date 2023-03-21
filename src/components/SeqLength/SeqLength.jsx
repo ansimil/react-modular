@@ -51,16 +51,19 @@ const SeqLength = () => {
     const [appState, updateState] = stateHook
 
     const changeSeqLength = (length) => {
-        if (sequencerRef.current.stepper.mode === "up"){
-            sequencerRef.current.stepper.min = lengthMap[length].up.min
-            sequencerRef.current.stepper.max = lengthMap[length].up.max
-
+        if (sequencerRef.current[0].stepper.mode === "up"){
+            sequencerRef.current.forEach(track => {
+                track.stepper.min = lengthMap[length].up.min
+                track.stepper.max = lengthMap[length].up.max
+            })
         }
         else if (sequencerRef.current.stepper.mode === "down"){
-            sequencerRef.current.stepper.min = lengthMap[length].down.min
-            sequencerRef.current.stepper.max = lengthMap[length].down.max
+            sequencerRef.current.forEach(track => {
+                track.stepper.min = lengthMap[length].down.min
+                track.stepper.max = lengthMap[length].down.max
+            })
         }
-        console.log('mode', sequencerRef.current.stepper.mode, 'min', sequencerRef.current.stepper.min, 'max', sequencerRef.current.stepper.max)
+        // console.log('mode', sequencerRef.current.stepper.mode, 'min', sequencerRef.current.stepper.min, 'max', sequencerRef.current.stepper.max)
         updateState({type: ACTIONS.SEQUENCER.length, payload:  {value: length}})
     }
 
@@ -72,7 +75,7 @@ const SeqLength = () => {
         <div className="lengthBtnsContainer">
             <button
             className={appState.sequencerSettings.length === 2 ? "btn lengthBtn endBtnLeft activeBtn" : "btn lengthBtn endBtnLeft"}
-            onClick={(e)=>{
+            onClick={()=>{
                 changeSeqLength(2)
                 }}
             >
@@ -80,21 +83,21 @@ const SeqLength = () => {
             </button>
             <button
             className={appState.sequencerSettings.length === 4 ? "btn lengthBtn middleBtn activeBtn" : "btn lengthBtn middleBtn"}
-            onClick={(e)=>{
+            onClick={()=>{
                 changeSeqLength(4)
                 }}>
             4
             </button>
             <button             
             className={appState.sequencerSettings.length === 8 ? "btn lengthBtn middleBtn activeBtn" : "btn lengthBtn middleBtn"}
-            onClick={(e)=>{
+            onClick={()=>{
                 changeSeqLength(8)
                 }}>
             8
             </button>
             <button
             className={appState.sequencerSettings.length === 16 ? "btn lengthBtn endBtnRight activeBtn" : "btn lengthBtn endBtnRight"}
-            onClick={(e)=>{
+            onClick={()=>{
                 changeSeqLength(16)
                 }}>
             16

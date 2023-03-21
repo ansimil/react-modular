@@ -166,9 +166,9 @@ p {
     align-items: center;
     flex-direction: column;
     min-height: $moduleMinHeight;
-    min-width: 500px;
+    // min-width: 500px;
     max-width: 600px;
-    width: 42%;
+    // width: 42%;
     background-color: rgb(57,57,57);
     overflow: hidden;
     border-radius: 3px;
@@ -261,8 +261,6 @@ p {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    // background-color: rgb(44,44,44);
-    // background-color: #767763;
     background-color: #58594a;
     border-bottom: solid black 0.5px;
 }
@@ -274,8 +272,6 @@ p {
     align-items: center;
     border: solid black 0.5px;
     border-radius: 3px;
-    // background-color: rgb(57,57,57);
-    // background-color: #8a8b74;
     background-color: #7e7e6a;
     box-shadow: inset 0px 0px 3px rgba(0,0,0,0.5);
 }
@@ -389,8 +385,6 @@ p {
     align-items: center;
     border: solid black 0.5px;
     border-radius: 3px;
-    // background-color: rgb(57,57,57);
-    // background-color: #8a8b74;
     background-color: #7e7e6a;
     box-shadow: inset 0px 0px 3px rgba(0,0,0,0.5);
 }
@@ -406,6 +400,7 @@ p {
     box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
     width: 98%;
     flex: 1;
+    margin-bottom: 0.2rem;
 }
 
 #nexus-ui-sequencer-1 {
@@ -504,7 +499,7 @@ p {
 }
 
 .sequencer-settings-small {
-    min-width: 130px;
+    min-width: 110px;
     min-height: 85px
 }
 
@@ -549,6 +544,10 @@ p {
     padding: 0.3rem 0.5rem !important;
     font-size: 0.5rem;
     margin-bottom: 0.5rem;
+}
+
+#seq-track1 {
+    margin-top: 0.5rem
 }
 
 

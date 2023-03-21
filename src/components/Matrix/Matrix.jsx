@@ -10,17 +10,75 @@ const Matrix = ( { matrixLocationRef } ) => {
     const [appState, updateState] = stateHook
 
     const changeConnections = e => {
+        matrixRef.current?.cells.forEach(cell => {
+            if (cell.row === e.row && cell.column === e.column && e.state) {
+                cell.element.children[0].style.fill = "#000"
+            }
+            if (cell.row === e.row && cell.column === e.column && !e.state){
+                cell.element.children[0].style.fill = "#ffffff"
+                highlightRowsColumns(e)
+            }
+        })
         updateState({type: ACTIONS.MATRIX.connections, payload: {value: e} })
     }
+    let sqSize = 400/Object.keys(appState.matrixSettings.outputs).length
+    let rows = Object.keys(appState.matrixSettings.outputs).length
+    let columns = Object.keys(appState.matrixSettings.inputs).length
+    let width = sqSize * columns
+    let height = sqSize * rows
 
+    const highlightRowsColumns = (cell) => {
+        let row = cell.row
+        let column = cell.column
+        const verticalLabels = document.getElementsByClassName('verticalLabels')[0].childNodes
+        const horizontalLabels = Array.from(document.getElementsByClassName('horizontal-label'))
+        matrixRef.current.cells.forEach(cell => {
+            if (!cell._state.state) {
+                cell.element.children[0].style.fill = "#fff"
+            }
+            else if (cell._state.state) {
+                cell.element.children[0].style.fill = "#000"
+            }
+        })
+        verticalLabels.forEach((label, i) => {
+            if (i === cell.row) {
+                label.style.color = "#b3e3fc"
+                label.children[0].style.borderBottom = "solid black 1px"
+            }
+            else {
+                label.style.color = "#000"
+                label.children[0].style.borderBottom = "none"
+            }
+        })
+        horizontalLabels.forEach((label, i) => {
+            if (i === cell.column) {
+                label.style.color = "#b3e3fc"
+                label.children[0].style.borderBottom = "solid black 1px"
+            }
+            else {
+                label.style.color = "#000"
+                label.children[0].style.borderBottom = "none"
+            }
+        })
+        matrixRef.current.cells.forEach(cell => {
+            if ((cell.row === row || cell.column === column) && !cell._state.state) {
+                cell.element.children[0].style.fill = "#fafdd1" 
+            }
+        })
+        if (cell.element) {
+            if (!cell._state?.state || !cell.state) {
+                cell.element.children[0].style.fill = "#f7ff61"
+            }
+            if (cell._state?.state || cell.state) {
+                cell.element.children[0].style.fill = "#393939"
+            }
+        }
+        
+    }
+    
     useEffect(()=>{
-        let rows = Object.keys(appState.matrixSettings.outputs).length
-        let columns = Object.keys(appState.matrixSettings.inputs).length
-        let width = 40 * rows
-        let height = (width/rows)*columns
-
         let matrix = new Nexus.Sequencer("#matrix", {
-            "size": [height, width],
+            "size": [width, height],
             "rows": rows,
             "columns": columns 
         })
@@ -34,6 +92,11 @@ const Matrix = ( { matrixLocationRef } ) => {
         initialConnection.forEach(connection => {
             matrix.matrix.toggle.cell(...connection)
         })
+        matrix.cells.forEach(cell => {
+            cell.element.addEventListener("mouseover", (e) => {
+                highlightRowsColumns(cell)
+            })
+        })
         matrixRef.current = matrix
         // eslint-disable-next-line
     },[])
@@ -41,38 +104,79 @@ const Matrix = ( { matrixLocationRef } ) => {
    
 
   return (
-    <div ref={matrixLocationRef} className='matrixContainer'>
+    <div 
+    ref={matrixLocationRef} 
+    className='matrixContainer' 
+    onMouseOver={(e) => {
+        const verticalLabels = document.getElementsByClassName('verticalLabels')[0].childNodes
+        const horizontalLabels = Array.from(document.getElementsByClassName('horizontal-label'))
+        
+        if (e.target.nodeName !== "rect") {
+        matrixRef.current?.cells.forEach(cell => {
+            if (cell._state.state) {
+                cell.element.children[0].style.fill = "#000"
+            }
+            else {
+                cell.element.children[0].style.fill = "#fff"
+            }
+        })
+        }
+        if (e.target.nodeName !== "rect" && e.target.nodeName !== "svg"){
+            verticalLabels.forEach((label) => {
+            label.style.color = "#000"
+            label.children[0].style.borderBottom = "none"
+        })
+        horizontalLabels.forEach((label) => {
+            label.style.color = "#000"
+            label.children[0].style.borderBottom = "none"
+        })
+        }
+        // console.log(e.target)
+    }}
+    >
         <div className='matrixContainerInner'>
         <div className="inputsLabel"><p>inputs</p></div>
-            <div className="horizontalLabels">
-                <div className="horizontalLabel"><p>osc1FM</p></div>
-                <div className="horizontalLabel"><p>osc2FM</p></div>
-                <div className="horizontalLabel"><p>lfo1FM</p></div>
-                <div className="horizontalLabel"><p>lfo2FM</p></div>
-                <div className="horizontalLabel"><p>filter</p></div>
-                <div className="horizontalLabel"><p>filterFM</p></div>
-                <div className="horizontalLabel"><p>vca audio</p></div> 
-                <div className="horizontalLabel"><p>vca ctrl.</p></div>
-                <div className="horizontalLabel"><p>reverb audio</p></div>
-                <div className="horizontalLabel"><p>reverb wet</p></div>
-                <div className="horizontalLabel"><p>output</p></div>
-            </div>
-            <div className="matrixInner">
-            <div className="outputsLabel"><p>outputs</p></div>
-            <div className='verticalLabels'>
-                <div className="verticalLabel">osc1</div>
-                <div className="verticalLabel">osc2</div>
-                <div className="verticalLabel">lfo1</div>
-                <div className="verticalLabel">lfo2</div>
-                <div className="verticalLabel">filter</div>
-                <div className="verticalLabel">env</div>
-                <div className="verticalLabel">vca</div>
-                <div className="verticalLabel">reverb</div> 
-            </div>
-            <div id="matrix"></div>
-    
-            </div>
+            <table>
+                <thead>
+                
+                        <tr className="horizontal-labels">
+                            <th></th> 
+                            <th></th>
+                            <th style={{display: "flex"}}>
+                            {Object.keys(appState.matrixSettings.inputs).map((input, i) => {
+                                const name = appState.matrixSettings.inputs[input].name
+                                return (
+                                        <div key={i} className="horizontal-label" style={{"width": `${sqSize}px`}}><span className="horizontal-span" style={{fontSize: `${0.025*sqSize}rem`}}>{name}</span></div>
+                                )
+                            })
+                            }
+                            </th>
+                        </tr>
+                
+                </thead>
+                <tbody>
+                    <tr>
+                        <td className="outputsLabel"><p>outputs</p></td>
+                            
+                        <td className='verticalLabels' style={{"height": `${height}px`}}>
+                            {Object.keys(appState.matrixSettings.outputs).map((output, i) => {
+                                const name = appState.matrixSettings.outputs[output].name
+                                return (
+                                    <div key={i} className="vertical-label" style={{height: sqSize}}><span className="vertical-span" style={{fontSize: `${0.025*sqSize}rem`}}>{name}</span></div> 
+                                )
+                            })
+                            }
+                        </td>
+                            
+                        <td>
+                            <div id="matrix"></div>
+                        </td>
+                        
+                    </tr>
+                </tbody>
+            </table>
         </div>
+      
     </div>
   )
 }

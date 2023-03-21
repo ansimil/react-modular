@@ -156,9 +156,7 @@ p {
   align-items: center;
   flex-direction: column;
   min-height: 300px;
-  min-width: 500px;
   max-width: 600px;
-  width: 42%;
   background-color: rgb(57, 57, 57);
   overflow: hidden;
   border-radius: 3px;
@@ -390,6 +388,7 @@ p {
   box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
   width: 98%;
   flex: 1;
+  margin-bottom: 0.2rem;
 }
 
 #nexus-ui-sequencer-1 {
@@ -486,7 +485,7 @@ p {
 }
 
 .sequencer-settings-small {
-  min-width: 130px;
+  min-width: 110px;
   min-height: 85px;
 }
 
@@ -531,4 +530,8 @@ p {
   padding: 0.3rem 0.5rem !important;
   font-size: 0.5rem;
   margin-bottom: 0.5rem;
+}
+
+#seq-track1 {
+  margin-top: 0.5rem;
 }/*# sourceMappingURL=App.css.map */

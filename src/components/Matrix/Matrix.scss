@@ -36,67 +36,47 @@ $containerBorderRadius: 3px;
     background-color: $lightestBackground;
 }
 
-.verticalLabel {
+.vertical-label {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 45px;
+    position: relative;
+    height: 40px;
 }
 
-.horizontalLabel, .verticalLabel {
-    flex: 1;
-    text-align: center;
-    margin: 0;
+.vertical-span {
+    bottom: 30%;
+    right: 15%;
+    position: absolute;
+    transform: rotate(-45deg);
+    transform-origin: center right;
+    white-space: nowrap;
     font-family: mainFont;
-    transform: rotate(315deg);
-}
-
-.verticalLabel {
-    flex: 1 1;
-    text-align: center;
-    margin: 0;
-    font-family: mainFont;
-    transform: rotate(315deg);
-    min-width: 4rem;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
 }
 
 .verticalLabels {
-    height: 320px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    margin-bottom: -2%;
-    margin-right: -7px;
-}
-
-.horizontalLabels {
-    width: 439.5px;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    margin-bottom: 0;
-    margin-left: 51%;
-    margin-top: 5rem;
-}
-
-.horizontalLabel {
-    transform: rotate(315deg);
-    transform-origin: 0 0;
-    margin: 0;
-    margin-left: 0px;
-    padding: 0;
-    display: flex;
-    justify-content: flex-start;
-    min-width: 98.857px;
-    align-items: center;
-    margin-left: -64px;
+    display: table-row;
 }
 
 .horizontalLabel p {
     margin: 0
+}
+
+.horizontal-label {
+    height: 110px;
+    position: relative;
+    width: 40px
+}
+
+.horizontal-span {
+    bottom: 5px;
+    left: 50%;
+    position: absolute;
+    transform: rotate( -45deg );
+    transform-origin: center left;
+    white-space: nowrap;
+    font-family: mainFont;
 }
 
 .matrixInner {
@@ -104,6 +84,7 @@ $containerBorderRadius: 3px;
     justify-content: center;
     align-items: center;
     column-gap: 10px;
+    margin-top: -1rem;
 }
 
 #matrix {
@@ -116,15 +97,16 @@ $containerBorderRadius: 3px;
 
 .outputsLabel {
     transform: rotate(270deg);
-    margin-bottom: 1.7rem;
-    padding: 1rem;
-    margin-right: -22px;
+}
+
+.outputsLabel p {
     border: solid black 1px;
     border-radius: 3px;
+    padding: 1rem;
 }
 
 .inputsLabel {
-    margin-left: 8rem;
+    margin-left: 25%;
     padding: 1rem;
     border: solid black 1px;
     border-radius: 3px;

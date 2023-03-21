@@ -13,13 +13,14 @@ import ModuleComp from '../ModuleComp/ModuleComp';
 
 
 function App() {
-  const { oscillatorsArr, filtersArr, lfosArr, adsrArr, effectsArr } = useContext(ModularBusContext)
+  const { oscillatorsArr, filtersArr, lfosArr, adsrArr, vcasArr, effectsArr } = useContext(ModularBusContext)
   let seqRef = useRef(null)
   let keysRef = useRef(null)
   let oscillatorsRef = useRef(null)
   let lfosRef = useRef(null)
   let filterRef = useRef(null)
   let envelopeRef = useRef(null)
+  let vcaRef = useRef(null)
   let oscilloscopeRef = useRef(null)
   let matrixLocationRef = useRef(null)
   let effectsLocationRef = useRef(null)
@@ -28,7 +29,7 @@ function App() {
   return (
     <div className="App">
       <ControlBar />
-      <Navbar seqRef={seqRef} oscillatorsRef={oscillatorsRef} lfosRef={lfosRef} filterRef={filterRef} envelopeRef={envelopeRef} oscilloscopeRef={oscilloscopeRef} matrixLocationRef={matrixLocationRef} effectsLocationRef={effectsLocationRef} keysRef={keysRef}/>
+      <Navbar seqRef={seqRef} oscillatorsRef={oscillatorsRef} lfosRef={lfosRef} filterRef={filterRef} envelopeRef={envelopeRef} oscilloscopeRef={oscilloscopeRef} matrixLocationRef={matrixLocationRef} effectsLocationRef={effectsLocationRef} keysRef={keysRef} vcaRef={vcaRef}/>
       <Matrix matrixLocationRef={matrixLocationRef}/>   
       
       <ModuleContainer name={'_seq'} moduleClass={'seq'} locationRef={seqRef}>
@@ -59,10 +60,18 @@ function App() {
           })}
       </ModuleContainer>
         
-      <ModuleContainer name={'_envelope'} moduleClass={'envelope'} locationRef={envelopeRef}>
+      <ModuleContainer name={'_envelopes'} moduleClass={'envelope'} locationRef={envelopeRef}>
       {adsrArr.map((adsr, i) => {          
             return (
               <ModuleComp key={adsr.name} module={adsr} i={i} /> 
+            )
+      })}
+      </ModuleContainer>
+
+      <ModuleContainer name={'vcas'} moduleClass={'vca'} locationRef={vcaRef}>
+      {vcasArr.map((vca, i) => {          
+            return (
+              <ModuleComp key={vca.name} module={vca} i={i} /> 
             )
       })}
       </ModuleContainer>
@@ -83,7 +92,6 @@ function App() {
       <ModuleContainer name={'_keys'} moduleClass={'keys'} locationRef={keysRef}>
        <Keyboard/>
       </ModuleContainer>
-      
       
     </div>
   );
