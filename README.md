@@ -1,8 +1,8 @@
 # Modular Monosynth
 
-## [Link](https://modular-monosynth.netlify.app)
+## [Play the synth!](https://modular-monosynth.netlify.app)
 
-
+<img src="https://res.cloudinary.com/dpkg7rmxr/image/upload/v1679378914/Screen_Shot_2023-03-21_at_5.06.24_pm_wnixcp.png" height="250px" alt="synth image"/>
 
 ### About
 
