@@ -42,21 +42,17 @@ const Matrix = ( { matrixLocationRef } ) => {
         })
         verticalLabels.forEach((label, i) => {
             if (i === cell.row) {
-                label.style.color = "#b3e3fc"
                 label.children[0].style.borderBottom = "solid black 1px"
             }
             else {
-                label.style.color = "#000"
                 label.children[0].style.borderBottom = "none"
             }
         })
         horizontalLabels.forEach((label, i) => {
             if (i === cell.column) {
-                label.style.color = "#b3e3fc"
                 label.children[0].style.borderBottom = "solid black 1px"
             }
             else {
-                label.style.color = "#000"
                 label.children[0].style.borderBottom = "none"
             }
         })
