@@ -388,6 +388,7 @@ p {
   box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
   width: 98%;
   flex: 1;
+  margin-bottom: 0.2rem;
 }
 
 #nexus-ui-sequencer-1 {

@@ -7,6 +7,7 @@ import RandomSequenceBtn from '../RandomSequenceBtn/RandomSequenceBtn'
 import RandomGatesBtn from '../RandomGatesBtn/RandomGatesBtn'
 import RandomizeNotes from '../RandomizeNotes/RandomizeNotes'
 import TrackAssignmentComp from '../TrackAssignmentComp/TrackAssignmentComp'
+import ShowTrackNotes from '../ShowTrackNotes/ShowTrackNotes'
 import { handleMouseEvent } from '../../services/general.services'
 import * as Tone from 'tone'
 import Nexus from 'nexusui'
@@ -274,7 +275,7 @@ const Sequencer = () => {
           </div>
         
       </div>
-
+      <ShowTrackNotes changeCurrentTrack={changeCurrentTrack} loadTrackSliders={loadTrackSliders} />
       {sequencerRef.current && <TrackAssignmentComp sequencerRef={sequencerRef} />}
 
       <div className="sequencerSettingsContainer">
@@ -288,28 +289,7 @@ const Sequencer = () => {
             </div>
             <div className="sequencer-settings-middlethird">
             <RandomizeNotes seqSlidersRef={seqSlidersRef}/>
-            <div style={{"display": "flex"}}>
-              <button
-              className="btn selector-btn"
-              id="1"
-              onClick={(e) => {
-                changeCurrentTrack(e)
-                loadTrackSliders(e)
-              }}
-              >
-              Track 1
-              </button>
-              <button
-              className="btn selector-btn"
-              id="2"
-              onClick={(e) => {
-                changeCurrentTrack(e)
-                loadTrackSliders(e)
-              }}
-              >
-              Track 2
-              </button>
-            </div>
+            
             </div>
             <div className="sequencer-settings-bottomthird">
             

@@ -75,7 +75,7 @@ const SeqLength = () => {
         <div className="lengthBtnsContainer">
             <button
             className={appState.sequencerSettings.length === 2 ? "btn lengthBtn endBtnLeft activeBtn" : "btn lengthBtn endBtnLeft"}
-            onClick={(e)=>{
+            onClick={()=>{
                 changeSeqLength(2)
                 }}
             >
@@ -83,21 +83,21 @@ const SeqLength = () => {
             </button>
             <button
             className={appState.sequencerSettings.length === 4 ? "btn lengthBtn middleBtn activeBtn" : "btn lengthBtn middleBtn"}
-            onClick={(e)=>{
+            onClick={()=>{
                 changeSeqLength(4)
                 }}>
             4
             </button>
             <button             
             className={appState.sequencerSettings.length === 8 ? "btn lengthBtn middleBtn activeBtn" : "btn lengthBtn middleBtn"}
-            onClick={(e)=>{
+            onClick={()=>{
                 changeSeqLength(8)
                 }}>
             8
             </button>
             <button
             className={appState.sequencerSettings.length === 16 ? "btn lengthBtn endBtnRight activeBtn" : "btn lengthBtn endBtnRight"}
-            onClick={(e)=>{
+            onClick={()=>{
                 changeSeqLength(16)
                 }}>
             16

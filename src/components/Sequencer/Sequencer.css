@@ -19,6 +19,7 @@
   align-items: center;
   width: 100%;
   flex: 1;
+  gap: 0.2rem;
 }
 
 .sequencerSettingsContainer {
@@ -51,7 +52,6 @@
   padding-left: 1rem;
   padding-right: 1rem;
   margin-left: 0.1rem;
-  margin-right: 0.1rem;
   height: 98%;
   border-radius: 3px;
   border: solid black 1px;

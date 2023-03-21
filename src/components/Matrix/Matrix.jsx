@@ -10,10 +10,13 @@ const Matrix = ( { matrixLocationRef } ) => {
     const [appState, updateState] = stateHook
 
     const changeConnections = e => {
-        console.log(e)
         matrixRef.current?.cells.forEach(cell => {
-            if (cell.row === e.row && cell.column === e.row && e.state) {
+            if (cell.row === e.row && cell.column === e.column && e.state) {
                 cell.element.children[0].style.fill = "#000"
+            }
+            if (cell.row === e.row && cell.column === e.column && !e.state){
+                cell.element.children[0].style.fill = "#ffffff"
+                highlightRowsColumns(e)
             }
         })
         updateState({type: ACTIONS.MATRIX.connections, payload: {value: e} })
@@ -40,17 +43,21 @@ const Matrix = ( { matrixLocationRef } ) => {
         verticalLabels.forEach((label, i) => {
             if (i === cell.row) {
                 label.style.color = "#b3e3fc"
+                label.children[0].style.borderBottom = "solid black 1px"
             }
             else {
                 label.style.color = "#000"
+                label.children[0].style.borderBottom = "none"
             }
         })
         horizontalLabels.forEach((label, i) => {
             if (i === cell.column) {
                 label.style.color = "#b3e3fc"
+                label.children[0].style.borderBottom = "solid black 1px"
             }
             else {
                 label.style.color = "#000"
+                label.children[0].style.borderBottom = "none"
             }
         })
         matrixRef.current.cells.forEach(cell => {
@@ -58,12 +65,15 @@ const Matrix = ( { matrixLocationRef } ) => {
                 cell.element.children[0].style.fill = "#fafdd1" 
             }
         })
-        if (!cell._state.state || !cell.state) {
-            cell.element.children[0].style.fill = "#f7ff61"
+        if (cell.element) {
+            if (!cell._state?.state || !cell.state) {
+                cell.element.children[0].style.fill = "#f7ff61"
+            }
+            if (cell._state?.state || cell.state) {
+                cell.element.children[0].style.fill = "#393939"
+            }
         }
-        if (cell._state.state || cell.state) {
-            cell.element.children[0].style.fill = "#393939"
-        }
+        
     }
     
     useEffect(()=>{
@@ -88,7 +98,6 @@ const Matrix = ( { matrixLocationRef } ) => {
             })
         })
         matrixRef.current = matrix
-        console.log(matrixRef.current)
         // eslint-disable-next-line
     },[])
 
@@ -115,9 +124,11 @@ const Matrix = ( { matrixLocationRef } ) => {
         if (e.target.nodeName !== "rect" && e.target.nodeName !== "svg"){
             verticalLabels.forEach((label) => {
             label.style.color = "#000"
+            label.children[0].style.borderBottom = "none"
         })
         horizontalLabels.forEach((label) => {
             label.style.color = "#000"
+            label.children[0].style.borderBottom = "none"
         })
         }
         // console.log(e.target)
