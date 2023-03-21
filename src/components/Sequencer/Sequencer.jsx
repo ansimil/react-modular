@@ -34,6 +34,28 @@ const Sequencer = () => {
     11: "B"
   }
 
+  const highlightCell = (cell, i) => {
+    console.log(i)
+    let row = cell.row
+    let column = cell.column
+    sequencerRef.current.forEach(track => {
+      track.cells.forEach(cell => {
+        if (!cell._state.state) {
+          cell.element.children[0].style.fill = "#eee"
+      }
+      else if (cell._state.state) {
+          cell.element.children[0].style.fill = "#000"
+      }
+      })
+    })
+    sequencerRef.current[i].cells.forEach(cell => {
+    if ((cell.row === row && cell.column === column) && !cell._state.state) {
+      cell.element.children[0].style.fill = "#fafdd1" 
+    }
+    })
+    
+  }
+
   const randomizeGates = () => {
     sequencerRef.current.forEach(track => {
       track.matrix.populate.row(0, [0.5])
@@ -41,17 +63,32 @@ const Sequencer = () => {
   }
 
   const handleInc = (id, i) => {
-    if (appState.sequencerSettings[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave < 6){
-    let value = appState.sequencerSettings[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave + 1
+    if (appState.sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave < 6){
+    let value = appState.sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave + 1
     updateState({type: ACTIONS.SEQUENCER[id], payload: {id, value, i}})
     }
   }
 
   const handleDec = (id, i) => {
-    if (appState.sequencerSettings[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave > 0){
-    let value = appState.sequencerSettings[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave - 1
+    if (appState.sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave > 0){
+    let value = appState.sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave - 1
     updateState({type: ACTIONS.SEQUENCER[id], payload: {id, value, i}})
     }
+  }
+
+  const toggleCell = (e, i) => {
+    console.log(e)
+    sequencerRef.current?.forEach(track => {
+      track.cells.forEach(cell => {
+        if (cell.row === e.row && cell.column === e.column && e.state) {
+            cell.element.children[0].style.fill = "#000"
+        }
+        if (cell.row === e.row && cell.column === e.column && !e.state){
+            cell.element.children[0].style.fill = "#eee"
+        }
+        highlightCell(e, i)
+      })
+    })
   }
 
   const change = (e, i) => {
@@ -193,10 +230,18 @@ const Sequencer = () => {
     })
     seqSlidersRef.current = sliders
 
-    tracks.forEach(track => {
+    tracks.forEach((track, i) => {
+      track.on("change", (e) => {
+        toggleCell(e, i)
+      })
       track.interval.rate = 60 / appState.synthSettings.bpm * 1000
       track.colors.accent = "#000"
       track.colors.mediumLight = "#fafdd1"
+      track.cells.forEach(cell => {
+        cell.element.addEventListener("mouseover", (e) => {
+            highlightCell(cell, i)
+        })
+    })
     })
     sequencerRef.current = tracks
   // eslint-disable-next-line
@@ -209,7 +254,36 @@ const Sequencer = () => {
             <p>{`seq`}</p>
         </div>
       </div>
-      <div className="sequencerInner">
+      <div 
+      className="sequencerInner"
+      onMouseOver={(e) => {
+        const verticalLabels = document.getElementsByClassName('verticalLabels')[0].childNodes
+        const horizontalLabels = Array.from(document.getElementsByClassName('horizontal-label'))
+        
+        if (e.target.nodeName !== "rect") {
+        sequencerRef.current?.forEach(track=> {
+          track.cells.forEach(cell => {
+            if (cell._state.state) {
+                cell.element.children[0].style.fill = "#000"
+            }
+            else {
+                cell.element.children[0].style.fill = "#eee"
+            }
+        })
+        })
+        if (e.target.nodeName !== "rect" && e.target.nodeName !== "svg"){
+            verticalLabels.forEach((label) => {
+            label.style.color = "#000"
+            label.children[0].style.borderBottom = "none"
+        })
+        horizontalLabels.forEach((label) => {
+            label.style.color = "#000"
+            label.children[0].style.borderBottom = "none"
+        })
+        }
+        // console.log(e.target)
+        }}}
+        >
       <div className="sequencerNotesGates">
         <div id="seq-track1"></div>
         <div id="seq-track2"></div>
