@@ -11,19 +11,25 @@ The Modular Monosynth web app is a project that is inspired by my passion for mo
 The main goal of the synth is to create a monosynth with the flexibility of a modular synth system.
 
 ### Technical details
-The web app is being built with ReactJS and Sass. For sound the main library used in Tone.js, which uses the Web Audio API. 
+The web app is being built with ReactJS and Sass. For sound the main library used in Tone.js, which wraps the Web Audio API. 
 
 ### Updates
 
 The following features have been recently added:
 
-- Connection Matrix - this will bring the modular aspect of the synth to life, allowing the user to connect each module as they please.
-- Step sequencer - a basic implementation of a 16 step sequencer with various functionalities 
+- Cursor highlighting on the matrix to improve visibility and usability. When the user places their cursor over a square, the row and column are highlighted with another colour to show which two modules correlate at that location. 
+- Added second track to sequencer. The user is now able to sequence two lines simulultaneously.
+- Gate and Note assignation for the sequencer. Now that there are two tracks, the user can assign which oscillator the notes will be assigned to, and which adsr/envelope the gates will be assigned to. 
+- 4 VCAs have been introduced. This allows the user to have more control over modulation. They can also use them as a 4 channel mixer.
+
 
 ### Next steps
 
-At the moment the app offers a simply monosynth configuration with an oscillator, two lfos, a filter and an ADSR. Functionalities that will be coming shortly include:
+Features to come:
 
-- MIDI - it will be possible for the user to plug in a midi keyboard and play the synth
+- Saving and loading matrix and module settings presets
+- Add settings to keyboard allowing user to control the key-osc-adsr assignation
+- Ability to add and remove modules from the system
+- MIDI - possible for the user to plug in a midi keyboard and play the synth
 
 
