@@ -41,7 +41,7 @@ export const ACTIONS = {
         currentTrack: "change_current_track",
         note: "change_step_note",
         octave: "change_step_octave",
-        step: "trigger_step",
+        trigger: "trigger_step",
         player: "change_sequencer_player",
         direction: "change_sequencer_direction",
         length: "change_sequencer_length",
@@ -51,7 +51,8 @@ export const ACTIONS = {
             notes: "change_sequencer_random_notes",
             scale: "change_sequencer_random_notes_scale",
             root: "change_sequencer_random_notes_root"
-        }
+        },
+        assignNoteGate: "change_sequencer_assigned_note_gate"
     },
     MATRIX: {
         connections: "change_connections",
