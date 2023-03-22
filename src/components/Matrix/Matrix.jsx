@@ -127,7 +127,6 @@ const Matrix = ( { matrixLocationRef } ) => {
             label.children[0].style.borderBottom = "none"
         })
         }
-        // console.log(e.target)
     }}
     >
         <div className='matrixContainerInner'>
