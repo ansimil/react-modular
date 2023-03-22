@@ -35,7 +35,6 @@ const Sequencer = () => {
   }
 
   const highlightCell = (cell, i) => {
-    console.log(i)
     let row = cell.row
     let column = cell.column
     sequencerRef.current.forEach(track => {
@@ -77,7 +76,6 @@ const Sequencer = () => {
   }
 
   const toggleCell = (e, i) => {
-    console.log(e)
     sequencerRef.current?.forEach(track => {
       track.cells.forEach(cell => {
         if (cell.row === e.row && cell.column === e.column && e.state) {
@@ -281,7 +279,6 @@ const Sequencer = () => {
             label.children[0].style.borderBottom = "none"
         })
         }
-        // console.log(e.target)
         }}}
         >
       <div className="sequencerNotesGates">

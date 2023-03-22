@@ -248,7 +248,6 @@ export function reducer(state, action){
         case ACTIONS.adsr[id]:
             state.adsrSettings[moduleName][id] = value
             adsrArr[i].adsr[id] = value
-            console.log(adsrArr[i].adsr)
             return {...state, adsrSettings: {...state.adsrSettings, [moduleName]: {...state.adsrSettings[moduleName], [id]: Number(value)}}};
         
         case ACTIONS.adsr.trigger:    
@@ -286,7 +285,6 @@ export function reducer(state, action){
             return {...state, sequencerSettings: {...state.sequencerSettings, currentTrack: value}}
         
         case ACTIONS.SEQUENCER.assignNoteGate:
-            console.log(value, id, i)
             let noteGateMap = {
                 note: "assignedNotes",
                 gate: "assignedGates"
@@ -385,7 +383,6 @@ export function reducer(state, action){
             }}
 
         default:
-            console.log('error', action)
             return {...state};
     }
 }

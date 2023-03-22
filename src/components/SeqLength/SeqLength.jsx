@@ -63,7 +63,6 @@ const SeqLength = () => {
                 track.stepper.max = lengthMap[length].down.max
             })
         }
-        // console.log('mode', sequencerRef.current.stepper.mode, 'min', sequencerRef.current.stepper.min, 'max', sequencerRef.current.stepper.max)
         updateState({type: ACTIONS.SEQUENCER.length, payload:  {value: length}})
     }
 

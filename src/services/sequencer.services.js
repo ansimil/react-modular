@@ -19,7 +19,6 @@ const step = (oscillatorsArr, adsrArr, timeNow, state, midiToFreqArr, step, bpmF
     state.sequencerSettings.tracks[`track${trackTriggering}`].assignedGates.forEach(assignedAdsr => {
             adsrArr.forEach(adsr => {
                 if (adsr.name === assignedAdsr) {
-                    console.log(`track${trackTriggering}`, adsr.name)
                     adsr.adsr.triggerAttackRelease(bpmForClockWidth, timeNow, 1)
                 }
             })
