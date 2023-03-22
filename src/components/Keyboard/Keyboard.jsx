@@ -11,7 +11,6 @@ const Keyboard = () => {
     const { stateHook } = useContext(ModularBusContext)
     // eslint-disable-next-line
     const [appState, updateState] = stateHook
-
     let midiNoteArr = [[24, 36], [36, 48], [48, 60], [60, 72], [72, 84], [84, 96], [96, 108]]
 
     const keyMapper = {
@@ -99,11 +98,9 @@ const Keyboard = () => {
     const { keyboardRef } = useContext(ModularBusContext)
 
 
-    const handleKeyboard = (e) => {  
+    const handleKeyboard = (e) => {
         const { note, state } = e
-        updateState({type: ACTIONS.osc.frequency, payload: {note, i:0, moduleName:"osc1"}})
-        updateState({type: ACTIONS.osc.frequency, payload: {note, i:1, moduleName:"osc2"}})
-        updateState({type: ACTIONS.adsr.trigger, payload: {stateKey: state, i:0}})
+        updateState({type: ACTIONS.keyboard.note, payload: {note, stateKey: state}})
     }
 
 

@@ -9,9 +9,11 @@ export class Oscillator {
             type:"sine",
             frequency: initFreq
         })
-        this.FMDepth = new Tone.Gain(0)
+        this.FMDepth = new Tone.Gain({
+            gain: 0
+        })
         this.converter = new Tone.AudioToGain()
-        this.FMDepth.connect(this.osc.detune)
+        this.FMDepth.connect(this.osc.frequency)
         this.settings = {
             matrixIOs: {
                     inputs: [
@@ -77,15 +79,17 @@ export class Oscillator {
     }
 
     updateOscPwm(value){
-        if (value === "0" && this.osc.width) {
-            this.osc.width.value = 0.5
+        if ((value === "0" || value === 0) && this.osc.type === "pwm") {
+            this.osc.set({
+                width: 0.5
+            })
         }
         if (this.osc.type === "pwm") {
-            this.osc.modulationFrequency.value = value
+            this.osc.modulationFrequency.rampTo(value, 0.01, 0)
         }
     }
 
     updateFMDepth(value){
-        this.FMDepth.gain.value = value
+        this.FMDepth.gain.rampTo(value, 0.01, 0)
     }
 }
