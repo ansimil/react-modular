@@ -37,7 +37,7 @@ export class Oscillator {
                 new Slider("detune", actionsSelector, "DETUNE", 0, 100, 0.001, "cts", 1),
                 new Slider("pwm", actionsSelector, "PWM", 0, 40, 0.001, "Hz", 1),
                 new Slider("glide", actionsSelector, "GLIDE", 0, 5, 0.001, "s", 1),
-                new Slider("oscFMDepth", actionsSelector, "FM DEPTH", 0, 2500, 0.001, "", 1)   
+                new Slider("oscFMDepth", actionsSelector, "FM DEPTH", 0, 2500, 0.001, "", 0.004)   
             ],
             selectorsArr: [
                 new Selector("sine", "SINE", "type"),
