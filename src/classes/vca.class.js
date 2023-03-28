@@ -6,6 +6,7 @@ export class VCA {
         this.type = "vca"
         this.name = actionsSelector
         this.vca = new Tone.Gain(0)
+        this.converter = new Tone.AudioToGain()
         this.ctrlGainAdjust = new Tone.Gain(1)
         this.audioGainAdjust = new Tone.Gain(1)
         this.audioGainAdjust.connect(this.vca)
@@ -30,7 +31,8 @@ export class VCA {
                     {
                         name: `${actionsSelector}`,
                         node: this.vca,
-                        type: "audio source"
+                        type: "audio source",
+                        converter: this.converter
                     }
                 ]
             },

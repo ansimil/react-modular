@@ -8,8 +8,6 @@ const setConnections = (tuple, state) => {
             nodeToConnect.node.connect(nodeToConnect.converter)
             nodeToConnect.converter.connect(nodeToConnectTo.node)
             updateConnectionCount = (nodeToConnectTo.connectedNodes) + 1
-            console.log(nodeToConnectTo.name, updateConnectionCount)
-
         }
         else {
             updateConnectionCount = (nodeToConnectTo.connectedNodes) + 1 
@@ -17,14 +15,10 @@ const setConnections = (tuple, state) => {
                 nodeToConnectTo.node.gain.value = 0
             }
             else {
-                console.log('fire connection gain')
                 nodeToConnectTo.node.gain.rampTo(1 / updateConnectionCount, 0.01, 0) 
-                console.log(nodeToConnectTo.node.gain.value)
             }
             console.log(nodeToConnect.name, 'connects to', nodeToConnectTo.name)
             nodeToConnect.node.connect(nodeToConnectTo.node)
-            console.log(nodeToConnectTo.name, updateConnectionCount)
-
         }
 
         return updateConnectionCount
