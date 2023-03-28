@@ -64,11 +64,17 @@ p {
 .inc-btn {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
+  border-left: none;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
 }
 
 .dec-btn {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
+  border-right: none !important;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 
 .inc-dec-indicator {
@@ -79,9 +85,10 @@ p {
   min-height: 22.5px;
   background-color: rgb(222, 222, 222);
   margin: 0;
-  font-family: lightFont;
+  font-family: mainFont;
   font-size: 0.7rem;
-  box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.4);
+  border-top: solid black 1px;
+  border-bottom: solid black 1px;
 }
 
 .inc-dec-label {
