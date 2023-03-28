@@ -126,12 +126,15 @@ const initialAdsrState = setModuleInitialState(adsrArr)
 
 // Connection chain //
 const initialConnection = [
-    [4,0],
-    [6,4],
-    [14,7],
+    [6,0],
+    [8,1],
+    [14,4],
     [0,2],
     [2,3],
+    [4,7],
+    [4,8],
     [7,5],
+    [9,6],
     [16,11]
 ]
 
@@ -201,6 +204,8 @@ export function reducer(state, action){
             }
 
             return {...state}
+
+            
 
         // osc SETTINGS //
 
@@ -457,6 +462,10 @@ function ModularBus (props) {
         lfoSettings: {...initialLfoState},
         vcaSettings: {...initialVcaState},
         effectsSettings: {...initialEffectsState},
+        keyboardSettings: {
+            mode: "polyphonic",
+            modeOptions: ["polyphonic", "monophonic"] 
+        },
         sequencerSettings: {
             tracks: {
                 track1: {
