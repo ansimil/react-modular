@@ -81,6 +81,9 @@ let vca4 = new VCA(`vca${vcasArr.length+1}`)
 vcasArr.push(vca4)
 modulesArr.push(vcasArr)
 
+let count = 0
+let keyAdsrAssignation = {}
+
 function counter(){
     let count = 0
     if (effectsArr.length === 0){
@@ -123,12 +126,15 @@ const initialAdsrState = setModuleInitialState(adsrArr)
 
 // Connection chain //
 const initialConnection = [
-    [4,0],
-    [6,4],
-    [14,7],
+    [6,0],
+    [8,1],
+    [14,4],
     [0,2],
     [2,3],
+    [4,7],
+    [4,8],
     [7,5],
+    [9,6],
     [16,11]
 ]
 
@@ -146,7 +152,17 @@ export function reducer(state, action){
     switch (action.type) {
         // SYNTH SETTINGS //
         case ACTIONS.SYNTH.start:
-            startContext(osc1.osc, osc2.osc, lfo1.osc, lfo2.osc)
+            oscillatorsArr.forEach(osc => {
+                osc.FMDepth.gain.rampTo(0,0,0)
+            })
+            lfosArr.forEach(lfo => {
+                lfo.FMDepth.gain.rampTo(0,0,0)
+            })
+            filtersArr.forEach(filter => {
+                filter.FMDepth.gain.rampTo(0,0,0);
+                filter.QDepth.gain.rampTo(0,0,0);
+            })
+            startContext(oscillatorsArr, lfosArr)
             output1.output.gain.setValueAtTime(output1.output.gain.value, actx.currentTime)
             output1.output.gain.linearRampToValueAtTime(1, actx.currentTime + smoothing)
             return {...state, synthSettings: {...state.synthSettings, start: true, startCount: 1}}
@@ -165,6 +181,31 @@ export function reducer(state, action){
             Tone.Transport.bpm.rampTo(value, 0.05)
             return {...state, synthSettings: {...state.synthSettings, [id]: Number(value)}}
 
+        case ACTIONS.keyboard.note:
+            if (stateKey){
+                let availableSlots = []
+                for (let i = 0; i<adsrArr.length; i++){
+                    if (Object.values(keyAdsrAssignation).indexOf(i) === -1) {
+                        availableSlots.push(i)
+                    }
+                }
+                if (availableSlots.length > 0) {
+                    count = Math.min(...availableSlots)
+                    keyAdsrAssignation = {...keyAdsrAssignation, [note]: count}
+                    adsrArr[count].updateADSRGain(stateKey, actx.currentTime, state)
+                    updateOscFrequency(oscillatorsArr[count].osc, state, actx.currentTime, midiToFreqArr, note, oscillatorsArr[count].name)
+                }
+            }
+            else if (!stateKey) {
+                if (Object.values(keyAdsrAssignation).indexOf(keyAdsrAssignation[note]) !== -1) {
+                    adsrArr[keyAdsrAssignation[note]].updateADSRGain(stateKey, actx.currentTime, state)
+                    delete keyAdsrAssignation[note]
+                }
+            }
+
+            return {...state}
+
+            
 
         // osc SETTINGS //
 
@@ -250,9 +291,9 @@ export function reducer(state, action){
             adsrArr[i].adsr[id] = value
             return {...state, adsrSettings: {...state.adsrSettings, [moduleName]: {...state.adsrSettings[moduleName], [id]: Number(value)}}};
         
-        case ACTIONS.adsr.trigger:    
-            adsrArr[i].updateADSRGain(stateKey, actx.currentTime, state)
-            return {...state}
+        // case ACTIONS.adsr.trigger:    
+        //     adsrArr[i].updateADSRGain(stateKey, actx.currentTime, state)
+        //     return {...state}
 
         // VCA SETTINGS //    
 
@@ -421,6 +462,10 @@ function ModularBus (props) {
         lfoSettings: {...initialLfoState},
         vcaSettings: {...initialVcaState},
         effectsSettings: {...initialEffectsState},
+        keyboardSettings: {
+            mode: "polyphonic",
+            modeOptions: ["polyphonic", "monophonic"] 
+        },
         sequencerSettings: {
             tracks: {
                 track1: {

@@ -64,5 +64,8 @@ export const ACTIONS = {
             wet: "change_reverb_wet",
             preDelay: "change_reverb_preDelay"
         }
+    },
+    keyboard: {
+        note: "handle-key-press"
     }
 }
