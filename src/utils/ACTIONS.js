@@ -3,7 +3,8 @@ export const ACTIONS = {
         start: "start_synth",
         stop: "stop_synth",
         outputGain: "change_synth_outputGain",
-        bpm: "change_synth_bpm"
+        bpm: "change_synth_bpm",
+        savePreset: "save_synth_preset"
     },
     osc: {
             type: "change_osc_type",
