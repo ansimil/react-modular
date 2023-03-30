@@ -162,7 +162,6 @@ export function reducer(state, action){
                 filter.FMDepth.gain.rampTo(0,0,0);
                 filter.QDepth.gain.rampTo(0,0,0);
             })
-            console.log(adsrArr[0])
             startContext(oscillatorsArr, lfosArr)
             output1.output.gain.setValueAtTime(output1.output.gain.value, actx.currentTime)
             output1.output.gain.linearRampToValueAtTime(1, actx.currentTime + smoothing)
@@ -181,6 +180,10 @@ export function reducer(state, action){
             state.synthSettings.bpm = value
             Tone.Transport.bpm.rampTo(value, 0.05)
             return {...state, synthSettings: {...state.synthSettings, [id]: Number(value)}}
+        
+        case ACTIONS.SYNTH.savePreset:
+            localStorage.setItem("0", JSON.stringify({...state}))
+            return {...state}
 
         case ACTIONS.keyboard.note:
             if (stateKey){
