@@ -1,4 +1,3 @@
-import React from 'react'
 
 const SelectorBtn = ({label, id, type, change, activeType, name, toChange, i}) => {
   return (

@@ -19,14 +19,20 @@ export class Oscillator {
                     inputs: [
                         {
                             name: `${actionsSelector} FM`,
+                            parentModule: this.name,
+                            moduleType: this.type,
                             node: this.FMDepth,
+                            stateName: "oscFMDepth",
                             type: "audio param",
+                            subType: "attenuator",
                             connectedNodes: 0
                         }   
                     ],
                     outputs: [
                         {
                             name: actionsSelector,
+                            parentModule: this.name,
+                            moduleType: this.type,
                             node: this.osc,
                             type: "audio source",
                             converter: this.converter

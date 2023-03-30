@@ -126,16 +126,16 @@ const initialAdsrState = setModuleInitialState(adsrArr)
 
 // Connection chain //
 const initialConnection = [
-    [6,0],
-    [8,1],
-    [14,4],
+    [7,0],
+    [9,1],
+    [15,4],
     [0,2],
     [2,3],
     [4,7],
     [4,8],
-    [7,5],
-    [9,6],
-    [16,11]
+    [8,5],
+    [10,6],
+    [17,11]
 ]
 
 let connectionChain = []
@@ -227,6 +227,7 @@ export function reducer(state, action){
         
         case ACTIONS.osc.oscFMDepth:
             oscillatorsArr[i].updateFMDepth(value)
+            console.log(oscillatorsArr[i])
             return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], [id]: Number(value)}}};
 
         case ACTIONS.osc.frequency:
@@ -284,6 +285,9 @@ export function reducer(state, action){
             filtersArr[i].FMDepth.gain.rampTo(value, 0.1, actx.currentTime)
             return {...state, filterSettings: {...state.filterSettings, [moduleName]: {...state.filterSettings[moduleName], [id]: Number(value)}}};
         
+        case ACTIONS.filter.QDepth:
+            filtersArr[i].QDepth.gain.rampTo(value, 0.1, actx.currentTime)
+            return {...state, filterSettings: {...state.filterSettings, [moduleName]: {...state.filterSettings[moduleName], [id]: Number(value)}}};
 
         // ADSR SETTINGS //
 

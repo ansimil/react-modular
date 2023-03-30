@@ -11,6 +11,7 @@ const SlidersContainer = ({ module, i }) => {
     const { slidersArr } = module.settings
     
     const change = (e, id) => {
+        console.log(e, id)
         let [value] = e;
         if (subtype) {
             updateState({type: ACTIONS[type][subtype][id], payload: {id, value, moduleName: name, i, type, subtype}})

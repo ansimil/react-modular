@@ -19,7 +19,8 @@ export const ACTIONS = {
         frequency: "change_filter_frequency",
         detune: "change_filter_detune",
         Q: "change_filter_Q",
-        freqFMDepth: "change_freqFMDepth"
+        freqFMDepth: "change_freqFMDepth",
+        QDepth: "change_QDepth"
     },
     adsr: {
         attack:"change_adsr_attack",

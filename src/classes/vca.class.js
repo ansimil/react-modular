@@ -16,12 +16,17 @@ export class VCA {
                 inputs: [
                     {
                         name: `${actionsSelector} audio`,
+                        parentModule: this.name,
+                        moduleType: this.type,
                         node: this.audioGainAdjust,
                         type: "audio param",
                         connectedNodes: 0,
                     },
                     {
                         name: `${actionsSelector} ctrl`,
+                        parentModule: this.name,
+                        moduleType: this.type,
+                        stateName: "gain",
                         node: this.ctrlGainAdjust,
                         type: "gain param",
                         connectedNodes: 0 
@@ -30,6 +35,8 @@ export class VCA {
                 outputs: [
                     {
                         name: `${actionsSelector}`,
+                        parentModule: this.name,
+                        moduleType: this.type,
                         node: this.vca,
                         type: "audio source",
                         converter: this.converter
