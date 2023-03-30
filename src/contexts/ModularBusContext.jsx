@@ -235,12 +235,47 @@ export function reducer(state, action){
             return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], frequency: newFreq}}};
             
         case ACTIONS.osc.offset:
+            console.log(i)
             let newValue
+            
             if (value === "inc") {
                 newValue = state.oscSettings[moduleName][id] + 1
+                if (id === "octave"){
+                    let converter = new Tone.Frequency(oscillatorsArr[i].osc.frequency.value)
+                    let newMidi = converter.toMidi() + 12
+                    let converterTwo = new Tone.Frequency(newMidi, "midi")
+                    oscillatorsArr[i].osc.frequency.rampTo(converterTwo.toFrequency(), 0.01, 0)
+                    converter.dispose()
+                    converterTwo.dispose()
+                }
+                else {
+                    let converter = new Tone.Frequency(oscillatorsArr[i].osc.frequency.value)
+                    let newMidi = converter.toMidi() + 1
+                    let converterTwo = new Tone.Frequency(newMidi, "midi")
+                    oscillatorsArr[i].osc.frequency.rampTo(converterTwo.toFrequency(), 0.01, 0)
+                    converter.dispose()
+                    converterTwo.dispose()
+                }
             }
             else {
                 newValue = state.oscSettings[moduleName][id] - 1
+                if (id === "octave"){
+                    let converter = new Tone.Frequency(oscillatorsArr[i].osc.frequency.value)
+                    let newMidi = converter.toMidi() - 12
+                    let converterTwo = new Tone.Frequency(newMidi, "midi")
+                    oscillatorsArr[i].osc.frequency.rampTo(converterTwo.toFrequency(), 0.01, 0)
+                    converter.dispose()
+                    converterTwo.dispose()
+                }
+                else {
+                    let converter = new Tone.Frequency(oscillatorsArr[i].osc.frequency.value)
+                    let newMidi = converter.toMidi() - 1
+                    let converterTwo = new Tone.Frequency(newMidi, "midi")
+                    oscillatorsArr[i].osc.frequency.rampTo(converterTwo.toFrequency(), 0.01, 0)
+                    converter.dispose()
+                    converterTwo.dispose()
+                }
+                
             }
             return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], [id]: Number(newValue)}}};
 

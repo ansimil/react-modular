@@ -7,12 +7,13 @@ const AdditionalSettingsContainer = ({ module, i }) => {
     const [ appState, updateState ] = stateHook
     const { incDecArr } = module.settings
     const { name: moduleName, type } = module
+    const moduleIdx = i
   return (
     <div className="additional-settings-container">
         {incDecArr.map((incDec, i) => {
             const value = appState[`${type}Settings`][moduleName][incDec.name]
             return (
-                <IncDec key={i} updateState={updateState} value={value} moduleName={moduleName} type={type} label={incDec.name} i={i} />
+                <IncDec key={i} updateState={updateState} value={value} moduleName={moduleName} type={type} label={incDec.name} i={moduleIdx} />
             )
         })}
     </div>
