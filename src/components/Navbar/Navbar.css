@@ -6,7 +6,7 @@
        column-gap: 2.5rem;
   position: fixed;
   top: 50px;
-  width: 100%;
+  width: inherit;
   height: 40px;
   background-color: rgb(57, 57, 57);
   z-index: 9998;
