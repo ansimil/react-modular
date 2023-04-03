@@ -1,7 +1,7 @@
 .controlBarContainer {
   position: fixed;
   top: 0;
-  width: 100%;
+  width: inherit;
   height: 50px;
   display: flex;
   justify-content: flex-start;

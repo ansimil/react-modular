@@ -238,7 +238,6 @@ export function reducer(state, action){
             return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], frequency: newFreq}}};
             
         case ACTIONS.osc.offset:
-            console.log(i)
             let newValue
             
             if (value === "inc") {
@@ -333,10 +332,6 @@ export function reducer(state, action){
             state.adsrSettings[moduleName][id] = value
             adsrArr[i].adsr[id] = value
             return {...state, adsrSettings: {...state.adsrSettings, [moduleName]: {...state.adsrSettings[moduleName], [id]: Number(value)}}};
-        
-        // case ACTIONS.adsr.trigger:    
-        //     adsrArr[i].updateADSRGain(stateKey, actx.currentTime, state)
-        //     return {...state}
 
         // VCA SETTINGS //    
 
@@ -353,8 +348,21 @@ export function reducer(state, action){
         case ACTIONS.SEQUENCER.direction:
             return {...state, sequencerSettings: {...state.sequencerSettings, direction: value}}
 
-        case ACTIONS.SEQUENCER.octave:
-            return {...state, sequencerSettings: {...state.sequencerSettings, tracks: {...state.sequencerSettings.tracks, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[i], octave: value}}}}}} 
+        case ACTIONS.SEQUENCER.octave: 
+            let newSequencerSliderOctaveValue           
+            if (value === "inc") {
+                newSequencerSliderOctaveValue = state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[i].octave + 1
+                // let converter = new Tone.Frequency(oscillatorsArr[i].osc.frequency.value)
+                // let newMidi = converter.toMidi() + 12
+                // let converterTwo = new Tone.Frequency(newMidi, "midi")
+                // oscillatorsArr[i].osc.frequency.rampTo(converterTwo.toFrequency(), 0.01, 0)
+                // converter.dispose()
+                // converterTwo.dispose()
+            }
+            else {
+                newSequencerSliderOctaveValue = state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[i].octave - 1 
+            }
+            return {...state, sequencerSettings: {...state.sequencerSettings, tracks: {...state.sequencerSettings.tracks, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[i], octave: newSequencerSliderOctaveValue}}}}}} 
         
         case ACTIONS.SEQUENCER.note:
             return {...state, sequencerSettings: {...state.sequencerSettings, tracks: {...state.sequencerSettings.tracks, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[i], note: value}}}}}}
