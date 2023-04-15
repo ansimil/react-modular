@@ -50,7 +50,7 @@ $moduleMinHeight: 400px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: flex-end;
+    align-items: center;
     width: 600px;
     background-color: rgb(44, 44, 44);
     padding-left: 1rem;
@@ -223,4 +223,11 @@ $moduleMinHeight: 400px;
 
 .border-left {
     border-left: solid white 0.5px;
+}
+
+.sequencer-gates-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

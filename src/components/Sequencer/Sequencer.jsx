@@ -210,7 +210,7 @@ const Sequencer = () => {
     let sliders = []
     arr.forEach(i => {
       let slider = new Nexus.Multislider(`#slider${i}`, {
-        'size': [(sequencerWidth/16)-1,150],
+        'size': [(sequencerWidth/16)-2,150],
         'numberOfSliders': 1,
         'min': 0,
         'max': 11,
