@@ -31,7 +31,6 @@
 .track-notes-gates-selectors {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
 }
 
 .note-selector-options, .gate-selector-options {
@@ -39,10 +38,12 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: solid black 0.5px;
-  border-radius: 3px;
   padding: 0.3rem 0.6rem;
-  box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.4);
+  gap: 0.3rem;
+}
+
+.note-selector-options {
+  border-right: solid black 0.5px;
 }
 
 .note-selector-options label, .gate-selector-options label {
@@ -56,4 +57,8 @@ input[type=radio] {
 
 .note-selector-options > p, .gate-selector-options > p {
   margin-bottom: 0.5rem;
+}
+
+.note-selector-btns button, .gate-selector-btns button {
+  max-height: 25px;
 }/*# sourceMappingURL=TrackAssignmentComp.css.map */

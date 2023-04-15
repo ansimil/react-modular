@@ -1,5 +1,7 @@
 import { useContext, useEffect } from 'react'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
+// import sine from '../../assets/icons/sine-icon.png'
+// import Presets from '../PresetsComp/Presets'
 import { ACTIONS } from '../../utils/ACTIONS'
 import Nexus from 'nexusui'
 import './Matrix.css'
@@ -171,7 +173,7 @@ const Matrix = ( { matrixLocationRef } ) => {
                 </tbody>
             </table>
         </div>
-      
+      {/* <Presets/> */}
     </div>
   )
 }

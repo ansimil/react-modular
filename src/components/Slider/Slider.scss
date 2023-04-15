@@ -2,6 +2,33 @@
     border: black solid 0.5px
 }
 
+.slider-outer-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slider-lines-left, .slider-lines-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    border: none !important;
+}
+
+.slider-lines-left {
+    align-items: flex-end
+}
+
+.slider-lines-right {
+    align-items: flex-start
+}
+
+.slider-line {
+    background-color: rgb(73, 73, 73);
+    height: 1px;
+    border: none !important
+}
+
 div[id*="slider"] svg:hover, div[class*="sliderHover"] svg:hover {
     background-color: rgb(71, 71, 71) !important;
 }

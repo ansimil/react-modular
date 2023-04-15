@@ -61,6 +61,30 @@ p {
     align-items: center;
 }
 
+.inc-dec-vertical-inner .inc-dec-btns-container {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center;
+}
+
+.inc-btn-vertical {
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+    border-bottom: none;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.dec-btn-vertical {
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top: none !important;
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+    width: 23px
+}
+
 .inc-dec-btn {
     min-width: 15px;
     max-width: 25px;
@@ -73,11 +97,17 @@ p {
 .inc-btn {
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
+    border-left: none;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
 }
 
 .dec-btn {
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
+    border-right: none !important;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
 
 .inc-dec-indicator {
@@ -88,9 +118,27 @@ p {
     min-height: 22.5px;
     background-color: rgb(222, 222, 222);
     margin: 0;
-    font-family: lightFont;
+    font-family: mainFont;
     font-size: 0.7rem;
-    box-shadow: inset 0px 0px 3px rgba(0,0,0,0.4);
+    border-top: solid black 1px;
+    border-bottom: solid black 1px;
+    color: black
+    // box-shadow: inset 0px 0px 3px rgba(0,0,0,0.4);
+}
+
+.inc-dec-indicator-vertical {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 21px;
+    min-height: 22.5px;
+    background-color: rgb(222, 222, 222);
+    margin: 0;
+    font-family: mainFont;
+    font-size: 0.7rem;
+    border-right: solid black 1px;
+    border-left: solid black 1px;
+    color: black
 }
 
 .inc-dec-label {
@@ -105,6 +153,7 @@ p {
     color: black;
     padding-top: 0.2rem;
     padding-bottom: 0.2rem;
+    
 }
 
 .waveselect-btn, .selector-btn {
@@ -115,19 +164,24 @@ p {
     justify-content: center;
     align-items: center;
     background-color: rgb(44,44,44);
-    color: rgb(222, 222, 222);
-    box-shadow: inset 0px 0px 3px rgba(0,0,0,0.4);
+    color: rgb(195, 195, 195);
+    box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.4), inset 1px 1px 3px rgba(115, 115, 115,0.2);
+    transform: translate(-1px, -1px);
     border: solid black 0.5px;
     border-radius: 3px;
+    transition: 100ms
 }
 
 .btn:hover {
     background-color: rgb(112, 112, 112);
+    box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.4), inset 1px 1px 3px rgb(158, 158, 158, 0.8);
 }
 
 .activeBtn {
     background-color: #1e1e1e !important;
     color: rgb(179, 227, 252) !important;
+    box-shadow: inset -1px -1px 3px rgba(115, 115, 115,0.1), inset 1px 1px 3px rgba(0, 0, 0, 0.4) !important;
+    transform: translate(0, 0) !important;
 }
 
 .middleBtn {
@@ -178,7 +232,6 @@ p {
 .valueIndicator {
     font-family: lightFont;
     font-size: 0.7rem;
-    // background-color: rgb(246, 246, 246);
     background-color: rgb(222, 222, 222);
     text-align: center;
     padding: 0 5px;
@@ -439,7 +492,9 @@ p {
     justify-content: center;
     align-items: center;
     // height: 30px;
-    padding: 0.3rem 0.5rem !important
+    padding: 0.3rem 0.5rem !important;
+    transform: translate(-1px, -1px);
+    box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.4), inset 1px 1px 3px rgba(115, 115, 115,0.2);
 }
 
 .randomize-gates-btn p {
@@ -487,7 +542,8 @@ p {
 
 .randomize-notes-container .root-note-btn {
     max-width: 20px !important;
-    min-width: 20px !important
+    min-width: 20px !important;
+    font-family: lightFont
 }
 
 .root-btns {
@@ -547,7 +603,6 @@ p {
 }
 
 #seq-track1 {
-    margin-top: 0.5rem
+    margin-top: 0.2rem
 }
-
 

@@ -3,9 +3,16 @@ import Nexus from 'nexusui'
 import './Slider.css'
 
 const Slider = ({ name, label, valueLabel, unit, min, max, step, values, valueMultiplier, sliderRef, id, changeFunction}) => {
+    const height = 150
+    const width = 30
+    const shortLine = "7px"
+    const longLine = "13px"
+
+    const lineArray = [shortLine, shortLine, shortLine, shortLine, longLine, shortLine, shortLine, shortLine, shortLine]
+
     useEffect(()=>{
         let multislider = new Nexus.Multislider(`#${name}${id}`, {
-            'size': [30,150],
+            'size': [width,height],
             'numberOfSliders': 1,
             'min': min,
             'max': max,
@@ -29,7 +36,23 @@ const Slider = ({ name, label, valueLabel, unit, min, max, step, values, valueMu
     <div className={`sliderContainer ${id}`}>
       <label className="sliderLabel"><p>{label}</p></label>
       <p className="valueIndicator">{`${(valueLabel * valueMultiplier).toFixed(2)}${unit}`}</p>
+      <div className="slider-outer-container">
+      <div className="slider-lines-left" style={{height: height}}>
+      {lineArray.map((line, i) => {
+        return (
+          <div key={`slider${id}leftLine${i}`} className='slider-line' style={{width: line}}></div>
+        )
+      })}
+      </div>
       <div className="sliderInnerContainer sliderHover" id={`${name}${id}`}></div>
+      <div className="slider-lines-right" style={{height: height}}>
+      {lineArray.map((line, i) => {
+        return (
+          <div key={`slider${id}rightLine${i}`} className='slider-line' style={{width: line}}></div>
+        )
+      })}
+      </div>
+      </div>
     </div>
   )
 }

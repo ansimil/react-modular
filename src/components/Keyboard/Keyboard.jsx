@@ -9,9 +9,7 @@ import './Keyboard.css'
 const Keyboard = () => {
     const [ noteState, setNoteState ] = useState(3)
     const { stateHook } = useContext(ModularBusContext)
-    // eslint-disable-next-line
-    const [appState, updateState] = stateHook
-
+    const [, updateState] = stateHook
     let midiNoteArr = [[24, 36], [36, 48], [48, 60], [60, 72], [72, 84], [84, 96], [96, 108]]
 
     const keyMapper = {
@@ -99,11 +97,9 @@ const Keyboard = () => {
     const { keyboardRef } = useContext(ModularBusContext)
 
 
-    const handleKeyboard = (e) => {  
+    const handleKeyboard = (e) => {
         const { note, state } = e
-        updateState({type: ACTIONS.osc.frequency, payload: {note, i:0, moduleName:"osc1"}})
-        updateState({type: ACTIONS.osc.frequency, payload: {note, i:1, moduleName:"osc2"}})
-        updateState({type: ACTIONS.adsr.trigger, payload: {stateKey: state, i:0}})
+        updateState({type: ACTIONS.keyboard.note, payload: {note, stateKey: state}})
     }
 
 
@@ -121,22 +117,8 @@ const Keyboard = () => {
         <div className="octaveInfo">
             
             <div className="octaveBtns">
-                <button 
-                disabled={noteState<=4 ? "" : true} 
-                className={noteState<=4 ? "btn octaveUpBtn": "octaveUpBtn btn disabledBtn"} 
-                onClick={()=> {
-                    setNoteState(noteState+1)
-                    }}
-                onMouseDown={()=>{
-                    handleMouseEvent("octaveUpBtn", true)
-                }}
-                onMouseUp={()=>{
-                    handleMouseEvent("octaveUpBtn", false)
-                }}
-                >
-                +
-                </button>
-                <p className="valueIndicator octaveIndicator">{noteState+1}</p>
+                
+                
                 <button 
                 disabled={noteState >= 1 ? "" : true} 
                 className={noteState>=1 ? "btn octaveDownBtn": "btn octaveDownBtn disabledBtn"} 
@@ -151,6 +133,22 @@ const Keyboard = () => {
                 }}
                 >
                 -
+                </button>
+                <p className="valueIndicator octaveIndicator">{noteState+1}</p>
+                <button 
+                disabled={noteState<=4 ? "" : true} 
+                className={noteState<=4 ? "btn octaveUpBtn": "octaveUpBtn btn disabledBtn"} 
+                onClick={()=> {
+                    setNoteState(noteState+1)
+                    }}
+                onMouseDown={()=>{
+                    handleMouseEvent("octaveUpBtn", true)
+                }}
+                onMouseUp={()=>{
+                    handleMouseEvent("octaveUpBtn", false)
+                }}
+                >
+                +
                 </button>
             </div>
         </div>

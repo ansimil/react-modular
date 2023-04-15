@@ -14,7 +14,7 @@ import ArrowWhiteIcon from '../../assets/icons/arrow-white-icon.png'
 import './PlayerControls.css'
 
 const PlayerControls = () => {
-    const { stateHook, sequencerRef } = useContext(ModularBusContext)
+    const { stateHook, sequencerRef, seqSlidersRef } = useContext(ModularBusContext)
     const [appState, updateState] = stateHook
 
   return (
@@ -58,6 +58,23 @@ const PlayerControls = () => {
                 track.next()
                 track.stepper.value = lengthMap[appState.sequencerSettings.length].up.max
               })
+              const stepIndicatorArr = [...document.getElementsByClassName("sequencer-step-indicators")]
+              stepIndicatorArr[0].childNodes.forEach((step, i) => {
+                if (i === 0){
+                  step.classList.add("active-step-indicator")
+                }
+                else {
+                  step.classList.remove("active-step-indicator")
+                }
+              })
+              seqSlidersRef.current.forEach(slider => {
+              if (slider.parent.id === `slider0`){
+                slider.parent.className = "activeSeqSlider"
+              }
+              else {
+                slider.parent.className = ""
+              }
+            })
               Tone.Transport.stop()
               updateState({type: ACTIONS.SEQUENCER.player, payload: {value: 'stopped'}})
               updateState({type: ACTIONS.SEQUENCER.updateStepValue, payload: {value: 0}})

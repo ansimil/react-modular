@@ -2,18 +2,19 @@ import { useContext, useEffect } from 'react'
 import { ACTIONS } from '../../utils/ACTIONS'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
 import SeqLength from '../SeqLength/SeqLength'
-import SevenSegDisplay from '../SevenSegDisplay/SevenSegDisplay'
+// import SevenSegDisplay from '../SevenSegDisplay/SevenSegDisplay'
 import RandomSequenceBtn from '../RandomSequenceBtn/RandomSequenceBtn'
 import RandomGatesBtn from '../RandomGatesBtn/RandomGatesBtn'
 import RandomizeNotes from '../RandomizeNotes/RandomizeNotes'
 import TrackAssignmentComp from '../TrackAssignmentComp/TrackAssignmentComp'
 import ShowTrackNotes from '../ShowTrackNotes/ShowTrackNotes'
-import { handleMouseEvent } from '../../services/general.services'
+import IncDecVertical from '../IncDecVertical/IncDecVertical'
 import * as Tone from 'tone'
 import Nexus from 'nexusui'
 import './Sequencer.css'
 
 const Sequencer = () => {
+  const sequencerWidth = 600
   const { stateHook, sequencerRef, seqSlidersRef } = useContext(ModularBusContext)
   // eslint-disable-next-line
   const [appState, updateState] = stateHook
@@ -61,19 +62,6 @@ const Sequencer = () => {
     })
   }
 
-  const handleInc = (id, i) => {
-    if (appState.sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave < 6){
-    let value = appState.sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave + 1
-    updateState({type: ACTIONS.SEQUENCER[id], payload: {id, value, i}})
-    }
-  }
-
-  const handleDec = (id, i) => {
-    if (appState.sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave > 0){
-    let value = appState.sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave - 1
-    updateState({type: ACTIONS.SEQUENCER[id], payload: {id, value, i}})
-    }
-  }
 
   const toggleCell = (e, i) => {
     sequencerRef.current?.forEach(track => {
@@ -114,6 +102,8 @@ const Sequencer = () => {
       track.next()
     })
     }
+
+    
   }
 
   const handleTrigger = (time) => {
@@ -131,6 +121,18 @@ const Sequencer = () => {
     })
     
     updateState({type: ACTIONS.SEQUENCER.trigger, payload: {value, time, highSteps}})
+
+    const stepIndicatorArr = [...document.getElementsByClassName("sequencer-step-indicators")]
+    // console.log(stepIndicatorArr)
+    stepIndicatorArr[0].childNodes.forEach((step, i) => {
+      console.log(value, i)
+      if (value === i){
+        step.classList.add("active-step-indicator")
+      }
+      else {
+        step.classList.remove("active-step-indicator")
+      }
+    })
 
     seqSlidersRef.current.forEach(slider => {
       if (slider.parent.id === `slider${value}`){
@@ -176,7 +178,6 @@ const Sequencer = () => {
   },[sequencerSettings.random])
 
   useEffect(()=>{
-    const sequencerWidth = 600
 
     if (sequencerRef.current){
       sequencerRef.current.forEach((track)=>{
@@ -209,7 +210,7 @@ const Sequencer = () => {
     let sliders = []
     arr.forEach(i => {
       let slider = new Nexus.Multislider(`#slider${i}`, {
-        'size': [(sequencerWidth/16)-1,120],
+        'size': [(sequencerWidth/16)-2,150],
         'numberOfSliders': 1,
         'min': 0,
         'max': 11,
@@ -282,8 +283,27 @@ const Sequencer = () => {
         }}}
         >
       <div className="sequencerNotesGates">
-        <div id="seq-track1"></div>
-        <div id="seq-track2"></div>
+        <div className="sequencer-gates-container">
+          <div className='sequencer-step-indicators'>
+          {arr.map((num, i) => {
+            let border
+            if (i === 0){
+              border = "border-left"
+            }
+            else if (i === 15) {
+              border = "border-right"
+            }
+            else if ((i !== 0) && (i !== 15) && ((i+1) % 4 === 0)) {
+              border = "border-right"
+            }
+            return (
+              <p className={border ? `sequencer-step-indicator ${border}` : "sequencer-step-indicator"} style={{width: (sequencerWidth-2.5)/16 }}>{Number(i)+1}</p>
+            )
+          })}
+          </div>
+          <div id="seq-track1"></div>
+          <div id="seq-track2"></div>
+        </div>
         <div className="slidersContainer">
 
           {arr.map((i) => {
@@ -295,53 +315,26 @@ const Sequencer = () => {
 
           <div className='notesAndOctaves'>
             <div className="sequencerNotes">
-              {arr.map(i => {
-                return (
-                  <p key={i}>{notesObject[sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].note]}</p>
-                )
-              })}
+              <p className="inc-dec-label sliderLabel">NOTE</p>
+              <div className="sequencer-inc-dec-note-container">
+                {arr.map(i => {
+                  return (
+                    <p key={i}>{notesObject[sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].note]}</p>
+                  )
+                })}  
+              </div>
             </div>
             <div className="noteOctave">
-            {arr.map(i => {
-                return (
-                  <div key={i} className="noteOctaveInner">
-                    <p>{sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave}</p>
-                    <div className="bpmIncDecContainer">
-                      <button
-                      disabled={sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave >= 6 ? true: ""}
-                      className={`bpmBtn bpmTopBtn octave-up-${i}`} 
-                      onClick={()=> {
-                        handleInc("octave", i)
-                      }}
-                      onMouseDown={
-                        () => handleMouseEvent(`octave-up-${i}`, true)
-                      }
-                      onMouseUp={
-                        () => handleMouseEvent(`octave-up-${i}`, false)
-                      }
-                      >
-                      +
-                      </button>
-                      <button
-                      disabled={sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave <= 1 ? true: ""}
-                      className={`bpmBtn bpmBtmBtn octave-down-${i}`}
-                      onClick={()=> {
-                        handleDec("octave", i)
-                      }}
-                      onMouseDown={
-                        () => handleMouseEvent(`octave-down-${i}`, true)
-                      }
-                      onMouseUp={
-                        () => handleMouseEvent(`octave-down-${i}`, false)
-                      }
-                      >
-                      -
-                      </button>
-                    </div>
-                  </div>
-                )
-            })
-            }
+              <p className="inc-dec-label sliderLabel">OCTAVE</p>
+
+              <div className="sequencer-inc-dec-octave-container">
+              {arr.map(i => {
+                  return (
+                    <IncDecVertical moduleType={"SEQUENCER"} moduleName={`slider${i}`} id={"octave"} i={i} value={sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave} />
+                  )
+              })
+              }
+              </div>
             </div>
           </div>
         
@@ -351,7 +344,7 @@ const Sequencer = () => {
 
       <div className="sequencerSettingsContainer">
         <div className="sequencer-settings-inner">
-          <SevenSegDisplay />
+          {/* <SevenSegDisplay /> */}
           <div className="sequencer-settings-inner-inner">
             <div className="sequencer-settings-topthird">
             <SeqLength />

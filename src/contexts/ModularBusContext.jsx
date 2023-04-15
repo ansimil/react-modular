@@ -81,6 +81,9 @@ let vca4 = new VCA(`vca${vcasArr.length+1}`)
 vcasArr.push(vca4)
 modulesArr.push(vcasArr)
 
+let count = 0
+let keyAdsrAssignation = {}
+
 function counter(){
     let count = 0
     if (effectsArr.length === 0){
@@ -123,13 +126,16 @@ const initialAdsrState = setModuleInitialState(adsrArr)
 
 // Connection chain //
 const initialConnection = [
-    [4,0],
-    [6,4],
-    [14,7],
+    [7,0],
+    [9,1],
+    [15,4],
     [0,2],
     [2,3],
-    [7,5],
-    [16,11]
+    [4,7],
+    [4,8],
+    [8,5],
+    [10,6],
+    [17,11]
 ]
 
 let connectionChain = []
@@ -146,7 +152,17 @@ export function reducer(state, action){
     switch (action.type) {
         // SYNTH SETTINGS //
         case ACTIONS.SYNTH.start:
-            startContext(osc1.osc, osc2.osc, lfo1.osc, lfo2.osc)
+            oscillatorsArr.forEach(osc => {
+                osc.FMDepth.gain.rampTo(0,0,0)
+            })
+            lfosArr.forEach(lfo => {
+                lfo.FMDepth.gain.rampTo(0,0,0)
+            })
+            filtersArr.forEach(filter => {
+                filter.FMDepth.gain.rampTo(0,0,0);
+                filter.QDepth.gain.rampTo(0,0,0);
+            })
+            startContext(oscillatorsArr, lfosArr)
             output1.output.gain.setValueAtTime(output1.output.gain.value, actx.currentTime)
             output1.output.gain.linearRampToValueAtTime(1, actx.currentTime + smoothing)
             return {...state, synthSettings: {...state.synthSettings, start: true, startCount: 1}}
@@ -164,7 +180,36 @@ export function reducer(state, action){
             state.synthSettings.bpm = value
             Tone.Transport.bpm.rampTo(value, 0.05)
             return {...state, synthSettings: {...state.synthSettings, [id]: Number(value)}}
+        
+        case ACTIONS.SYNTH.savePreset:
+            localStorage.setItem("0", JSON.stringify({...state}))
+            return {...state}
 
+        case ACTIONS.keyboard.note:
+            if (stateKey){
+                let availableSlots = []
+                for (let i = 0; i<adsrArr.length; i++){
+                    if (Object.values(keyAdsrAssignation).indexOf(i) === -1) {
+                        availableSlots.push(i)
+                    }
+                }
+                if (availableSlots.length > 0) {
+                    count = Math.min(...availableSlots)
+                    keyAdsrAssignation = {...keyAdsrAssignation, [note]: count}
+                    adsrArr[count].updateADSRGain(stateKey, actx.currentTime, state)
+                    updateOscFrequency(oscillatorsArr[count].osc, state, actx.currentTime, midiToFreqArr, note, oscillatorsArr[count].name)
+                }
+            }
+            else if (!stateKey) {
+                if (Object.values(keyAdsrAssignation).indexOf(keyAdsrAssignation[note]) !== -1) {
+                    adsrArr[keyAdsrAssignation[note]].updateADSRGain(stateKey, actx.currentTime, state)
+                    delete keyAdsrAssignation[note]
+                }
+            }
+
+            return {...state}
+
+            
 
         // osc SETTINGS //
 
@@ -185,6 +230,7 @@ export function reducer(state, action){
         
         case ACTIONS.osc.oscFMDepth:
             oscillatorsArr[i].updateFMDepth(value)
+            console.log(oscillatorsArr[i])
             return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], [id]: Number(value)}}};
 
         case ACTIONS.osc.frequency:
@@ -193,11 +239,45 @@ export function reducer(state, action){
             
         case ACTIONS.osc.offset:
             let newValue
+            
             if (value === "inc") {
                 newValue = state.oscSettings[moduleName][id] + 1
+                if (id === "octave"){
+                    let converter = new Tone.Frequency(oscillatorsArr[i].osc.frequency.value)
+                    let newMidi = converter.toMidi() + 12
+                    let converterTwo = new Tone.Frequency(newMidi, "midi")
+                    oscillatorsArr[i].osc.frequency.rampTo(converterTwo.toFrequency(), 0.01, 0)
+                    converter.dispose()
+                    converterTwo.dispose()
+                }
+                else {
+                    let converter = new Tone.Frequency(oscillatorsArr[i].osc.frequency.value)
+                    let newMidi = converter.toMidi() + 1
+                    let converterTwo = new Tone.Frequency(newMidi, "midi")
+                    oscillatorsArr[i].osc.frequency.rampTo(converterTwo.toFrequency(), 0.01, 0)
+                    converter.dispose()
+                    converterTwo.dispose()
+                }
             }
             else {
                 newValue = state.oscSettings[moduleName][id] - 1
+                if (id === "octave"){
+                    let converter = new Tone.Frequency(oscillatorsArr[i].osc.frequency.value)
+                    let newMidi = converter.toMidi() - 12
+                    let converterTwo = new Tone.Frequency(newMidi, "midi")
+                    oscillatorsArr[i].osc.frequency.rampTo(converterTwo.toFrequency(), 0.01, 0)
+                    converter.dispose()
+                    converterTwo.dispose()
+                }
+                else {
+                    let converter = new Tone.Frequency(oscillatorsArr[i].osc.frequency.value)
+                    let newMidi = converter.toMidi() - 1
+                    let converterTwo = new Tone.Frequency(newMidi, "midi")
+                    oscillatorsArr[i].osc.frequency.rampTo(converterTwo.toFrequency(), 0.01, 0)
+                    converter.dispose()
+                    converterTwo.dispose()
+                }
+                
             }
             return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], [id]: Number(newValue)}}};
 
@@ -242,6 +322,9 @@ export function reducer(state, action){
             filtersArr[i].FMDepth.gain.rampTo(value, 0.1, actx.currentTime)
             return {...state, filterSettings: {...state.filterSettings, [moduleName]: {...state.filterSettings[moduleName], [id]: Number(value)}}};
         
+        case ACTIONS.filter.QDepth:
+            filtersArr[i].QDepth.gain.rampTo(value, 0.1, actx.currentTime)
+            return {...state, filterSettings: {...state.filterSettings, [moduleName]: {...state.filterSettings[moduleName], [id]: Number(value)}}};
 
         // ADSR SETTINGS //
 
@@ -249,10 +332,6 @@ export function reducer(state, action){
             state.adsrSettings[moduleName][id] = value
             adsrArr[i].adsr[id] = value
             return {...state, adsrSettings: {...state.adsrSettings, [moduleName]: {...state.adsrSettings[moduleName], [id]: Number(value)}}};
-        
-        case ACTIONS.adsr.trigger:    
-            adsrArr[i].updateADSRGain(stateKey, actx.currentTime, state)
-            return {...state}
 
         // VCA SETTINGS //    
 
@@ -269,8 +348,21 @@ export function reducer(state, action){
         case ACTIONS.SEQUENCER.direction:
             return {...state, sequencerSettings: {...state.sequencerSettings, direction: value}}
 
-        case ACTIONS.SEQUENCER.octave:
-            return {...state, sequencerSettings: {...state.sequencerSettings, tracks: {...state.sequencerSettings.tracks, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[i], octave: value}}}}}} 
+        case ACTIONS.SEQUENCER.octave: 
+            let newSequencerSliderOctaveValue           
+            if (value === "inc") {
+                newSequencerSliderOctaveValue = state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[i].octave + 1
+                // let converter = new Tone.Frequency(oscillatorsArr[i].osc.frequency.value)
+                // let newMidi = converter.toMidi() + 12
+                // let converterTwo = new Tone.Frequency(newMidi, "midi")
+                // oscillatorsArr[i].osc.frequency.rampTo(converterTwo.toFrequency(), 0.01, 0)
+                // converter.dispose()
+                // converterTwo.dispose()
+            }
+            else {
+                newSequencerSliderOctaveValue = state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[i].octave - 1 
+            }
+            return {...state, sequencerSettings: {...state.sequencerSettings, tracks: {...state.sequencerSettings.tracks, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[i], octave: newSequencerSliderOctaveValue}}}}}} 
         
         case ACTIONS.SEQUENCER.note:
             return {...state, sequencerSettings: {...state.sequencerSettings, tracks: {...state.sequencerSettings.tracks, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[i], note: value}}}}}}
@@ -421,6 +513,10 @@ function ModularBus (props) {
         lfoSettings: {...initialLfoState},
         vcaSettings: {...initialVcaState},
         effectsSettings: {...initialEffectsState},
+        keyboardSettings: {
+            mode: "polyphonic",
+            modeOptions: ["polyphonic", "monophonic"] 
+        },
         sequencerSettings: {
             tracks: {
                 track1: {

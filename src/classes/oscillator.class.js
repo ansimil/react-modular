@@ -9,22 +9,30 @@ export class Oscillator {
             type:"sine",
             frequency: initFreq
         })
-        this.FMDepth = new Tone.Gain(0)
+        this.FMDepth = new Tone.Gain({
+            gain: 0
+        })
         this.converter = new Tone.AudioToGain()
-        this.FMDepth.connect(this.osc.detune)
+        this.FMDepth.connect(this.osc.frequency)
         this.settings = {
             matrixIOs: {
                     inputs: [
                         {
                             name: `${actionsSelector} FM`,
+                            parentModule: this.name,
+                            moduleType: this.type,
                             node: this.FMDepth,
+                            stateName: "oscFMDepth",
                             type: "audio param",
+                            subType: "attenuator",
                             connectedNodes: 0
                         }   
                     ],
                     outputs: [
                         {
                             name: actionsSelector,
+                            parentModule: this.name,
+                            moduleType: this.type,
                             node: this.osc,
                             type: "audio source",
                             converter: this.converter
@@ -35,7 +43,7 @@ export class Oscillator {
                 new Slider("detune", actionsSelector, "DETUNE", 0, 100, 0.001, "cts", 1),
                 new Slider("pwm", actionsSelector, "PWM", 0, 40, 0.001, "Hz", 1),
                 new Slider("glide", actionsSelector, "GLIDE", 0, 5, 0.001, "s", 1),
-                new Slider("oscFMDepth", actionsSelector, "FM DEPTH", 0, 2500, 0.001, "", 1)   
+                new Slider("oscFMDepth", actionsSelector, "FM DEPTH", 0, 2500, 0.001, "", 0.004)   
             ],
             selectorsArr: [
                 new Selector("sine", "SINE", "type"),
@@ -77,15 +85,17 @@ export class Oscillator {
     }
 
     updateOscPwm(value){
-        if (value === "0" && this.osc.width) {
-            this.osc.width.value = 0.5
+        if ((value === "0" || value === 0) && this.osc.type === "pwm") {
+            this.osc.set({
+                width: 0.5,
+            })            
         }
         if (this.osc.type === "pwm") {
-            this.osc.modulationFrequency.value = value
+            this.osc.modulationFrequency.rampTo(value, 0.01, 0)
         }
     }
 
     updateFMDepth(value){
-        this.FMDepth.gain.value = value
+        this.FMDepth.gain.rampTo(value, 0.01, 0)
     }
 }

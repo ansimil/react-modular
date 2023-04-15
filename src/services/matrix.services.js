@@ -4,21 +4,28 @@ const setConnections = (tuple, state) => {
         let updateConnectionCount
 
         if ((nodeToConnect.type === "gain source" && nodeToConnectTo.type === "audio param") || (nodeToConnect.type === "audio source" && nodeToConnectTo.type === "gain param")) {
-            console.log(nodeToConnect.name, 'connects to converter, connects to', nodeToConnectTo.name)
+            updateConnectionCount = (nodeToConnectTo.connectedNodes) + 1
             nodeToConnect.node.connect(nodeToConnect.converter)
             nodeToConnect.converter.connect(nodeToConnectTo.node)
+            console.log(nodeToConnect.name, 'connects to converter, connects to', nodeToConnectTo.name)
+        }
+        else if (nodeToConnectTo.subType === 'attenuator'){
             updateConnectionCount = (nodeToConnectTo.connectedNodes) + 1
+            const value = state[`${nodeToConnectTo.moduleType}Settings`][nodeToConnectTo.parentModule][nodeToConnectTo.stateName]
+            nodeToConnect.node.connect(nodeToConnectTo.node)
+            nodeToConnectTo.node.gain.rampTo(value, 0.01, 0)
+            console.log(nodeToConnect.name, 'connects to', nodeToConnectTo.name)
         }
         else {
-            updateConnectionCount = (nodeToConnectTo.connectedNodes) + 1 
+            updateConnectionCount = (nodeToConnectTo.connectedNodes) + 1
+            nodeToConnect.node.connect(nodeToConnectTo.node)
             if (updateConnectionCount === 0) {
                 nodeToConnectTo.node.gain.value = 0
             }
             else {
-                nodeToConnectTo.node.gain.value = 1 / updateConnectionCount
+                nodeToConnectTo.node.gain.rampTo(1 / updateConnectionCount, 0.01, 0) 
             }
             console.log(nodeToConnect.name, 'connects to', nodeToConnectTo.name)
-            nodeToConnect.node.connect(nodeToConnectTo.node)
         }
 
         return updateConnectionCount
@@ -41,7 +48,9 @@ const setDisconnections = (tuple, state) => {
                 nodeToDisconnectFrom.node.gain.value = 1
             }
             else {
-                nodeToDisconnectFrom.node.gain.value = 1 / updateConnectionCount
+                console.log('fire disconnection gain', updateConnectionCount)
+                nodeToDisconnectFrom.node.gain.rampTo(1 / updateConnectionCount, 0.01, 0)
+                console.log(nodeToDisconnectFrom.node.gain)
             }
             console.log(nodeToDisconnect.name, 'disconnects from', nodeToDisconnectFrom.name)
             nodeToDisconnect.node.disconnect(nodeToDisconnectFrom.node)

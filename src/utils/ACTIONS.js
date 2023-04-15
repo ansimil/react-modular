@@ -3,7 +3,8 @@ export const ACTIONS = {
         start: "start_synth",
         stop: "stop_synth",
         outputGain: "change_synth_outputGain",
-        bpm: "change_synth_bpm"
+        bpm: "change_synth_bpm",
+        savePreset: "save_synth_preset"
     },
     osc: {
             type: "change_osc_type",
@@ -19,7 +20,8 @@ export const ACTIONS = {
         frequency: "change_filter_frequency",
         detune: "change_filter_detune",
         Q: "change_filter_Q",
-        freqFMDepth: "change_freqFMDepth"
+        freqFMDepth: "change_freqFMDepth",
+        QDepth: "change_QDepth"
     },
     adsr: {
         attack:"change_adsr_attack",
@@ -64,5 +66,8 @@ export const ACTIONS = {
             wet: "change_reverb_wet",
             preDelay: "change_reverb_preDelay"
         }
+    },
+    keyboard: {
+        note: "handle-key-press"
     }
 }

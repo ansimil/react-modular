@@ -24,20 +24,39 @@ export class Filter {
                 inputs: [
                     {
                         name: `${actionsSelector} audio`,
+                        parentModule: this.name,
+                        moduleType: this.type,
                         node: this.gainAdjust,
                         type: "audio param",
                         connectedNodes: 0
                     },
                     {
                         name: `${actionsSelector} FM`,
+                        parentModule: this.name,
+                        moduleType: this.type,
+                        stateName: "freqFMDepth",
                         node: this.FMDepth,
                         type: "audio param",
-                        connectedNodes: 0
+                        subType: "attenuator",
+                        connectedNodes: 0,
+                        
+                    },
+                    {
+                        name: `${actionsSelector} Q`,
+                        parentModule: this.name,
+                        moduleType: this.type,
+                        stateName: "QDepth",
+                        node: this.QDepth,
+                        type: "gain param",
+                        subType: "attenuator",
+                        connectedNodes: 0, 
                     }
                 ],
                 outputs: [
                     {
                         name: actionsSelector,
+                        parentModule: this.name,
+                        moduleType: this.type,
                         node: this.filter,
                         type: "audio source",
                         converter: this.converter
@@ -48,7 +67,8 @@ export class Filter {
                 new Slider("frequency", "filter", "CUTOFF", 10, 10000, 0.001, "Hz", 1),
                 new Slider("detune", "filter", "FINE", 0, 100, 0.001, "cts", 1),
                 new Slider("Q", "filter", "RES", 0, 10, 0.001, "", 1),
-                new Slider("freqFMDepth", "filter", "FM DEPTH", 0, 2500, 0.001, "", 1)
+                new Slider("freqFMDepth", "filter", "FM DEPTH", 0, 2500, 0.001, "", 1),
+                new Slider("QDepth", "filter", "RES DEPTH", 0, 10, 0.001, "", 1)
             ],
             selectorsArr: [
                 new Selector("lowpass", "LP", "type"),
@@ -61,7 +81,8 @@ export class Filter {
             detune: this.filter.detune.value,
             type: this.filter.type,
             Q: this.filter.Q.value,
-            freqFMDepth: this.FMDepth.gain.value
+            freqFMDepth: this.FMDepth.gain.value,
+            QDepth: this.QDepth.gain.value
         }
     }
 }
