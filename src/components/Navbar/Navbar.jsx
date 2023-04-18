@@ -42,6 +42,7 @@ const Navbar = ({seqRef, oscillatorsRef, lfosRef, filterRef, envelopeRef, oscill
         <NavbarBtn name="lfos" ref={lfosRef} />
         <NavbarBtn name="filter" ref={filterRef} />
         <NavbarBtn name="envelopes" ref={envelopeRef} />
+        <NavbarBtn name="vcas" ref={vcaRef} />
         <NavbarBtn name="effects" ref={effectsLocationRef} />
         <NavbarBtn name="oscilloscope" ref={oscilloscopeRef} />
         <NavbarBtn name="keys" ref={keysRef} />
