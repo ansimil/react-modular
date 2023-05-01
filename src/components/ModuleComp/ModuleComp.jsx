@@ -1,5 +1,5 @@
 import SlidersContainer from '../SlidersContainer/SlidersContainer'
-import ModuleInfo from '../ModuleInfo.jsx/ModuleInfo'
+import ModuleInfo from '../ModuleInfo/ModuleInfo'
 import SelectorsContainer from '../SelectorsComp/SelectorsContainer'
 import AdditionalSettingsContainer from '../AdditionalSettingsContainer/AdditionalSettingsContainer'
 

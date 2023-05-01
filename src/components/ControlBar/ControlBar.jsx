@@ -6,6 +6,7 @@ import PlayerControls from '../PlayerControls/PlayerControls'
 import Oscilloscope from '../Oscilloscope/Oscilloscope'
 import './ControlBar.css'
 import qMark from '../../assets/icons/questionmark-icon.png'
+import Presets from '../PresetsComp/Presets'
 
 const ControlBar = () => {
     const [showModal, setShowModal] = useState(process.env.REACT_APP_ENVIRONMENT === 'dev' ? false : true)
@@ -26,6 +27,7 @@ const ControlBar = () => {
           <PlayerControls/>
         </div>
         <div className="controlbar-end-container controlbar-inner">
+          <Presets/>
           <Oscilloscope size={[60,30]} id={"small"}/>
           <div className="helpIconContainer">
           <img onClick={toggleModal} className="helpIcon" src={qMark} alt="help" />

@@ -28,6 +28,7 @@ const StartBtn = () => {
             <div className="startBtnDiv">
               <button
               id="start"
+              title="on/off"
               onClick={change}
               className={synthSettings.start ? "startBtn activeBtn endBtnRight": "startBtn endBtnLeft"}
               >

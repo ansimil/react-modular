@@ -29,6 +29,7 @@ import {
     ACTIONS
 } from "../utils/ACTIONS";
 import * as Tone from 'tone'
+import exportFromJSON from "export-from-json";
 
 const ModularBusContext = createContext()
 
@@ -108,20 +109,7 @@ modulesArr.push(outputsArr)
 
 output1.output.connect(out)
 
-
 const IOs = setInitialIOState(modulesArr)
-const inputs = IOs[0]
-const outputs = IOs[1]
-
-
-
-
-const initialOscState = setModuleInitialState(oscillatorsArr)
-const initialFilterState = setModuleInitialState(filtersArr)
-const initialLfoState = setModuleInitialState(lfosArr)
-const initialVcaState = setModuleInitialState(vcasArr)
-const initialEffectsState = setModuleInitialState(effectsArr)
-const initialAdsrState = setModuleInitialState(adsrArr)
 
 
 // Connection chain //
@@ -139,6 +127,117 @@ const initialConnection = [
 ]
 
 let connectionChain = []
+
+
+
+const initialOscState = { oscSettings: setModuleInitialState(oscillatorsArr) }
+const initialFilterState = { filterSettings: setModuleInitialState(filtersArr) }
+const initialLfoState = { lfoSettings: setModuleInitialState(lfosArr) }
+const initialVcaState = { vcaSettings: setModuleInitialState(vcasArr) }
+const initialEffectsState = { effectsSettings: setModuleInitialState(effectsArr) }
+const initialAdsrState = { adsrSettings: setModuleInitialState(adsrArr) }
+const initialSynthSettings = { synthSettings: {
+    start: false,
+    startCount: 0,
+    outputGain: 0,
+    bpm: 120
+}}
+const initialKeyboardSettings = {
+    keyboardSettings: {
+        mode: "polyphonic",
+        modeOptions: ["polyphonic", "monophonic"] 
+    },
+}
+const initialSequencerSettings = {
+    sequencerSettings: {
+        tracks: {
+            track1: {
+                sliders: {
+                    0:{note:0,octave:3, active: false},
+                    1:{note:0,octave:3, active: false},
+                    2:{note:0,octave:3, active: false},
+                    3:{note:0,octave:3, active: false},
+                    4:{note:0,octave:3, active: false},
+                    5:{note:0,octave:3, active: false},
+                    6:{note:0,octave:3, active: false},
+                    7:{note:0,octave:3, active: false},
+                    8:{note:0,octave:3, active: false},
+                    9:{note:0,octave:3, active: false},
+                    10:{note:0,octave:3, active: false},
+                    11:{note:0,octave:3, active: false},
+                    12:{note:0,octave:3, active: false},
+                    13:{note:0,octave:3, active: false},
+                    14:{note:0,octave:3, active: false},
+                    15:{note:0,octave:3, active: false},
+                },
+                assignedNotes: ["osc1"],
+                assignedGates: ["adsr1"]
+            },
+            track2: {
+                sliders: {
+                    0:{note:0,octave:3, active: false},
+                    1:{note:0,octave:3, active: false},
+                    2:{note:0,octave:3, active: false},
+                    3:{note:0,octave:3, active: false},
+                    4:{note:0,octave:3, active: false},
+                    5:{note:0,octave:3, active: false},
+                    6:{note:0,octave:3, active: false},
+                    7:{note:0,octave:3, active: false},
+                    8:{note:0,octave:3, active: false},
+                    9:{note:0,octave:3, active: false},
+                    10:{note:0,octave:3, active: false},
+                    11:{note:0,octave:3, active: false},
+                    12:{note:0,octave:3, active: false},
+                    13:{note:0,octave:3, active: false},
+                    14:{note:0,octave:3, active: false},
+                    15:{note:0,octave:3, active: false},
+                },
+                assignedNotes: ["osc2"],
+                assignedGates: ["adsr2"]
+            },
+        },
+        currentTrack: 1,
+        step: -1,
+        player: "stopped",
+        direction: "up",
+        length: 16,
+        random: false,
+        randomNotes: {
+            root: "c",
+            scale: "all"
+        }
+    },
+}
+const initialMatrixSettings = {
+    matrixSettings: {
+        currentConnections: initialConnection
+    }
+}
+
+const initialState = {
+    ...initialOscState,
+    ...initialFilterState,
+    ...initialLfoState,
+    ...initialVcaState,
+    ...initialEffectsState,
+    ...initialAdsrState,
+    ...initialSynthSettings,
+    ...initialKeyboardSettings,
+    ...initialSequencerSettings,
+    ...initialMatrixSettings
+}
+
+const checkForPreset = () => {
+    const savedPreset = JSON.parse(localStorage.getItem("synthState"))
+    if (savedPreset) {
+        return savedPreset
+    }
+    else {
+        return initialState
+    }
+}
+
+const checkedState = checkForPreset()
 
 const midiToFreqConverter = () => {
     for (let i = 0; i < 106; i++){
@@ -182,8 +281,22 @@ export function reducer(state, action){
             return {...state, synthSettings: {...state.synthSettings, [id]: Number(value)}}
         
         case ACTIONS.SYNTH.savePreset:
-            localStorage.setItem("0", JSON.stringify({...state}))
-            return {...state}
+            var seen = [];
+            const newState = JSON.stringify(state, function(key, val) {
+            if (val != null && typeof val == "object") {
+                    if (seen.indexOf(val) >= 0) {
+                        return;
+                    }
+                    seen.push(val);
+                }
+                return val;
+            });
+            const data = [{ state: newState }];
+            localStorage.setItem("synthState", newState)
+            const fileName = "application-state";   
+            const exportType = exportFromJSON.types.json;   
+            exportFromJSON({ data, fileName, exportType })
+            return { ...state }
 
         case ACTIONS.keyboard.note:
             if (stateKey){
@@ -230,7 +343,6 @@ export function reducer(state, action){
         
         case ACTIONS.osc.oscFMDepth:
             oscillatorsArr[i].updateFMDepth(value)
-            console.log(oscillatorsArr[i])
             return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], [id]: Number(value)}}};
 
         case ACTIONS.osc.frequency:
@@ -238,7 +350,6 @@ export function reducer(state, action){
             return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], frequency: newFreq}}};
             
         case ACTIONS.osc.offset:
-            console.log(i)
             let newValue
             
             if (value === "inc") {
@@ -445,26 +556,21 @@ export function reducer(state, action){
         case ACTIONS.MATRIX.connections:
             const {row:outputs, column:inputs, state:cellState} = value
             const tuple = [inputs,outputs]
-            let connectionsResponse
             if (cellState) {
                 connectionChain.push(tuple)
-                connectionsResponse = setConnections(tuple, state, output1.output, out)
+                setConnections(tuple, state, IOs)
             }
             else {
-                connectionsResponse = setDisconnections(tuple, state)
+                setDisconnections(tuple, IOs)
                 let leftoverConnections = connectionChain.filter(connection => {
                         return (connection[0] !== tuple[0] || connection[1] !== tuple[1])
                 })
                 connectionChain = leftoverConnections
             }
             return {...state, matrixSettings: {...state.matrixSettings, 
-                currentConnections: [connectionChain],
-                inputs: {...state.matrixSettings.inputs,
-                    [inputs]: {...state.matrixSettings.inputs[inputs],
-                        connectedNodes: connectionsResponse
-                    }
+                currentConnections: [connectionChain]
                 }
-            }}
+            }
 
         default:
             return {...state};
@@ -485,101 +591,18 @@ function ModularBus (props) {
     let adsrRef = useRef([])
     let effectsRef = useRef([])
     
-
+    
     midiToFreqConverter()
 
     const connectToOscilloscope = () => {
         oscilloscopeRef.current.connect(output1.output)
     }
 
-    const stateHook = useReducer(reducer, {
-        synthSettings: {
-            start: false,
-            startCount: 0,
-            outputGain: output1.output.gain.value,
-            bpm: 120
-        },
-        oscSettings: {...initialOscState},
-        filterSettings: {...initialFilterState},
-        adsrSettings: {...initialAdsrState},
-        lfoSettings: {...initialLfoState},
-        vcaSettings: {...initialVcaState},
-        effectsSettings: {...initialEffectsState},
-        keyboardSettings: {
-            mode: "polyphonic",
-            modeOptions: ["polyphonic", "monophonic"] 
-        },
-        sequencerSettings: {
-            tracks: {
-                track1: {
-                    sliders: {
-                        0:{note:0,octave:3, active: false},
-                        1:{note:0,octave:3, active: false},
-                        2:{note:0,octave:3, active: false},
-                        3:{note:0,octave:3, active: false},
-                        4:{note:0,octave:3, active: false},
-                        5:{note:0,octave:3, active: false},
-                        6:{note:0,octave:3, active: false},
-                        7:{note:0,octave:3, active: false},
-                        8:{note:0,octave:3, active: false},
-                        9:{note:0,octave:3, active: false},
-                        10:{note:0,octave:3, active: false},
-                        11:{note:0,octave:3, active: false},
-                        12:{note:0,octave:3, active: false},
-                        13:{note:0,octave:3, active: false},
-                        14:{note:0,octave:3, active: false},
-                        15:{note:0,octave:3, active: false},
-                    },
-                    assignedNotes: ["osc1"],
-                    assignedGates: ["adsr1"]
-                },
-                track2: {
-                    sliders: {
-                        0:{note:0,octave:3, active: false},
-                        1:{note:0,octave:3, active: false},
-                        2:{note:0,octave:3, active: false},
-                        3:{note:0,octave:3, active: false},
-                        4:{note:0,octave:3, active: false},
-                        5:{note:0,octave:3, active: false},
-                        6:{note:0,octave:3, active: false},
-                        7:{note:0,octave:3, active: false},
-                        8:{note:0,octave:3, active: false},
-                        9:{note:0,octave:3, active: false},
-                        10:{note:0,octave:3, active: false},
-                        11:{note:0,octave:3, active: false},
-                        12:{note:0,octave:3, active: false},
-                        13:{note:0,octave:3, active: false},
-                        14:{note:0,octave:3, active: false},
-                        15:{note:0,octave:3, active: false},
-                    },
-                    assignedNotes: ["osc2"],
-                    assignedGates: ["adsr2"]
-                },
-            },
-            currentTrack: 1,
-            step: -1,
-            player: "stopped",
-            direction: "up",
-            length: 16,
-            random: false,
-            randomNotes: {
-                root: "c",
-                scale: "all"
-            }
-        },
-        matrixSettings: {
-            outputs: {...outputs},
-            inputs: {...inputs},
-            initialConnections: [
-                ...initialConnection
-            ],
-            currentConnections: []
-        }
-    })
+    const stateHook = useReducer(reducer, checkedState)
 
 
     return (
-        <ModularBusContext.Provider value={{oscillatorsArr, filtersArr, lfosArr, adsrArr, vcasArr, effectsArr, stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr1, oscRef, lfoRef, filterRef, vcaRef, effectsRef, initialConnection}}>
+        <ModularBusContext.Provider value={{oscillatorsArr, filtersArr, lfosArr, adsrArr, vcasArr, effectsArr, stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr1, oscRef, lfoRef, filterRef, vcaRef, effectsRef, IOs, initialConnection}}>
         {props.children}
         </ModularBusContext.Provider>
     )

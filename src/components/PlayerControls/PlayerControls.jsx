@@ -21,6 +21,7 @@ const PlayerControls = () => {
     <div className="sequencerControlsContainer">
         <div className='playBtnsContainer'>
           <button
+          title="Start"
           className={appState.sequencerSettings.player === 'started' ? "playerBtn endBtnLeft activeBtn" : "playerBtn endBtnLeft"} 
           onClick={
             ()=>{
@@ -34,7 +35,8 @@ const PlayerControls = () => {
             src={appState.sequencerSettings.player === 'started' ? PlayWhiteIcon : PlayBlackIcon} 
             alt="play" />
           </button>
-          <button 
+          <button
+          title="Pause" 
           className={appState.sequencerSettings.player === 'paused' ? "playerBtn middleBtn activeBtn" : "playerBtn middleBtn"}
           onClick={
             ()=>{
@@ -49,7 +51,8 @@ const PlayerControls = () => {
             alt="pause" />
           </button>
 
-          <button 
+          <button
+          title="Stop" 
           className={appState.sequencerSettings.player === 'stopped' ? "playerBtn endBtnRight activeBtn" : "playerBtn endBtnRight" }
           onClick={
             ()=>{
@@ -72,7 +75,8 @@ const PlayerControls = () => {
         </div>
 
         <div className='directionBtnContainer'>
-          <button 
+          <button
+          title="Up" 
           className={appState.sequencerSettings.direction === "up" ? "playerBtn endBtnLeft activeBtn": "playerBtn endBtnLeft"}
           onClick={
             ()=>{
@@ -97,6 +101,7 @@ const PlayerControls = () => {
             />
             </button>
           <button
+          title="Down"
           className={appState.sequencerSettings.direction === "down" ? "playerBtn endBtnRight activeBtn": "playerBtn endBtnRight"}
           onClick={
             ()=>{
