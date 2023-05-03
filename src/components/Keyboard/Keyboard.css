@@ -5,6 +5,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 1rem;
 }
 
 .keyboardContainerInner {
@@ -25,6 +26,7 @@
   align-items: center;
   flex-direction: column;
   flex: 1;
+  margin-bottom: 1rem;
 }
 
 .octaveInfo button {
@@ -54,6 +56,5 @@
 }
 
 #keyboard {
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding: 2rem;
 }/*# sourceMappingURL=Keyboard.css.map */

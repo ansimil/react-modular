@@ -52,6 +52,30 @@ p {
   align-items: center;
 }
 
+.inc-dec-vertical-inner .inc-dec-btns-container {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: center;
+}
+
+.inc-btn-vertical {
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+  border-bottom: none;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.dec-btn-vertical {
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-top: none !important;
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
+  width: 23px;
+}
+
 .inc-dec-btn {
   min-width: 15px;
   max-width: 25px;
@@ -89,6 +113,22 @@ p {
   font-size: 0.7rem;
   border-top: solid black 1px;
   border-bottom: solid black 1px;
+  color: black;
+}
+
+.inc-dec-indicator-vertical {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 21px;
+  min-height: 22.5px;
+  background-color: rgb(222, 222, 222);
+  margin: 0;
+  font-family: mainFont;
+  font-size: 0.7rem;
+  border-right: solid black 1px;
+  border-left: solid black 1px;
+  color: black;
 }
 
 .inc-dec-label {
@@ -548,5 +588,5 @@ p {
 }
 
 #seq-track1 {
-  margin-top: 0.5rem;
+  margin-top: 0.2rem;
 }/*# sourceMappingURL=App.css.map */

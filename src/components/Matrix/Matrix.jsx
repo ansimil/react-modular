@@ -86,7 +86,7 @@ const Matrix = ( { matrixLocationRef } ) => {
         matrix.element.id = "matrix"
         matrix.type = 'Matrix'
         matrix.mode = 'toggle'
-        matrixSettings.currentConnections[0].forEach(connection => {
+        matrixSettings.currentConnections.forEach(connection => {
             matrix.matrix.toggle.cell(...connection)
         })
         matrix.cells.forEach(cell => {

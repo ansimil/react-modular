@@ -1,0 +1,34 @@
+.presets-modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.presets-modal-container div {
+  flex: 1;
+  height: 100%;
+}
+
+.save-presets-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.new-preset-container, .load-presets-container, .existing-preset-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.new-preset-container form, .load-presets-container form, .existing-preset-container form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}/*# sourceMappingURL=PresetsModal.css.map */

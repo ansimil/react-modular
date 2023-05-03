@@ -137,9 +137,6 @@ const initialVcaState = { vcaSettings: setModuleInitialState(vcasArr) }
 const initialEffectsState = { effectsSettings: setModuleInitialState(effectsArr) }
 const initialAdsrState = { adsrSettings: setModuleInitialState(adsrArr) }
 const initialSynthSettings = { synthSettings: {
-    start: false,
-    startCount: 0,
-    outputGain: 0,
     bpm: 120
 }}
 const initialKeyboardSettings = {
@@ -198,7 +195,6 @@ const initialSequencerSettings = {
         },
         currentTrack: 1,
         step: -1,
-        player: "stopped",
         direction: "up",
         length: 16,
         random: false,
@@ -228,16 +224,25 @@ const initialState = {
 }
 
 const checkForPreset = () => {
-    const savedPreset = JSON.parse(localStorage.getItem("synthState"))
-    if (savedPreset) {
-        return savedPreset
+    const presetToLoad = localStorage.getItem("presetToLoad")
+    const savedPreset = JSON.parse(localStorage.getItem("savedPatches"))
+    if (presetToLoad){
+        let presetToReturn
+        savedPreset.forEach(preset => {
+            if (Object.keys(preset)[0] === presetToLoad) {
+                presetToReturn = preset[presetToLoad]
+            }
+        })
+        return presetToReturn
     }
     else {
         return initialState
     }
 }
 
+
 const checkedState = checkForPreset()
+
 
 const midiToFreqConverter = () => {
     for (let i = 0; i < 106; i++){
@@ -264,25 +269,39 @@ export function reducer(state, action){
             startContext(oscillatorsArr, lfosArr)
             output1.output.gain.setValueAtTime(output1.output.gain.value, actx.currentTime)
             output1.output.gain.linearRampToValueAtTime(1, actx.currentTime + smoothing)
-            return {...state, synthSettings: {...state.synthSettings, start: true, startCount: 1}}
+            return {...state}
 
         case ACTIONS.SYNTH.stop:
             output1.output.gain.setValueAtTime(output1.output.gain.value, actx.currentTime)
             output1.output.gain.linearRampToValueAtTime(0.0001, actx.currentTime + smoothing)
-            return {...state, synthSettings: {...state.synthSettings, start: false}}
+            return {...state}
         
         case ACTIONS.SYNTH.outputGain:
             output1.gain.linearRampToValueAtTime(value, actx.currentTime + 0.005)
-            return {...state, synthSettings: {...state.synthSettings, [id]: Number(value)}}
+            return {...state}
 
         case ACTIONS.SYNTH.bpm:
             state.synthSettings.bpm = value
             Tone.Transport.bpm.rampTo(value, 0.05)
             return {...state, synthSettings: {...state.synthSettings, [id]: Number(value)}}
         
-        case ACTIONS.SYNTH.savePreset:
+        case ACTIONS.SYNTH.saveNewPreset:
+            let existingPresets = localStorage.getItem("savedPatches") ? localStorage.getItem("savedPatches") : []
+            const newPreset = { [value]: state }
+            if (existingPresets.length !== 0) {
+                const parsed = JSON.parse(existingPresets)
+                existingPresets = []
+                parsed.forEach(existing => {
+                    existingPresets.push(existing)
+                })
+                existingPresets.push(newPreset)
+            }
+            else {
+                existingPresets.push(newPreset)
+            }
+                
             var seen = [];
-            const newState = JSON.stringify(state, function(key, val) {
+            const newState = JSON.stringify(existingPresets, function(key, val) {
             if (val != null && typeof val == "object") {
                     if (seen.indexOf(val) >= 0) {
                         return;
@@ -291,12 +310,30 @@ export function reducer(state, action){
                 }
                 return val;
             });
-            const data = [{ state: newState }];
-            localStorage.setItem("synthState", newState)
+            let data = [{ state: newState }];
+            localStorage.setItem("savedPatches", newState)
             const fileName = "application-state";   
             const exportType = exportFromJSON.types.json;   
             exportFromJSON({ data, fileName, exportType })
             return { ...state }
+
+        case ACTIONS.SYNTH.overwritePreset:
+            const existingPresetsForOverwrite = JSON.parse(localStorage.getItem("savedPatches"))
+            const remaining = existingPresetsForOverwrite.filter(preset => { return (Object.keys(preset)[0] !== value) })
+            const newPresetForOverwrite = { [value]: state }
+            remaining.push(newPresetForOverwrite)
+            var seenForOverWrite = []
+            const newStateForOverwrite = JSON.stringify(remaining, function(key, val) {
+                if (val != null && typeof val == "object") {
+                        if (seenForOverWrite.indexOf(val) >= 0) {
+                            return;
+                        }
+                        seenForOverWrite.push(val);
+                    }
+                    return val;
+                });
+            localStorage.setItem("savedPatches", newStateForOverwrite)
+            return {...state}
 
         case ACTIONS.keyboard.note:
             if (stateKey){
@@ -444,10 +481,6 @@ export function reducer(state, action){
             state.adsrSettings[moduleName][id] = value
             adsrArr[i].adsr[id] = value
             return {...state, adsrSettings: {...state.adsrSettings, [moduleName]: {...state.adsrSettings[moduleName], [id]: Number(value)}}};
-        
-        // case ACTIONS.adsr.trigger:    
-        //     adsrArr[i].updateADSRGain(stateKey, actx.currentTime, state)
-        //     return {...state}
 
         // VCA SETTINGS //    
 
@@ -457,15 +490,25 @@ export function reducer(state, action){
     
         
 
-        // SEQUENCER SETTINGS //
-        case ACTIONS.SEQUENCER.player:
-            return {...state, sequencerSettings: {...state.sequencerSettings, player: value}}
-            
+        // SEQUENCER SETTINGS //    
         case ACTIONS.SEQUENCER.direction:
             return {...state, sequencerSettings: {...state.sequencerSettings, direction: value}}
 
-        case ACTIONS.SEQUENCER.octave:
-            return {...state, sequencerSettings: {...state.sequencerSettings, tracks: {...state.sequencerSettings.tracks, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[i], octave: value}}}}}} 
+        case ACTIONS.SEQUENCER.octave: 
+            let newSequencerSliderOctaveValue           
+            if (value === "inc") {
+                newSequencerSliderOctaveValue = state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[i].octave + 1
+                // let converter = new Tone.Frequency(oscillatorsArr[i].osc.frequency.value)
+                // let newMidi = converter.toMidi() + 12
+                // let converterTwo = new Tone.Frequency(newMidi, "midi")
+                // oscillatorsArr[i].osc.frequency.rampTo(converterTwo.toFrequency(), 0.01, 0)
+                // converter.dispose()
+                // converterTwo.dispose()
+            }
+            else {
+                newSequencerSliderOctaveValue = state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[i].octave - 1 
+            }
+            return {...state, sequencerSettings: {...state.sequencerSettings, tracks: {...state.sequencerSettings.tracks, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[i], octave: newSequencerSliderOctaveValue}}}}}} 
         
         case ACTIONS.SEQUENCER.note:
             return {...state, sequencerSettings: {...state.sequencerSettings, tracks: {...state.sequencerSettings.tracks, [`track${state.sequencerSettings.currentTrack}`]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`], sliders: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders, [i]: {...state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[i], note: value}}}}}}
@@ -538,6 +581,20 @@ export function reducer(state, action){
         case ACTIONS.SEQUENCER.length:
             return {...state, sequencerSettings: {...state.sequencerSettings, length: value}}
 
+        case ACTIONS.SEQUENCER.toggleGate:
+            const [ row, column, stepState ] = value
+            return {...state, sequencerSettings: {
+                ...state.sequencerSettings, tracks: {
+                    ...state.sequencerSettings.tracks, [`track${row+1}`]: {
+                        ...state.sequencerSettings.tracks[`track${row+1}`], sliders: {
+                            ...state.sequencerSettings.tracks[`track${row+1}`].sliders, [column]: {
+                                ...state.sequencerSettings.tracks[`track${row+1}`].sliders[column], active: stepState
+                            }
+                        }
+                    }
+                }
+            }}
+
         case ACTIONS.effects[subtype]?.[id]:
             if (subtype === 'reverb'){
                 if (id === 'decay'){
@@ -568,7 +625,7 @@ export function reducer(state, action){
                 connectionChain = leftoverConnections
             }
             return {...state, matrixSettings: {...state.matrixSettings, 
-                currentConnections: [connectionChain]
+                currentConnections: [...connectionChain]
                 }
             }
 

@@ -12,9 +12,11 @@ import StopWhiteIcon from '../../assets/icons/stop-white-icon.png'
 import ArrowBlackIcon from '../../assets/icons/arrow-black-icon.png'
 import ArrowWhiteIcon from '../../assets/icons/arrow-white-icon.png'
 import './PlayerControls.css'
+import { TransportContext } from '../../contexts/TransportContext'
 
 const PlayerControls = () => {
-    const { stateHook, sequencerRef } = useContext(ModularBusContext)
+    const { stateHook, sequencerRef, seqSlidersRef } = useContext(ModularBusContext)
+    const { transportState, setTransportState } = useContext(TransportContext)
     const [appState, updateState] = stateHook
 
   return (
@@ -22,38 +24,38 @@ const PlayerControls = () => {
         <div className='playBtnsContainer'>
           <button
           title="Start"
-          className={appState.sequencerSettings.player === 'started' ? "playerBtn endBtnLeft activeBtn" : "playerBtn endBtnLeft"} 
+          className={transportState.player === 'started' ? "playerBtn endBtnLeft activeBtn" : "playerBtn endBtnLeft"} 
           onClick={
             ()=>{
               Tone.Transport.start()
-              updateState({type: ACTIONS.SEQUENCER.player, payload: {value: 'started'}})
+              setTransportState({...transportState, "player": "started"})
               }
             }
           >
             <img 
             className="playerIcon"
-            src={appState.sequencerSettings.player === 'started' ? PlayWhiteIcon : PlayBlackIcon} 
+            src={transportState.player === 'started' ? PlayWhiteIcon : PlayBlackIcon} 
             alt="play" />
           </button>
           <button
           title="Pause" 
-          className={appState.sequencerSettings.player === 'paused' ? "playerBtn middleBtn activeBtn" : "playerBtn middleBtn"}
+          className={transportState.player === 'paused' ? "playerBtn middleBtn activeBtn" : "playerBtn middleBtn"}
           onClick={
             ()=>{
               Tone.Transport.pause()
-              updateState({type: ACTIONS.SEQUENCER.player, payload: {value: 'paused'}})
+              setTransportState({...transportState, "player": "paused"})
               }
             }
             >
             <img 
             className="playerIcon"
-            src={appState.sequencerSettings.player === 'paused' ? PauseWhiteIcon : PauseBlackIcon} 
+            src={transportState.player === 'paused' ? PauseWhiteIcon : PauseBlackIcon} 
             alt="pause" />
           </button>
 
           <button
           title="Stop" 
-          className={appState.sequencerSettings.player === 'stopped' ? "playerBtn endBtnRight activeBtn" : "playerBtn endBtnRight" }
+          className={transportState.player === 'stopped' ? "playerBtn endBtnRight activeBtn" : "playerBtn endBtnRight" }
           onClick={
             ()=>{
               sequencerRef.current.forEach(track => {
@@ -61,15 +63,32 @@ const PlayerControls = () => {
                 track.next()
                 track.stepper.value = lengthMap[appState.sequencerSettings.length].up.max
               })
+              const stepIndicatorArr = [...document.getElementsByClassName("sequencer-step-indicators")]
+              stepIndicatorArr[0].childNodes.forEach((step, i) => {
+                if (i === 0){
+                  step.classList.add("active-step-indicator")
+                }
+                else {
+                  step.classList.remove("active-step-indicator")
+                }
+              })
+              seqSlidersRef.current.forEach(slider => {
+              if (slider.parent.id === `slider0`){
+                slider.parent.className = "activeSeqSlider"
+              }
+              else {
+                slider.parent.className = ""
+              }
+            })
               Tone.Transport.stop()
-              updateState({type: ACTIONS.SEQUENCER.player, payload: {value: 'stopped'}})
+              setTransportState({...transportState, "player": "stopped"})
               updateState({type: ACTIONS.SEQUENCER.updateStepValue, payload: {value: 0}})
               }
           }
           >
             <img 
             className="playerIcon"
-            src={appState.sequencerSettings.player === 'stopped' ? StopWhiteIcon : StopBlackIcon} 
+            src={transportState.player === 'stopped' ? StopWhiteIcon : StopBlackIcon} 
             alt="pause" />
           </button>
         </div>

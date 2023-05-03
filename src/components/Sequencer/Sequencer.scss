@@ -22,7 +22,8 @@ $moduleMinHeight: 400px;
     align-items: center;
     width: 100%;
     flex: 1;
-    gap: 0.2rem
+    gap: 0.2rem;
+    min-height: 500px;
 }
 
 .sequencerSettingsContainer {
@@ -49,7 +50,7 @@ $moduleMinHeight: 400px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: flex-end;
+    align-items: center;
     width: 600px;
     background-color: rgb(44, 44, 44);
     padding-left: 1rem;
@@ -58,6 +59,7 @@ $moduleMinHeight: 400px;
     height: 98%;
     border-radius: 3px;
     border: solid black 1px;
+    gap: 0.2rem;
 }
 
 .notesAndOctaves {
@@ -98,9 +100,23 @@ $moduleMinHeight: 400px;
     width: 600px;
 }
 
+.noteOctave, .sequencerNotes {
+    flex-direction: column;
+}
 .sequencerNotes {
     flex: 1;
+    gap: 0.5rem;
     // border-bottom: solid black $borderThickness;
+}
+
+
+.sequencerNotes > .inc-dec-label {
+    margin-top: 0.5rem;
+    max-height: 10px
+}
+
+.noteOctave .inc-dec-label {
+    max-height: 10px;
 }
 
 .noteOctave {
@@ -120,6 +136,14 @@ $moduleMinHeight: 400px;
     
 }
 
+.noteOctave > .inc-dec-label, .sequencerNotes > .inc-dec-label {
+    font-family: mainFont;
+    max-width: 80px;
+    border: solid black 0.5px;
+    border-radius: 3px;
+    box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.5);
+}
+
 .noteOctave div {
     flex: 1
 }
@@ -136,6 +160,13 @@ $moduleMinHeight: 400px;
 .noteOctaveInner p {
     text-align: center;
     font-family: lightFont;
+}
+
+.sequencer-inc-dec-octave-container, .sequencer-inc-dec-note-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem
 }
 
 .sequencerNotes p, .noteOctaveInner p {
@@ -164,4 +195,39 @@ $moduleMinHeight: 400px;
 
 #sequencer rect:hover {
     stroke: #fafdd1
+}
+
+.sequencer-step-indicators {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: 0.2rem;
+}
+
+.sequencer-step-indicator {
+    text-align: center;
+    color: rgb(222, 222, 222);
+    font-size: 0.7rem;
+    font-family: lightFont;
+}
+
+.active-step-indicator {
+    color: rgb(179, 227, 252);
+    font-family: mainFont;
+    font-size: 0.9rem
+}
+
+.border-right {
+    border-right: solid white 0.5px;
+}
+
+.border-left {
+    border-left: solid white 0.5px;
+}
+
+.sequencer-gates-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

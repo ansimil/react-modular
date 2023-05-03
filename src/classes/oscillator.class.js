@@ -87,8 +87,8 @@ export class Oscillator {
     updateOscPwm(value){
         if ((value === "0" || value === 0) && this.osc.type === "pwm") {
             this.osc.set({
-                width: 0.5
-            })
+                width: 0.5,
+            })            
         }
         if (this.osc.type === "pwm") {
             this.osc.modulationFrequency.rampTo(value, 0.01, 0)
