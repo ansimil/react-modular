@@ -1,5 +1,5 @@
 import './App.css';
-import { useRef, useContext } from 'react'
+import { useRef, useContext, useState } from 'react'
 import { ModularBusContext } from '../../contexts/ModularBusContext';
 import Matrix from '../Matrix/Matrix';
 import Keyboard from '../Keyboard/Keyboard';
@@ -14,6 +14,7 @@ import ModuleComp from '../ModuleComp/ModuleComp';
 
 function App() {
   const { oscillatorsArr, filtersArr, lfosArr, adsrArr, vcasArr, effectsArr } = useContext(ModularBusContext)
+  const [currentPatch, setCurrentPatch] = useState("")
   let seqRef = useRef(null)
   let keysRef = useRef(null)
   let oscillatorsRef = useRef(null)
@@ -26,9 +27,10 @@ function App() {
   let effectsLocationRef = useRef(null)
 
 
+
   return (
     <div className="App">
-      <ControlBar />
+      <ControlBar currentPatch={currentPatch} setCurrentPatch={setCurrentPatch} />
       <Navbar seqRef={seqRef} oscillatorsRef={oscillatorsRef} lfosRef={lfosRef} filterRef={filterRef} envelopeRef={envelopeRef} oscilloscopeRef={oscilloscopeRef} matrixLocationRef={matrixLocationRef} effectsLocationRef={effectsLocationRef} keysRef={keysRef} vcaRef={vcaRef}/>
       <Matrix matrixLocationRef={matrixLocationRef}/>   
       

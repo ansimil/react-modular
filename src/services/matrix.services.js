@@ -1,6 +1,6 @@
-const setConnections = (tuple, state) => {
-        let nodeToConnectTo = state.matrixSettings.inputs[tuple[0]]
-        let nodeToConnect = state.matrixSettings.outputs[tuple[1]]
+const setConnections = (tuple, state, IOs) => {
+        let nodeToConnectTo = IOs[0][tuple[0]]
+        let nodeToConnect = IOs[1][tuple[1]]
         let updateConnectionCount
 
         if ((nodeToConnect.type === "gain source" && nodeToConnectTo.type === "audio param") || (nodeToConnect.type === "audio source" && nodeToConnectTo.type === "gain param")) {
@@ -32,9 +32,9 @@ const setConnections = (tuple, state) => {
 
 }
 
-const setDisconnections = (tuple, state) => {
-        let nodeToDisconnectFrom = state.matrixSettings.inputs[tuple[0]]
-        let nodeToDisconnect = state.matrixSettings.outputs[tuple[1]]
+const setDisconnections = (tuple, IOs) => {
+        let nodeToDisconnectFrom = IOs[0][tuple[0]]
+        let nodeToDisconnect = IOs[1][tuple[1]]
         let updateConnectionCount
 
         if ((nodeToDisconnect.type === "gain source" && nodeToDisconnectFrom.type === "audio param") || (nodeToDisconnect.type === "audio source" && nodeToDisconnectFrom.type === "gain param")){

@@ -12,45 +12,50 @@ import StopWhiteIcon from '../../assets/icons/stop-white-icon.png'
 import ArrowBlackIcon from '../../assets/icons/arrow-black-icon.png'
 import ArrowWhiteIcon from '../../assets/icons/arrow-white-icon.png'
 import './PlayerControls.css'
+import { TransportContext } from '../../contexts/TransportContext'
 
 const PlayerControls = () => {
     const { stateHook, sequencerRef, seqSlidersRef } = useContext(ModularBusContext)
+    const { transportState, setTransportState } = useContext(TransportContext)
     const [appState, updateState] = stateHook
 
   return (
     <div className="sequencerControlsContainer">
         <div className='playBtnsContainer'>
           <button
-          className={appState.sequencerSettings.player === 'started' ? "playerBtn endBtnLeft activeBtn" : "playerBtn endBtnLeft"} 
+          title="Start"
+          className={transportState.player === 'started' ? "playerBtn endBtnLeft activeBtn" : "playerBtn endBtnLeft"} 
           onClick={
             ()=>{
               Tone.Transport.start()
-              updateState({type: ACTIONS.SEQUENCER.player, payload: {value: 'started'}})
+              setTransportState({...transportState, "player": "started"})
               }
             }
           >
             <img 
             className="playerIcon"
-            src={appState.sequencerSettings.player === 'started' ? PlayWhiteIcon : PlayBlackIcon} 
+            src={transportState.player === 'started' ? PlayWhiteIcon : PlayBlackIcon} 
             alt="play" />
           </button>
-          <button 
-          className={appState.sequencerSettings.player === 'paused' ? "playerBtn middleBtn activeBtn" : "playerBtn middleBtn"}
+          <button
+          title="Pause" 
+          className={transportState.player === 'paused' ? "playerBtn middleBtn activeBtn" : "playerBtn middleBtn"}
           onClick={
             ()=>{
               Tone.Transport.pause()
-              updateState({type: ACTIONS.SEQUENCER.player, payload: {value: 'paused'}})
+              setTransportState({...transportState, "player": "paused"})
               }
             }
             >
             <img 
             className="playerIcon"
-            src={appState.sequencerSettings.player === 'paused' ? PauseWhiteIcon : PauseBlackIcon} 
+            src={transportState.player === 'paused' ? PauseWhiteIcon : PauseBlackIcon} 
             alt="pause" />
           </button>
 
-          <button 
-          className={appState.sequencerSettings.player === 'stopped' ? "playerBtn endBtnRight activeBtn" : "playerBtn endBtnRight" }
+          <button
+          title="Stop" 
+          className={transportState.player === 'stopped' ? "playerBtn endBtnRight activeBtn" : "playerBtn endBtnRight" }
           onClick={
             ()=>{
               sequencerRef.current.forEach(track => {
@@ -76,20 +81,21 @@ const PlayerControls = () => {
               }
             })
               Tone.Transport.stop()
-              updateState({type: ACTIONS.SEQUENCER.player, payload: {value: 'stopped'}})
+              setTransportState({...transportState, "player": "stopped"})
               updateState({type: ACTIONS.SEQUENCER.updateStepValue, payload: {value: 0}})
               }
           }
           >
             <img 
             className="playerIcon"
-            src={appState.sequencerSettings.player === 'stopped' ? StopWhiteIcon : StopBlackIcon} 
+            src={transportState.player === 'stopped' ? StopWhiteIcon : StopBlackIcon} 
             alt="pause" />
           </button>
         </div>
 
         <div className='directionBtnContainer'>
-          <button 
+          <button
+          title="Up" 
           className={appState.sequencerSettings.direction === "up" ? "playerBtn endBtnLeft activeBtn": "playerBtn endBtnLeft"}
           onClick={
             ()=>{
@@ -114,6 +120,7 @@ const PlayerControls = () => {
             />
             </button>
           <button
+          title="Down"
           className={appState.sequencerSettings.direction === "down" ? "playerBtn endBtnRight activeBtn": "playerBtn endBtnRight"}
           onClick={
             ()=>{

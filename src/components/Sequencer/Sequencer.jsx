@@ -48,7 +48,7 @@ const Sequencer = () => {
       }
       })
     })
-    sequencerRef.current[i].cells.forEach(cell => {
+    sequencerRef.current[i]?.cells.forEach(cell => {
     if ((cell.row === row && cell.column === column) && !cell._state.state) {
       cell.element.children[0].style.fill = "#fafdd1" 
     }
@@ -64,13 +64,15 @@ const Sequencer = () => {
 
 
   const toggleCell = (e, i) => {
-    sequencerRef.current?.forEach(track => {
+    sequencerRef.current?.forEach((track, trackIdx) => {
       track.cells.forEach(cell => {
         if (cell.row === e.row && cell.column === e.column && e.state) {
             cell.element.children[0].style.fill = "#000"
+            updateState({type: ACTIONS.SEQUENCER.toggleGate, payload: { value: [i, e.column, true]}})
         }
-        if (cell.row === e.row && cell.column === e.column && !e.state){
+        if (cell.row === e.row && cell.column === e.column && !e.state) {
             cell.element.children[0].style.fill = "#eee"
+            updateState({type: ACTIONS.SEQUENCER.toggleGate, payload: { value: [i, e.column, false]}})
         }
         highlightCell(e, i)
       })
@@ -243,6 +245,18 @@ const Sequencer = () => {
     })
     })
     sequencerRef.current = tracks
+    Object.keys(sequencerSettings.tracks).forEach((track, trackIdx) => {
+      Object.keys(sequencerSettings.tracks[track].sliders).forEach((step, i) => {
+        if (sequencerSettings.tracks[track].sliders[step].active){
+          sequencerRef.current?.[trackIdx].cells.forEach(cell => {
+            // console.log(cell.column, step)
+            if (Number(cell.column) === Number(step)){
+              sequencerRef.current?.[trackIdx].matrix.toggle.column(cell.column)
+            }
+          })
+        }
+      })
+    })
   // eslint-disable-next-line
   },[])
 
@@ -297,7 +311,7 @@ const Sequencer = () => {
               border = "border-right"
             }
             return (
-              <p className={border ? `sequencer-step-indicator ${border}` : "sequencer-step-indicator"} style={{width: (sequencerWidth-2.5)/16 }}>{Number(i)+1}</p>
+              <p key={`seqStepLabel${i}`} className={border ? `sequencer-step-indicator ${border}` : "sequencer-step-indicator"} style={{width: (sequencerWidth-2.5)/16 }}>{Number(i)+1}</p>
             )
           })}
           </div>
@@ -308,7 +322,7 @@ const Sequencer = () => {
 
           {arr.map((i) => {
             return (
-              <div key={i} id={`slider${i}`}></div>
+              <div key={`seqSlider${i}`} id={`slider${i}`}></div>
             )
           })}
           </div>
@@ -319,7 +333,7 @@ const Sequencer = () => {
               <div className="sequencer-inc-dec-note-container">
                 {arr.map(i => {
                   return (
-                    <p key={i}>{notesObject[sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].note]}</p>
+                    <p key={`stepLabel${i}`}>{notesObject[sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].note]}</p>
                   )
                 })}  
               </div>
@@ -330,7 +344,7 @@ const Sequencer = () => {
               <div className="sequencer-inc-dec-octave-container">
               {arr.map(i => {
                   return (
-                    <IncDecVertical moduleType={"SEQUENCER"} moduleName={`slider${i}`} id={"octave"} i={i} value={sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave} />
+                    <IncDecVertical key={`incDec${i}`} moduleType={"SEQUENCER"} moduleName={`slider${i}`} id={"octave"} i={i} value={sequencerSettings.tracks[`track${appState.sequencerSettings.currentTrack}`].sliders[i].octave} />
                   )
               })
               }

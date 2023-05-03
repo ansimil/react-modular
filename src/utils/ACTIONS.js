@@ -4,7 +4,9 @@ export const ACTIONS = {
         stop: "stop_synth",
         outputGain: "change_synth_outputGain",
         bpm: "change_synth_bpm",
-        savePreset: "save_synth_preset"
+        savePreset: "save_synth_preset",
+        loadPreset: "load_synth_preset",
+        overwritePreset: "overwrite_synth_preset"
     },
     osc: {
             type: "change_osc_type",
@@ -54,7 +56,8 @@ export const ACTIONS = {
             scale: "change_sequencer_random_notes_scale",
             root: "change_sequencer_random_notes_root"
         },
-        assignNoteGate: "change_sequencer_assigned_note_gate"
+        assignNoteGate: "change_sequencer_assigned_note_gate",
+        toggleGate: "toggle_sequencer_gate"
     },
     MATRIX: {
         connections: "change_connections",

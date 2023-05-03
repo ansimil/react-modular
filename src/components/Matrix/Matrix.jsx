@@ -1,15 +1,14 @@
 import { useContext, useEffect } from 'react'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
-// import sine from '../../assets/icons/sine-icon.png'
-// import Presets from '../PresetsComp/Presets'
 import { ACTIONS } from '../../utils/ACTIONS'
 import Nexus from 'nexusui'
 import './Matrix.css'
 
 const Matrix = ( { matrixLocationRef } ) => {
-    const { matrixRef, initialConnection, stateHook } = useContext(ModularBusContext)
+    const { matrixRef, stateHook, IOs } = useContext(ModularBusContext)
     // eslint-disable-next-line
     const [appState, updateState] = stateHook
+    const { matrixSettings } = appState
 
     const changeConnections = e => {
         matrixRef.current?.cells.forEach(cell => {
@@ -23,9 +22,9 @@ const Matrix = ( { matrixLocationRef } ) => {
         })
         updateState({type: ACTIONS.MATRIX.connections, payload: {value: e} })
     }
-    let sqSize = 400/Object.keys(appState.matrixSettings.outputs).length
-    let rows = Object.keys(appState.matrixSettings.outputs).length
-    let columns = Object.keys(appState.matrixSettings.inputs).length
+    let sqSize = 400/Object.keys(IOs[1]).length
+    let rows = Object.keys(IOs[1]).length
+    let columns = Object.keys(IOs[0]).length
     let width = sqSize * columns
     let height = sqSize * rows
 
@@ -87,7 +86,7 @@ const Matrix = ( { matrixLocationRef } ) => {
         matrix.element.id = "matrix"
         matrix.type = 'Matrix'
         matrix.mode = 'toggle'
-        initialConnection.forEach(connection => {
+        matrixSettings.currentConnections.forEach(connection => {
             matrix.matrix.toggle.cell(...connection)
         })
         matrix.cells.forEach(cell => {
@@ -140,8 +139,8 @@ const Matrix = ( { matrixLocationRef } ) => {
                             <th></th> 
                             <th></th>
                             <th style={{display: "flex"}}>
-                            {Object.keys(appState.matrixSettings.inputs).map((input, i) => {
-                                const name = appState.matrixSettings.inputs[input].name
+                            {Object.keys(IOs[0]).map((input, i) => {
+                                const name = IOs[0][input].name
                                 return (
                                         <div key={i} className="horizontal-label" style={{"width": `${sqSize}px`}}><span className="horizontal-span" style={{fontSize: `${0.025*sqSize}rem`}}>{name}</span></div>
                                 )
@@ -156,8 +155,8 @@ const Matrix = ( { matrixLocationRef } ) => {
                         <td className="outputsLabel"><p>outputs</p></td>
                             
                         <td className='verticalLabels' style={{"height": `${height}px`}}>
-                            {Object.keys(appState.matrixSettings.outputs).map((output, i) => {
-                                const name = appState.matrixSettings.outputs[output].name
+                            {Object.keys(IOs[1]).map((output, i) => {
+                                const name = IOs[1][output].name
                                 return (
                                     <div key={i} className="vertical-label" style={{height: sqSize}}><span className="vertical-span" style={{fontSize: `${0.025*sqSize}rem`}}>{name}</span></div> 
                                 )
@@ -173,7 +172,7 @@ const Matrix = ( { matrixLocationRef } ) => {
                 </tbody>
             </table>
         </div>
-      {/* <Presets/> */}
+      
     </div>
   )
 }
