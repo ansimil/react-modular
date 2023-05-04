@@ -6,7 +6,8 @@ export const ACTIONS = {
         bpm: "change_synth_bpm",
         savePreset: "save_synth_preset",
         loadPreset: "load_synth_preset",
-        overwritePreset: "overwrite_synth_preset"
+        overwritePreset: "overwrite_synth_preset",
+        deletePreset: "delete_synth_preset"
     },
     osc: {
             type: "change_osc_type",

@@ -11,6 +11,10 @@
     height: 100%;
 }
 
+.presets-modal-container button {
+    margin-top: 1rem;
+}
+
 .save-presets-container {
     display: flex;
     flex-direction: column;
@@ -18,17 +22,50 @@
     align-items: center;
 }
 
-.new-preset-container, .load-presets-container, .existing-preset-container {
+.save-presets-container input {
+    width: 180px
+}
+
+.save-presets-container input {
+    padding: 0.2rem 0
+}
+
+.save-presets-container input::placeholder {
+    text-align: center;
+}
+
+.save-presets-container button, .load-presets-container button, .delete-presets-container button {
+    width: 185px;
+}
+
+.save-presets-container select, .load-presets-container select, .delete-presets-container select {
+    text-align: center;
+    padding: 0.2rem 0;
+    font-family: lightFont;
+    width: 183px
+}
+
+
+.new-preset-container, .load-delete-presets-container, .existing-preset-container, .load-presets-container, .delete-presets-container {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
 
-.new-preset-container form, .load-presets-container form, .existing-preset-container form {
+.new-preset-container form, .load-delete-presets-container form, .existing-preset-container form {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 2rem
+}
+
+.save-new-patch-label {
+    font-family: mainFont;
+    margin-bottom: 1rem;
+    width: 180px;
+    min-height: 30px;
+    border-radius: 3px;
+    border: solid black 0.5px;
+    box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.5);
 }

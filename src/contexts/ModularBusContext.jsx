@@ -322,17 +322,33 @@ export function reducer(state, action){
             const remaining = existingPresetsForOverwrite.filter(preset => { return (Object.keys(preset)[0] !== value) })
             const newPresetForOverwrite = { [value]: state }
             remaining.push(newPresetForOverwrite)
-            var seenForOverWrite = []
+            var seenForOverwrite = []
             const newStateForOverwrite = JSON.stringify(remaining, function(key, val) {
                 if (val != null && typeof val == "object") {
-                        if (seenForOverWrite.indexOf(val) >= 0) {
+                        if (seenForOverwrite.indexOf(val) >= 0) {
                             return;
                         }
-                        seenForOverWrite.push(val);
+                        seenForOverwrite.push(val);
                     }
                     return val;
                 });
             localStorage.setItem("savedPatches", newStateForOverwrite)
+            return {...state}
+
+        case ACTIONS.SYNTH.deletePreset:
+            const existingPresetsForDelete = JSON.parse(localStorage.getItem("savedPatches"))
+            const remainingDelete = existingPresetsForDelete.filter(preset => { return (Object.keys(preset)[0] !== value) })
+            var seenForDelete = []
+            const newStateForDelete = JSON.stringify(remainingDelete, function(key, val) {
+                if (val != null && typeof val == "object") {
+                        if (seenForDelete.indexOf(val) >= 0) {
+                            return;
+                        }
+                        seenForDelete.push(val);
+                    }
+                    return val;
+                });
+            localStorage.setItem("savedPatches", newStateForDelete)
             return {...state}
 
         case ACTIONS.keyboard.note:

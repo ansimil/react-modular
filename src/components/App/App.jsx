@@ -9,6 +9,7 @@ import Sequencer from '../Sequencer/Sequencer';
 import ModuleContainer from '../ModuleContainer/ModuleContainer';
 import Navbar from '../Navbar/Navbar';
 import ModuleComp from '../ModuleComp/ModuleComp';
+import { Toaster } from 'react-hot-toast';
 
 
 
@@ -30,6 +31,13 @@ function App() {
 
   return (
     <div className="App">
+      <Toaster 
+      className="toast" 
+      position="top-center"
+      toastOptions={{
+        duration: 2200
+      }} 
+      />
       <ControlBar currentPatch={currentPatch} setCurrentPatch={setCurrentPatch} />
       <Navbar seqRef={seqRef} oscillatorsRef={oscillatorsRef} lfosRef={lfosRef} filterRef={filterRef} envelopeRef={envelopeRef} oscilloscopeRef={oscilloscopeRef} matrixLocationRef={matrixLocationRef} effectsLocationRef={effectsLocationRef} keysRef={keysRef} vcaRef={vcaRef}/>
       <Matrix matrixLocationRef={matrixLocationRef}/>   
