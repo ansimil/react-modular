@@ -83,7 +83,25 @@ export class Filter {
             Q: this.filter.Q.value,
             freqFMDepth: this.FMDepth.gain.value,
             QDepth: this.QDepth.gain.value
-        }
+        }   
+    }
+    updateFilterType(id){
+        this.filter.type = id
+    }
+    updateFilterFreq(value, startTime, currentTime) {
+        this.filter.frequency.rampTo(value, startTime, currentTime)
+    }
+    updateFilterDetune(value, startTime, currentTime){
+        this.filter.detune.rampTo(value, startTime, currentTime)
+    }
+    updateFilterQ(value, startTime, currentTime){
+        this.filter.Q.rampTo(value, startTime, currentTime)
+    }
+    updateFilterFMDepth(value, startTime, currentTime){
+        this.FMDepth.gain.rampTo(value, startTime, currentTime)
+    }
+    updateFilterQDepth(value, startTime, currentTime){
+        this.QDepth.gain.rampTo(value, startTime, currentTime)
     }
 }
 

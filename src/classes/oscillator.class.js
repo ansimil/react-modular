@@ -60,7 +60,7 @@ export class Oscillator {
             }
         ]
         }
-        this.initialState = {
+        this.initialState = {   
             frequency: this.osc.frequency.value,
             detune: this.osc.detune.value,
             type: this.osc.type,
