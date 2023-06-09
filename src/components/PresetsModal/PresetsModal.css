@@ -71,4 +71,11 @@
   border-radius: 3px;
   border: solid black 0.5px;
   box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.5);
+}
+
+.preset-error-message {
+  font-size: 0.7rem;
+  color: rgb(148, 0, 0);
+  margin-bottom: 0.5rem;
+  font-family: lightFont;
 }/*# sourceMappingURL=PresetsModal.css.map */

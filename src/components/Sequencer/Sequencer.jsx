@@ -125,9 +125,7 @@ const Sequencer = () => {
     updateState({type: ACTIONS.SEQUENCER.trigger, payload: {value, time, highSteps}})
 
     const stepIndicatorArr = [...document.getElementsByClassName("sequencer-step-indicators")]
-    // console.log(stepIndicatorArr)
     stepIndicatorArr[0].childNodes.forEach((step, i) => {
-      console.log(value, i)
       if (value === i){
         step.classList.add("active-step-indicator")
       }

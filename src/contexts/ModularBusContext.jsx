@@ -40,6 +40,23 @@ const actx = new Tone.Context()
 const out = actx.destination
 Tone.setContext(actx)
 
+const checkForPreset = () => {
+    const presetToLoad = localStorage.getItem("presetToLoad")
+    const savedPreset = JSON.parse(localStorage.getItem("savedPatches"))
+    if (presetToLoad){
+        let presetToReturn
+        savedPreset.forEach(preset => {
+            if (Object.keys(preset)[0] === presetToLoad) {
+                presetToReturn = preset[presetToLoad]
+            }
+        })
+        return presetToReturn
+    }
+    else {  
+        return ""
+    }
+}
+
 let modulesArr = []
 let oscillatorsArr = []
 let lfosArr = []
@@ -111,6 +128,38 @@ output1.output.connect(out)
 
 const IOs = setInitialIOState(modulesArr)
 
+if (checkForPreset()){
+    oscillatorsArr.forEach((osc, i) => {
+        osc.updateOscDetune(checkForPreset().oscSettings[`osc${i+1}`].detune)
+        osc.updateFMDepth(checkForPreset().oscSettings[`osc${i+1}`].oscFMDepth)
+        osc.updateOscType(checkForPreset().oscSettings[`osc${i+1}`].type, checkForPreset())
+        osc.updateOscPwm(checkForPreset().oscSettings[`osc${i+1}`].pwm)
+    })
+    filtersArr.forEach((filter, i) => {
+        filter.updateFilterFreq(checkForPreset().filterSettings[`filter${i+1}`].frequency, 0.1, actx.currentTime)
+        filter.updateFilterDetune(checkForPreset().filterSettings[`filter${i+1}`].detune, 0.1, actx.currentTime)
+        filter.updateFilterType(checkForPreset().filterSettings[`filter${i+1}`].type, 0.1, actx.currentTime)
+        filter.updateFilterQ(checkForPreset().filterSettings[`filter${i+1}`].Q, 0.1, actx.currentTime)
+        filter.updateFilterFMDepth(checkForPreset().filterSettings[`filter${i+1}`].freqFMDepth, 0.1, actx.currentTime)
+        filter.updateFilterQDepth(checkForPreset().filterSettings[`filter${i+1}`].QDepth, 0.1, actx.currentTime)
+    })
+    lfosArr.forEach((lfo, i) => {
+        lfo.updateLfoFrequency(checkForPreset().lfoSettings[`lfo${i+1}`].frequency)
+        lfo.updateFMDepth((checkForPreset().lfoSettings[`lfo${i+1}`].lfoFMDepth))
+        lfo.updateOscType(checkForPreset().lfoSettings[`lfo${i+1}`].type, checkForPreset())
+        lfo.updateOscPwm(checkForPreset().lfoSettings[`lfo${i+1}`].pwm)
+    })
+    adsrArr.forEach((adsr, i) => {
+        adsr.updateADSRSettings("attack", checkForPreset().adsrSettings[`adsr${i+1}`].attack)
+        adsr.updateADSRSettings("decay", checkForPreset().adsrSettings[`adsr${i+1}`].decay)
+        adsr.updateADSRSettings("sustain", checkForPreset().adsrSettings[`adsr${i+1}`].sustain)
+        adsr.updateADSRSettings("release", checkForPreset().adsrSettings[`adsr${i+1}`].release)
+    })
+    vcasArr.forEach((vca, i) => {
+        vca.updateVcaGain(checkForPreset().vcaSettings[`vca${i+1}`].gain, 0.1, actx.currentTime)
+    })
+}
+
 
 // Connection chain //
 const initialConnection = [
@@ -128,6 +177,17 @@ const initialConnection = [
 
 let connectionChain = []
 
+oscillatorsArr[0].initialState = {...oscillatorsArr[0].initialState, frequency: 5000,
+    detune: 20,
+    type: "triangle",
+    oscFMDepth: 200,
+    glide: 0.00,
+    pwm: 0,
+    octave: 0,
+    semitone: 0}
+
+console.log(oscillatorsArr)
+
 
 
 const initialOscState = { oscSettings: setModuleInitialState(oscillatorsArr) }
@@ -139,6 +199,9 @@ const initialAdsrState = { adsrSettings: setModuleInitialState(adsrArr) }
 const initialSynthSettings = { synthSettings: {
     bpm: 120
 }}
+
+
+
 const initialKeyboardSettings = {
     keyboardSettings: {
         mode: "polyphonic",
@@ -223,26 +286,12 @@ const initialState = {
     ...initialMatrixSettings
 }
 
-const checkForPreset = () => {
-    const presetToLoad = localStorage.getItem("presetToLoad")
-    const savedPreset = JSON.parse(localStorage.getItem("savedPatches"))
-    if (presetToLoad){
-        let presetToReturn
-        savedPreset.forEach(preset => {
-            if (Object.keys(preset)[0] === presetToLoad) {
-                presetToReturn = preset[presetToLoad]
-            }
-        })
-        return presetToReturn
-    }
-    else {
-        return initialState
-    }
-}
 
 
-const checkedState = checkForPreset()
 
+const checkedState = checkForPreset() ? checkForPreset() : initialState
+
+console.log(checkedState)
 
 const midiToFreqConverter = () => {
     for (let i = 0; i < 106; i++){
@@ -468,40 +517,45 @@ export function reducer(state, action){
         // FILTER SETTINGS //
 
         case ACTIONS.filter.type:
-            filtersArr[i].filter.type = id
+            // filtersArr[i].filter.type = id
+            filtersArr[i].updateFilterType(id)
             return {...state, filterSettings: {...state.filterSettings, [moduleName]: {...state.filterSettings[moduleName], type: id}}};
 
         case ACTIONS.filter.frequency:
-            filtersArr[i].filter.frequency.rampTo(value, 0.1, actx.currentTime)
+            filtersArr[i].updateFilterFreq(value, 0.1, actx.currentTime)
             return {...state, filterSettings: {...state.filterSettings, [moduleName]: {...state.filterSettings[moduleName], [id]: Number(value) }}};
             
         case ACTIONS.filter.detune:
-            filtersArr[i].filter.detune.rampTo(value, 0.1, actx.currentTime)
+            filtersArr[i].updateFilterDetune(value, 0.1, actx.currentTime)
             return {...state, filterSettings: {...state.filterSettings, [moduleName]: {...state.filterSettings[moduleName], [id]: Number(value)}}};
 
         case ACTIONS.filter.Q:
-            filtersArr[i].filter.Q.rampTo(value, 0.1, actx.currentTime)
+            // filtersArr[i].filter.Q.rampTo(value, 0.1, actx.currentTime)
+            filtersArr[i].updateFilterQ(value, 0.1, actx.currentTime)
             return {...state, filterSettings: {...state.filterSettings, [moduleName]: {...state.filterSettings[moduleName], [id]: Number(value)}}};
 
         case ACTIONS.filter.freqFMDepth:
-            filtersArr[i].FMDepth.gain.rampTo(value, 0.1, actx.currentTime)
+            // filtersArr[i].FMDepth.gain.rampTo(value, 0.1, actx.currentTime)
+            filtersArr[i].updateFilterFMDepth(value, 0.1, actx.currentTime)
             return {...state, filterSettings: {...state.filterSettings, [moduleName]: {...state.filterSettings[moduleName], [id]: Number(value)}}};
         
         case ACTIONS.filter.QDepth:
-            filtersArr[i].QDepth.gain.rampTo(value, 0.1, actx.currentTime)
+            // filtersArr[i].QDepth.gain.rampTo(value, 0.1, actx.currentTime)
+            filtersArr[i].updateFilterQDepth(value, 0.1, actx.currentTime)
             return {...state, filterSettings: {...state.filterSettings, [moduleName]: {...state.filterSettings[moduleName], [id]: Number(value)}}};
 
         // ADSR SETTINGS //
 
         case ACTIONS.adsr[id]:
             state.adsrSettings[moduleName][id] = value
-            adsrArr[i].adsr[id] = value
+            // adsrArr[i].adsr[id] = value
+            adsrArr[i].updateADSRSettings(id, value)
             return {...state, adsrSettings: {...state.adsrSettings, [moduleName]: {...state.adsrSettings[moduleName], [id]: Number(value)}}};
 
         // VCA SETTINGS //    
 
         case ACTIONS.vca.gain:
-            vcasArr[i].vca.gain.rampTo(value, 0.1, actx.currentTime)
+            vcasArr[i].updateVcaGain(value, 0.1, actx.currentTime)
             return {...state, vcaSettings: {...state.vcaSettings, [moduleName]: {...state.vcaSettings[moduleName], [id]: Number(value)}}};
     
         

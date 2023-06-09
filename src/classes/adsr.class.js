@@ -59,4 +59,7 @@ export class ADSR {
             this.adsr.triggerRelease(timeNow+0.05, 0.0001)
         }
     }
+    updateADSRSettings(id, value){
+        this.adsr[id] = value
+    }
 }

@@ -52,5 +52,8 @@ export class VCA {
             gain: this.vca.gain.value
         }
     }
+    updateVcaGain(value, startTime, currentTime){
+        this.vca.gain.rampTo(value, startTime, currentTime)
+    }
     
 }
