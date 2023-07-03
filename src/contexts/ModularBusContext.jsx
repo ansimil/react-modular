@@ -29,7 +29,7 @@ import {
     ACTIONS
 } from "../utils/ACTIONS";
 import * as Tone from 'tone'
-import exportFromJSON from "export-from-json";
+// import exportFromJSON from "export-from-json";
 
 const ModularBusContext = createContext()
 
@@ -359,11 +359,11 @@ export function reducer(state, action){
                 }
                 return val;
             });
-            let data = [{ state: newState }];
+            // let data = [{ state: newState }];
             localStorage.setItem("savedPatches", newState)
-            const fileName = "application-state";   
-            const exportType = exportFromJSON.types.json;   
-            exportFromJSON({ data, fileName, exportType })
+            // const fileName = "application-state";   
+            // const exportType = exportFromJSON.types.json;   
+            // exportFromJSON({ data, fileName, exportType })
             return { ...state }
 
         case ACTIONS.SYNTH.overwritePreset:
