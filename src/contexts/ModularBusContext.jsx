@@ -31,28 +31,27 @@ import {
 import * as Tone from 'tone'
 import exportFromJSON from "export-from-json";
 
-navigator.permissions.query({ name: "midi", sysex: true }).then((result) => {
-    if (result.state === "granted") {
-        console.log('granted')
-      // Access granted.
-    } else if (result.state === "prompt") {
-      // Using API will prompt for permission
-    }
-    // Permission was denied by user prompt or permission policy
-});
+// navigator.permissions.query({ name: "midi", sysex: true }).then((result) => {
+//     if (result.state === "granted") {
+//         console.log('granted')
+//       // Access granted.
+//     } else if (result.state === "prompt") {
+//       // Using API will prompt for permission
+//     }
+//     // Permission was denied by user prompt or permission policy
+// });
 
-let midi = null; // global MIDIAccess object
 function onMIDISuccess(midiAccess) {
-  console.log("MIDI ready!");
-  midi = midiAccess; // store in the global (in real usage, would probably keep in an object instance)
+  console.log(midiAccess);
 }
 
 function onMIDIFailure(msg) {
-  console.error(`Failed to get MIDI access - ${msg}`);
+       console.error(`Failed to get MIDI access - ${msg}`);
 }
 
-navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
-
+if (navigator.requestMIDIAccess) {
+    navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure)
+}
 
 const ModularBusContext = createContext()
 
