@@ -14,11 +14,11 @@ const TrackAssignmentComp = ({sequencerRef}) => {
     }
 
   return (
-    <div className="track-assignment-container">
+    <div className="track-assignment-container settings-container settings-container-dark">
     {sequencerRef.current.map((track, i) => {
         let trackIdx = i+1
         return (
-            <div key={`TRACK${i+1}`} className="track-assignments">
+            <div key={`TRACK${i+1}`} className="track-assignments settings-container settings-container-dark settings-container-dark-inlay">
                 <p className='seq-settings-label'>{`TRACK${i+1}`}</p>
                 <div className='track-notes-gates-selectors'>
                     <div className="note-selector-options">
@@ -31,7 +31,7 @@ const TrackAssignmentComp = ({sequencerRef}) => {
                                 }
                             })
                             return (
-                                <div className='note-selector-btns' key={`${osc.name}note`}>
+                                <div className='note-selectors' key={`${osc.name}note`}>
                                     <SelectorBtn label={osc.name} change={change} id={osc.name} toChange={"note"} i={trackIdx} activeType={activeType} />
                                 </div>   
                             )  
@@ -48,7 +48,7 @@ const TrackAssignmentComp = ({sequencerRef}) => {
                                 }
                             })
                             return (
-                                <div className='gate-selector-btns' key={`${adsr.name}gate`}>
+                                <div className='gate-selectors' key={`${adsr.name}gate`}>
                                     <SelectorBtn label={adsr.name} change={change} id={adsr.name} toChange={"gate"} i={trackIdx} activeType={activeType} />
                                 </div>   
                             )

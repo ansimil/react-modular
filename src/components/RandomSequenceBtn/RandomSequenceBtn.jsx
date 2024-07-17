@@ -8,13 +8,13 @@ const RandomSequenceBtn = () => {
     const { stateHook, sequencerRef } = useContext(ModularBusContext)
     const [ appState, updateState ] = stateHook
   return (
-    <div className="random-sequencer-container sequencer-settings-small">
+    <div className="random-sequencer-container sequencer-settings-small settings-container settings-container-dark settings-container-dark-inlay">
         <div className="seq-settings-label-div">
             <p className="seq-settings-label">RANDOM SEQ</p>
         </div>
         <div className="randomSequenceBtnsContainer">
         <button
-        className={appState.sequencerSettings.random ? "selector-btn btn activeBtn" : "selector-btn btn"}
+        className={appState.sequencerSettings.random ? "btn-dark selector-btn btn btn-active" : "selector-btn btn btn-dark"}
         onClick={()=>{
                 if (appState.sequencerSettings.direction === 'down') {
                   sequencerRef.current.forEach(track => {
@@ -32,7 +32,7 @@ const RandomSequenceBtn = () => {
         <p>ON</p>
         </button>
         <button
-        className={!appState.sequencerSettings.random ? "selector-btn btn activeBtn" : "selector-btn btn"}
+        className={!appState.sequencerSettings.random ? "selector-btn btn btn-active btn-dark" : "selector-btn btn btn-dark"}
         onClick={()=>{
                 // let currentFirstTrackStep
                 sequencerRef.current.forEach((track, i) => {

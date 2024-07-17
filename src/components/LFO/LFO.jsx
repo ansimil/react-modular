@@ -23,25 +23,25 @@ const LFO = ({ lfoNum }) => {
     }
 
     return (
-        <div className={`modulesContainer lfoContainer lfoContainer${lfoNum}`}>
-            <div className="moduleInfo">
-                <div className="moduleInfoInner">
+        <div className={`module-container lfoContainer lfoContainer${lfoNum}`}>
+            <div className="module-info">
+                <div className="module-info-inner">
                     <p>{`lfo_${lfoNum}`}</p>
                 </div>
             </div>
-            <div className="moduleSettingsContainer">
-                <div className="moduleSettingsInner">
-                <div className="slidersContainer">
+            <div className="module-settings-container">
+                <div className="module-settings-inner">
+                <div className="sliders">
             <Slider module={selectedLfoSettings} label={"COARSE"} valueLabel={(lfoSettings[selectedLfoSettings].frequency).toFixed(2)} unit={"Hz"} min={0.1} max={40} step={0.001} values={lfoSettings[selectedLfoSettings].frequency} sliderRef={lfoRef} id={"frequency"} changeFunction={change}/>
             <Slider module={selectedLfoSettings} label={"PWM"} valueLabel={(lfoSettings[selectedLfoSettings].pwm).toFixed(2)} unit={"Hz"} min={0} max={40} step={0.001} values={lfoSettings[selectedLfoSettings].pwm} sliderRef={lfoRef} id={"pwm"} changeFunction={change}/>
             <Slider module={selectedLfoSettings} label={"FM DEPTH"} valueLabel={(lfoSettings[selectedLfoSettings].lfoFMDepth / 1000).toFixed(2)} unit={""} min={0} max={10000} step={0.001} values={lfoSettings[selectedLfoSettings].lfoFMDepth} sliderRef={lfoRef} id={"lfoFMDepth"} changeFunction={change}/>
             </div>
             <div className="rightSideContainer">
 
-                <div className="waveSelectContainer">
+                <div className="waveform-selectors selectors">
                     <button 
                     id="sine"
-                    className={activeType === 'sine' ? "btn activeBtn waveselect-btn": "btn waveselect-btn"}
+                    className={activeType === 'sine' ? "btn btn-dark btn-active waveform-selector": "btn btn-dark waveform-selector"}
                     onClick={changeType}
                     >
                     SINE
@@ -49,7 +49,7 @@ const LFO = ({ lfoNum }) => {
 
                     <button 
                     id="triangle"
-                    className={activeType === 'triangle' ? "btn activeBtn waveselect-btn": "btn waveselect-btn"}
+                    className={activeType === 'triangle' ? "btn btn-dark btn-active waveform-selector": "btn btn-dark waveform-selector"}
                     onClick={changeType}
                     >
                     TRI
@@ -57,7 +57,7 @@ const LFO = ({ lfoNum }) => {
 
                     <button
                     id="pwm"
-                    className={activeType === 'pwm' ? "btn activeBtn waveselect-btn": "btn waveselect-btn"}
+                    className={activeType === 'pwm' ? "btn btn-dark btn-active waveform-selector": "btn btn-dark waveform-selector"}
                     onClick={changeType}
                     >
                     PULS
@@ -65,7 +65,7 @@ const LFO = ({ lfoNum }) => {
 
                     <button 
                     id="sawtooth"
-                    className={activeType === 'sawtooth' ? "btn activeBtn waveselect-btn": "btn waveselect-btn"}
+                    className={activeType === 'sawtooth' ? "btn btn-dark btn-active waveform-selector": "btn btn-dark waveform-selector"}
                     onClick={changeType}
                     >
                     SAW

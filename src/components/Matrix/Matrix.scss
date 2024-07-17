@@ -1,91 +1,4 @@
-$labelHighlight: rgb(117, 117, 117);
-$lightestBackground: rgb(239, 239, 239);
-$sliderBackground: rgb(222, 222, 222);
-$moduleMinHeight: 300px;
-$containerBorderRadius: 3px;
-
-.matrixContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 500px;
-    width: 100%;
-    background-color: rgb(57, 57, 57);
-    margin-top: 8rem;
-}
-
-.matrixContainer .moduleInfo {
-    border-bottom: none;
-    background-color: rgb(209, 253, 214);
-}
-
-.matrixContainer h2 {
-    text-align: center;
-    padding: 1.1rem 0.7rem;
-
-}
-
-.matrixContainerInner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding: 0.7rem 3.5rem 1rem 0.5rem;
-    border: solid black 0.5px;
-    border-radius: 3px;
-    background-color: $lightestBackground;
-}
-
-.vertical-label {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 45px;
-    position: relative;
-    height: 40px;
-}
-
-.vertical-span {
-    bottom: 30%;
-    right: 15%;
-    position: absolute;
-    transform: rotate(-45deg);
-    transform-origin: center right;
-    white-space: nowrap;
-    font-family: mainFont;
-}
-
-.verticalLabels {
-    display: table-row;
-}
-
-.horizontalLabel p {
-    margin: 0
-}
-
-.horizontal-label {
-    height: 110px;
-    position: relative;
-    width: 40px
-}
-
-.horizontal-span {
-    bottom: 5px;
-    left: 50%;
-    position: absolute;
-    transform: rotate( -45deg );
-    transform-origin: center left;
-    white-space: nowrap;
-    font-family: mainFont;
-}
-
-.matrixInner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    column-gap: 10px;
-    margin-top: -1rem;
-}
+@import '../../sass/variables';
 
 #matrix {
     border: solid black 1px;
@@ -95,19 +8,84 @@ $containerBorderRadius: 3px;
     background-color: rgb(57, 57, 57);
 }
 
-.outputsLabel {
-    transform: rotate(270deg);
-}
+.matrix {
+    &-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 500px;
+        width: 100%;
+        background-color: rgb(57, 57, 57);
+        margin-top: 8rem;
+        h2 {
+            text-align: center;
+            padding: 1.1rem 0.7rem;
+        
+        }
+        &-inner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 0.7rem 3.5rem 1rem 0.5rem;
+            border: solid black 0.5px;
+            border-radius: 3px;
+            background-color: $lightestBackground;
+        }
 
-.outputsLabel p {
-    border: solid black 1px;
-    border-radius: 3px;
-    padding: 1rem;
-}
-
-.inputsLabel {
-    margin-left: 25%;
-    padding: 1rem;
-    border: solid black 1px;
-    border-radius: 3px;
+        .label {
+            &-vertical {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 45px;
+                position: relative;
+                height: 40px;
+            }
+            &-horizontal {
+                height: 110px;
+                position: relative;
+                width: 40px
+            }
+            &-outputs {
+                transform: rotate(270deg);
+                p {
+                    border: solid black 1px;
+                    border-radius: 3px;
+                    padding: 1rem;
+                }
+            }
+            &-inputs {
+                margin-left: 25%;
+                padding: 1rem;
+                border: solid black 1px;
+                border-radius: 3px;
+            }
+        }
+        .labels {
+            &-vertical {
+                display: table-row;
+            }
+        }
+        .span {
+            &-vertical {
+                position: absolute;
+                transform: rotate(-45deg);
+                white-space: nowrap;
+                font-family: mainFont;
+                bottom: 30%;
+                right: 15%;
+                transform-origin: center right;
+            }
+            &-horizontal {
+                position: absolute;
+                transform: rotate(-45deg);
+                white-space: nowrap;
+                font-family: mainFont;
+                bottom: 5px;
+                left: 50%;
+                transform-origin: center left;
+            }
+        }
+    }
 }

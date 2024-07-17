@@ -1,21 +1,33 @@
-import { createContext, useReducer, useRef } from "react";
+import { 
+    createContext, 
+    useReducer, 
+    useRef 
+} from "react";
+
 import { 
     setConnections,
     setDisconnections,
     setInitialIOState 
 } from "../services/matrix.services";
+
 import { 
+    makeOsc,
     updateOscFrequency
 } from "../services/oscillator.services";
+
 import { 
     step,
 } from "../services/sequencer.services";
+
 import { 
     startContext 
 } from "../services/context.services";
+
 import {
-    setModuleInitialState
+    setModuleInitialState,
+    addModules
 } from "../services/general.services"
+
 import { 
     Oscillator,
     Filter,
@@ -25,9 +37,11 @@ import {
     Reverb,
     Output
 } from "../classes/classes";
+
 import { 
     ACTIONS
 } from "../utils/ACTIONS";
+
 import * as Tone from 'tone'
 // import exportFromJSON from "export-from-json";
 
@@ -66,11 +80,10 @@ let vcasArr = []
 let effectsArr = []
 let outputsArr = []
 
-let osc1 = new Oscillator(440, `osc${oscillatorsArr.length+1}`)
-oscillatorsArr.push(osc1)
-let osc2 = new Oscillator(440, `osc${oscillatorsArr.length+1}`)
-oscillatorsArr.push(osc2)
-modulesArr.push(oscillatorsArr)
+
+makeOsc(Oscillator, oscillatorsArr)
+makeOsc(Oscillator, oscillatorsArr)
+addModules(modulesArr, oscillatorsArr)
 
 let lfo1 = new LFO(2, `lfo${lfosArr.length+1}`)
 lfosArr.push(lfo1)
@@ -568,12 +581,6 @@ export function reducer(state, action){
             let newSequencerSliderOctaveValue           
             if (value === "inc") {
                 newSequencerSliderOctaveValue = state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[i].octave + 1
-                // let converter = new Tone.Frequency(oscillatorsArr[i].osc.frequency.value)
-                // let newMidi = converter.toMidi() + 12
-                // let converterTwo = new Tone.Frequency(newMidi, "midi")
-                // oscillatorsArr[i].osc.frequency.rampTo(converterTwo.toFrequency(), 0.01, 0)
-                // converter.dispose()
-                // converterTwo.dispose()
             }
             else {
                 newSequencerSliderOctaveValue = state.sequencerSettings.tracks[`track${state.sequencerSettings.currentTrack}`].sliders[i].octave - 1 

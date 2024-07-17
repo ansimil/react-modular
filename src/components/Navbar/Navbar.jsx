@@ -17,7 +17,7 @@ const Navbar = ({seqRef, oscillatorsRef, lfosRef, filterRef, envelopeRef, oscill
     const NavbarBtn = forwardRef((props, ref) => {
         return (
         <button 
-        className={`btn navbar-btn ${props.name}-navbar-btn`}
+        className={`btn btn-light navbar-btn ${props.name}-navbar-btn`}
         onClick={()=>{
             scrollTo(ref)}
         }

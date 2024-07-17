@@ -127,16 +127,16 @@ const Sequencer = () => {
     const stepIndicatorArr = [...document.getElementsByClassName("sequencer-step-indicators")]
     stepIndicatorArr[0].childNodes.forEach((step, i) => {
       if (value === i){
-        step.classList.add("active-step-indicator")
+        step.classList.add("step-indicator-active")
       }
       else {
-        step.classList.remove("active-step-indicator")
+        step.classList.remove("step-indicator-active")
       }
     })
 
     seqSlidersRef.current.forEach(slider => {
       if (slider.parent.id === `slider${value}`){
-        slider.parent.className = "activeSeqSlider"
+        slider.parent.className = "sequencer-slider-active"
       }
       else {
         slider.parent.className = ""
@@ -159,13 +159,13 @@ const Sequencer = () => {
 
   useEffect(()=>{
     Tone.Transport.cancel(0)
-    const [bpm] = document.getElementsByClassName('bpmIndicator')
+    const [bpm] = document.getElementsByClassName('bpm-indicator')
     Tone.Transport.scheduleRepeat(()=>{
       if (bpm.classList.length > 1) {
-        bpm.classList.remove('activeBpmIndicator')
+        bpm.classList.remove('active')
       }
       else {
-        bpm.classList.add('activeBpmIndicator')
+        bpm.classList.add('active')
       }
     }, "32n")
 
@@ -259,17 +259,17 @@ const Sequencer = () => {
   },[])
 
   return (
-    <div className="sequencerContainer">
-      <div className="moduleInfo">
+    <div className="sequencer-container">
+      <div className="module-info">
         <div className="moduleInfoInnerSeq">
             <p>{`seq`}</p>
         </div>
       </div>
       <div 
-      className="sequencerInner"
+      className="sequencer-inner"
       onMouseOver={(e) => {
-        const verticalLabels = document.getElementsByClassName('verticalLabels')[0].childNodes
-        const horizontalLabels = Array.from(document.getElementsByClassName('horizontal-label'))
+        const verticalLabels = document.getElementsByClassName('labels-vertical')[0].childNodes
+        const horizontalLabels = Array.from(document.getElementsByClassName('label-horizontal'))
         
         if (e.target.nodeName !== "rect") {
         sequencerRef.current?.forEach(track=> {
@@ -294,7 +294,7 @@ const Sequencer = () => {
         }
         }}}
         >
-      <div className="sequencerNotesGates">
+      <div className="sequencer-notes-gates settings-container settings-container-dark">
         <div className="sequencer-gates-container">
           <div className='sequencer-step-indicators'>
           {arr.map((num, i) => {
@@ -316,7 +316,7 @@ const Sequencer = () => {
           <div id="seq-track1"></div>
           <div id="seq-track2"></div>
         </div>
-        <div className="slidersContainer">
+        <div className="sliders">
 
           {arr.map((i) => {
             return (
@@ -325,9 +325,9 @@ const Sequencer = () => {
           })}
           </div>
 
-          <div className='notesAndOctaves'>
-            <div className="sequencerNotes">
-              <p className="inc-dec-label sliderLabel">NOTE</p>
+          <div className='sequencer-notes-octaves'>
+            <div className="sequencer-notes">
+              <p className="inc-dec-label slider-label">NOTE</p>
               <div className="sequencer-inc-dec-note-container">
                 {arr.map(i => {
                   return (
@@ -336,8 +336,8 @@ const Sequencer = () => {
                 })}  
               </div>
             </div>
-            <div className="noteOctave">
-              <p className="inc-dec-label sliderLabel">OCTAVE</p>
+            <div className="note-octave">
+              <p className="inc-dec-label slider-label">OCTAVE</p>
 
               <div className="sequencer-inc-dec-octave-container">
               {arr.map(i => {
@@ -354,7 +354,7 @@ const Sequencer = () => {
       <ShowTrackNotes changeCurrentTrack={changeCurrentTrack} loadTrackSliders={loadTrackSliders} />
       {sequencerRef.current && <TrackAssignmentComp sequencerRef={sequencerRef} />}
 
-      <div className="sequencerSettingsContainer">
+      <div className="sequencer-settings-container">
         <div className="sequencer-settings-inner">
           {/* <SevenSegDisplay /> */}
           <div className="sequencer-settings-inner-inner">

@@ -33,25 +33,25 @@ const Slider = ({ name, label, valueLabel, unit, min, max, step, values, valueMu
     },[])
 
   return (
-    <div className={`sliderContainer ${id}`}>
-      <label className="sliderLabel"><p>{label}</p></label>
-      <p className="valueIndicator">{`${(valueLabel * valueMultiplier).toFixed(2)}${unit}`}</p>
-      <div className="slider-outer-container">
-      <div className="slider-lines-left" style={{height: height}}>
-      {lineArray.map((line, i) => {
-        return (
-          <div key={`slider${id}leftLine${i}`} className='slider-line' style={{width: line}}></div>
-        )
-      })}
-      </div>
-      <div className="sliderInnerContainer sliderHover" id={`${name}${id}`}></div>
-      <div className="slider-lines-right" style={{height: height}}>
-      {lineArray.map((line, i) => {
-        return (
-          <div key={`slider${id}rightLine${i}`} className='slider-line' style={{width: line}}></div>
-        )
-      })}
-      </div>
+    <div className={`slider-container ${id}`}>
+      <label className="slider-label"><p>{label}</p></label>
+      <p className="value-indicator">{`${(valueLabel * valueMultiplier).toFixed(2)}${unit}`}</p>
+      <div className="slider-outer">
+        <div className="slider-lines slider-lines-left" style={{height: height}}>
+          {lineArray.map((line, i) => {
+            return (
+              <div key={`slider${id}leftLine${i}`} className='slider-line' style={{width: line}}></div>
+            )
+          })}
+        </div>
+        <div className="slider-inner slider-hover" id={`${name}${id}`}></div>
+        <div className=" slider-lines slider-lines-right" style={{height: height}}>
+        {lineArray.map((line, i) => {
+          return (
+            <div key={`slider${id}rightLine${i}`} className='slider-line' style={{width: line}}></div>
+          )
+        })}
+        </div>
       </div>
     </div>
   )

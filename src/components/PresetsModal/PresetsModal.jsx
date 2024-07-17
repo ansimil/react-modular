@@ -157,7 +157,7 @@ const PresetsModal = ({ showSaveModal, setShowSaveModal, setCurrentPatch } ) => 
         <div className='presets-modal-container'>
             <div className='save-presets-container'>
                 <div className='new-preset-container'>
-                <label className='sliderLabel save-new-patch-label' htmlFor="saveNewPreset">Save New Patch</label>
+                <label className='slider-label save-new-patch-label' htmlFor="saveNewPreset">Save New Patch</label>
                     <form action="saveNewPreset">
                     {errorMessage && <p className="preset-error-message">{errorMessage}</p>}
                         <input
@@ -183,7 +183,7 @@ const PresetsModal = ({ showSaveModal, setShowSaveModal, setCurrentPatch } ) => 
                     
                 </div>
                 <div className='existing-preset-container'>
-                    <label className='sliderLabel save-new-patch-label' htmlFor="overwritePresets">Overwrite Patch</label>
+                    <label className='slider-label save-new-patch-label' htmlFor="overwritePresets">Overwrite Patch</label>
                     <form action="submit">
                         <PresetOptions presetSection={"overwritePreset"} registerId={register3}/>
                         <button 
@@ -207,7 +207,7 @@ const PresetsModal = ({ showSaveModal, setShowSaveModal, setCurrentPatch } ) => 
                     <form
                     action="submit"
                     >
-                        <label className='sliderLabel save-new-patch-label' htmlFor="loadPresets">Load Patch</label>
+                        <label className='slider-label save-new-patch-label' htmlFor="loadPresets">Load Patch</label>
                         <PresetOptions presetSection={"loadPreset"} registerId={register2}/>
                         <button 
                         className='btn load-preset-btn'
@@ -229,7 +229,7 @@ const PresetsModal = ({ showSaveModal, setShowSaveModal, setCurrentPatch } ) => 
                 <form
                     action="submit"
                     >
-                        <label className='sliderLabel save-new-patch-label' htmlFor="deletePreset">Delete Patch</label>
+                        <label className='slider-label save-new-patch-label' htmlFor="deletePreset">Delete Patch</label>
                         <PresetOptions presetSection={"deletePreset"} registerId={register4}/>
                         <button 
                         className='btn delete-preset-btn'

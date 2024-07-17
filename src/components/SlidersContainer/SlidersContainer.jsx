@@ -21,7 +21,7 @@ const SlidersContainer = ({ module, i }) => {
     }
 
   return (
-    <div className="sliders-container">
+    <div className="sliders">
 
         {slidersArr.map((slider, i) => {
             const {module, label, unit, min, max, step, id, valueMultiplier} = slider

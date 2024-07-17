@@ -1,9 +1,6 @@
 .track-assignment-container {
   min-height: 98%;
   width: 250px;
-  border: solid black 1px;
-  border-radius: 3px;
-  background-color: rgb(44, 44, 44);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -12,15 +9,12 @@
 
 .track-assignments {
   margin-top: 0.5rem;
-  border: solid black 0.5px;
-  border-radius: 3px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 0.7rem;
   padding: 0.7rem;
-  box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
 
 .note-selector-options, .gate-selector-options {
@@ -59,6 +53,6 @@ input[type=radio] {
   margin-bottom: 0.5rem;
 }
 
-.note-selector-btns button, .gate-selector-btns button {
+.note-selectors button, .gate-selectors button {
   max-height: 25px;
 }/*# sourceMappingURL=TrackAssignmentComp.css.map */

@@ -24,7 +24,7 @@ const PlayerControls = () => {
         <div className='playBtnsContainer'>
           <button
           title="Start"
-          className={transportState.player === 'started' ? "playerBtn endBtnLeft activeBtn" : "playerBtn endBtnLeft"} 
+          className={transportState.player === 'started' ? "playerBtn btn-left-end btn-active" : "playerBtn btn-left-end"} 
           onClick={
             ()=>{
               Tone.Transport.start()
@@ -39,7 +39,7 @@ const PlayerControls = () => {
           </button>
           <button
           title="Pause" 
-          className={transportState.player === 'paused' ? "playerBtn middleBtn activeBtn" : "playerBtn middleBtn"}
+          className={transportState.player === 'paused' ? "playerBtn btn-middle btn-active" : "playerBtn btn-middle"}
           onClick={
             ()=>{
               Tone.Transport.pause()
@@ -55,7 +55,7 @@ const PlayerControls = () => {
 
           <button
           title="Stop" 
-          className={transportState.player === 'stopped' ? "playerBtn endBtnRight activeBtn" : "playerBtn endBtnRight" }
+          className={transportState.player === 'stopped' ? "playerBtn btn-right-end btn-active" : "playerBtn btn-right-end" }
           onClick={
             ()=>{
               sequencerRef.current.forEach(track => {
@@ -74,7 +74,7 @@ const PlayerControls = () => {
               })
               seqSlidersRef.current.forEach(slider => {
               if (slider.parent.id === `slider0`){
-                slider.parent.className = "activeSeqSlider"
+                slider.parent.className = "sequencer-slider-active"
               }
               else {
                 slider.parent.className = ""
@@ -96,7 +96,7 @@ const PlayerControls = () => {
         <div className='directionBtnContainer'>
           <button
           title="Up" 
-          className={appState.sequencerSettings.direction === "up" ? "playerBtn endBtnLeft activeBtn": "playerBtn endBtnLeft"}
+          className={appState.sequencerSettings.direction === "up" ? "playerBtn btn-left-end btn-active": "playerBtn btn-left-end"}
           onClick={
             ()=>{
                 let currentFirstTrackStep
@@ -121,7 +121,7 @@ const PlayerControls = () => {
             </button>
           <button
           title="Down"
-          className={appState.sequencerSettings.direction === "down" ? "playerBtn endBtnRight activeBtn": "playerBtn endBtnRight"}
+          className={appState.sequencerSettings.direction === "down" ? "playerBtn btn-right-end btn-active": "playerBtn btn-right-end"}
           onClick={
             ()=>{
               let currentFirstTrackStep

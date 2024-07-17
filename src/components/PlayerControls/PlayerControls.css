@@ -41,4 +41,8 @@
 .playerIcon {
   width: 15px;
   height: 15px;
+}
+
+.downIcon {
+  transform: rotate(180deg);
 }/*# sourceMappingURL=PlayerControls.css.map */

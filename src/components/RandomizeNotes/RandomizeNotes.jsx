@@ -59,28 +59,28 @@ const RandomizeNotes = ({seqSlidersRef}) => {
     }
 
   return (
-    <div className="randomize-notes-container sequencer-settings-medium">
+    <div className="randomize-notes-container sequencer-settings-medium settings-container settings-container-dark settings-container-dark-inlay">
         <div className="seq-settings-label-div">
             <p className="seq-settings-label">RANDOMIZE NOTES</p>
         </div>
         <div className='randomize-notes-inner'>
         <div className='scale-btns'>
             <button 
-            className={sequencerSettings.randomNotes.scale === "all" ? "btn activeBtn selector-btn" : "btn selector-btn"}
+            className={sequencerSettings.randomNotes.scale === "all" ? "btn btn-dark btn-active selector-btn" : "btn btn-dark selector-btn"}
             onClick={() => {
                 changeScale("all")
             }}>
             all
             </button>
             <button 
-            className={sequencerSettings.randomNotes.scale === "major" ? "btn activeBtn selector-btn" : "btn selector-btn"}
+            className={sequencerSettings.randomNotes.scale === "major" ? "btn btn-dark btn-active selector-btn" : "btn btn-dark selector-btn"}
             onClick={()=>{
                 changeScale("major")
             }}>
             major
             </button>
             <button 
-            className={sequencerSettings.randomNotes.scale === "minor" ? "btn activeBtn selector-btn" : "btn selector-btn"}
+            className={sequencerSettings.randomNotes.scale === "minor" ? "btn btn-dark btn-active selector-btn" : "btn btn-dark selector-btn"}
             onClick={()=>{
                 changeScale("minor")
             }}>
@@ -95,7 +95,7 @@ const RandomizeNotes = ({seqSlidersRef}) => {
                     setRoot(note)
                 }}
                 key={i}
-                className={sequencerSettings.randomNotes.root === note ? "btn activeBtn selector-btn root-note-btn" : "btn selector-btn root-note-btn"}
+                className={sequencerSettings.randomNotes.root === note ? "btn btn-dark btn-active selector-btn root-note-btn" : "btn btn-dark selector-btn root-note-btn"}
                 >
                 {note.toUpperCase()}
                 </button>
@@ -103,7 +103,7 @@ const RandomizeNotes = ({seqSlidersRef}) => {
         })}
         </div>
         <button
-        className="btn endBtnLeft endBtnRight set-random-notes"
+        className="btn btn-light btn-left-end btn-right-end set-random-notes"
         onMouseDown={()=>{
             handleMouseEvent("set-random-notes", true)
         }}

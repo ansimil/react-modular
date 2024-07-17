@@ -1,11 +1,6 @@
-// @font-face {
-//     font-family: "lightFont";
-//     src: url('../../assets/fonts/rubik/static/Rubik-Light.ttf');
-// }
-
 $inputHeight: 25px;
 
-.timeCompContainer {
+.time-comp-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -16,61 +11,59 @@ $inputHeight: 25px;
     background-color: rgb(57, 57, 57);
     border-radius: 3px;
     box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+    input {
+        width: 40px;
+        height: $inputHeight;
+        text-align: center;
+        font-family: mainFont;
+        border-radius: 3px;
+        border: none;
+        background-color: rgb(222, 222, 222);
+        &::-webkit-outer-spin-button, &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        &[type=number] {
+            -moz-appearance: textfield;
+        }
+    }
+    .bpm-incdec-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .btn-bpm {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            height: calc($inputHeight / 1.75);
+            text-align: center;
+            width: 20px;
+            padding: 0;
+            cursor: pointer;
+            border-left: solid black 1px;
+            border-right: solid black 1px;
+
+            &-top {
+                border-top: solid black 1px;
+                border-bottom: solid black 0.5px;
+                border-top-right-radius: 3px;
+                border-top-left-radius: 3px;
+            }
+
+            &-btm {
+                border-top: solid black 0.5px;
+                border-bottom: solid black 1px;
+                border-bottom-right-radius: 3px;
+                border-bottom-left-radius: 3px;
+            }
+        }
+    }
 }
 
-.timeCompContainer input {
-    width: 40px;
-    height: $inputHeight;
-    text-align: center;
-    font-family: mainFont;
-    border-radius: 3px;
-    border: none;
-    background-color: rgb(222, 222, 222);
-}
 
-.timeCompContainer input::-webkit-outer-spin-button,
-.timeCompContainer input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
 
-.timeCompContainer input[type=number] {
-  -moz-appearance: textfield;
-}
 
-.bpmIncDecContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
 
-.bpmBtn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    height: $inputHeight/1.75;
-    text-align: center;
-    width: 20px;
-    padding: 0;
-    cursor: pointer;
-}
 
-.bpmTopBtn {
-    border-left: solid black 1px;
-    border-right: solid black 1px;
-    border-top: solid black 1px;
-    border-bottom: solid black 0.5px;
-    border-top-right-radius: 3px;
-    border-top-left-radius: 3px;
-}
-
-.bpmBtmBtn {
-    border-left: solid black 1px;
-    border-right: solid black 1px;
-    border-top: solid black 0.5px;
-    border-bottom: solid black 1px;
-    border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px;
-}

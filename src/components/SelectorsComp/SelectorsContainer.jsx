@@ -16,7 +16,7 @@ const SelectorsContainer = ({ module, i }) => {
     }
 
   return (
-    <div className="selectors-container">
+    <div className="selectors">
     {selectorsArr && selectorsArr.map((selector) => {
         const { id, label, type } = selector
         return (

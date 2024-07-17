@@ -1,0 +1,20 @@
+$label-highlight: rgb(117, 117, 117);
+$lightestBackground: rgb(239, 239, 239);
+$light-background: rgb(222, 222, 222);
+$dark-background: rgb(44,44,44);
+$sliderBackground: $light-background;
+$moduleMinHeight: 300px;
+$containerBorderRadius: 3px;
+
+
+// Button Colors
+
+$btn-dark-bg: rgb(44,44,44);
+$btn-dark-color: rgb(195, 195, 195);
+$btn-dark-border: solid black 0.5px;
+
+$btn-light-bg: $light-background;
+$btn-light-border: solid black 1px;
+
+$btn-hover-bg: rgb(112, 112, 112);
+$btn-hover-box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.4), inset 1px 1px 3px rgb(158, 158, 158, 0.8); 

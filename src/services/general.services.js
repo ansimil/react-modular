@@ -1,11 +1,15 @@
 const handleMouseEvent = (classname, down) => {
     const el = document.getElementsByClassName(classname)
         if (down) {
-            el[0].classList.add("activeBtn")
+            el[0].classList.add("btn-active")
         }
         else {
-            el[0].classList.remove("activeBtn") 
+            el[0].classList.remove("btn-active") 
         }
+}
+
+const addModules = (modulesArr, moduleArr) => {
+    modulesArr.push(moduleArr)
 }
 
 const setModuleInitialState = (modulesArr) => {
@@ -19,5 +23,6 @@ const setModuleInitialState = (modulesArr) => {
 
 export {
     handleMouseEvent,
-    setModuleInitialState
+    setModuleInitialState,
+    addModules
 }
