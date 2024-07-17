@@ -4,13 +4,16 @@ import TimeComp from '../TimeComp/TimeComp'
 import HelpModal from '../HelpModal/HelpModal'
 import PlayerControls from '../PlayerControls/PlayerControls'
 import Oscilloscope from '../Oscilloscope/Oscilloscope'
+import BpmIndicator from '../BpmIndicator/BpmIndicator'
+import PresetsModal from '../PresetsModal/PresetsModal'
 import './ControlBar.css'
 import qMark from '../../assets/icons/questionmark-icon.png'
 import saveIcon from '../../assets/icons/save-preset-icon.png'
-import PresetsModal from '../PresetsModal/PresetsModal'
+
 import { ACTIONS } from '../../utils/ACTIONS'
 import { ModularBusContext } from '../../contexts/ModularBusContext'
 import toast from 'react-hot-toast'
+
 
 const ControlBar = ({currentPatch, setCurrentPatch}) => {
     const { stateHook } = useContext(ModularBusContext)
@@ -57,23 +60,20 @@ const ControlBar = ({currentPatch, setCurrentPatch}) => {
     },[currentPatch, setCurrentPatch])
 
     return (
-    <div className="controlBarContainer">
+    <div className="controlbar">
         <div className="controlbar-start-container controlbar-inner">
           <StartBtn/>
         </div>
 
         <div className="controlbar-middle-container controlbar-inner">
-          <div className='bpmIndicatorContainer'>
-            <div className='bpmIndicator'>
-            </div>
-          </div>
+          <BpmIndicator/>
           <TimeComp />
           <PlayerControls/>
         </div>
         <div className="controlbar-end-container controlbar-inner">
           <div title={`Current Patch: ${currentPatch ? currentPatch : "--Default Patch--"}`} className='save-preset-container'>
             <p className="current-patch-title">Current patch:</p>
-            <p title={currentPatch} className='valueIndicator currentPatchIndicator'>{currentPatch ? currentPatch : "--Default Patch--"}</p>
+            <p title={currentPatch} className='value-indicator current-patch-indicator'>{currentPatch ? currentPatch : "--Default Patch--"}</p>
             <img 
             title="Save/Load options. Shift+click for quick save" 
             onClick={(e) => {
@@ -91,7 +91,7 @@ const ControlBar = ({currentPatch, setCurrentPatch}) => {
           onClick={(e) => {
             toggleModal(e)
           }} 
-          className="helpIcon" 
+          className="help-icon" 
           src={qMark} 
           alt="help"   
           />

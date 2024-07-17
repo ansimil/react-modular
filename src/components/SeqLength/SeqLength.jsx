@@ -67,13 +67,13 @@ const SeqLength = () => {
     }
 
   return (
-    <div className="sequencer-length-container sequencer-settings-small">
+    <div className="sequencer-length-container sequencer-settings-small settings-container settings-container-dark settings-container-dark-inlay">
         <div className="seq-settings-label-div">
             <p className="seq-settings-label">LENGTH</p>
         </div>
         <div className="lengthBtnsContainer">
             <button
-            className={appState.sequencerSettings.length === 2 ? "btn lengthBtn endBtnLeft activeBtn" : "btn lengthBtn endBtnLeft"}
+            className={appState.sequencerSettings.length === 2 ? "btn lengthBtn btn-left-end btn-active" : "btn lengthBtn btn-left-end"}
             onClick={()=>{
                 changeSeqLength(2)
                 }}
@@ -81,21 +81,21 @@ const SeqLength = () => {
             2
             </button>
             <button
-            className={appState.sequencerSettings.length === 4 ? "btn lengthBtn middleBtn activeBtn" : "btn lengthBtn middleBtn"}
+            className={appState.sequencerSettings.length === 4 ? "btn lengthBtn btn-middle btn-active" : "btn lengthBtn btn-middle"}
             onClick={()=>{
                 changeSeqLength(4)
                 }}>
             4
             </button>
             <button             
-            className={appState.sequencerSettings.length === 8 ? "btn lengthBtn middleBtn activeBtn" : "btn lengthBtn middleBtn"}
+            className={appState.sequencerSettings.length === 8 ? "btn lengthBtn btn-middle btn-active" : "btn lengthBtn btn-middle"}
             onClick={()=>{
                 changeSeqLength(8)
                 }}>
             8
             </button>
             <button
-            className={appState.sequencerSettings.length === 16 ? "btn lengthBtn endBtnRight activeBtn" : "btn lengthBtn endBtnRight"}
+            className={appState.sequencerSettings.length === 16 ? "btn lengthBtn btn-right-end btn-active" : "btn lengthBtn btn-right-end"}
             onClick={()=>{
                 changeSeqLength(16)
                 }}>

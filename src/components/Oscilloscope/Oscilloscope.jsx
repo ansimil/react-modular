@@ -14,7 +14,7 @@ const Oscilloscope = ({size, id}) => {
     // eslint-disable-next-line     
     },[])
   return (
-    <div className="oscilloscopeContainer">
+    <div className="oscilloscope">
         <div id={`${id}oscilloscope`}></div>
     </div>
   )

@@ -31,8 +31,8 @@ const Matrix = ( { matrixLocationRef } ) => {
     const highlightRowsColumns = (cell) => {
         let row = cell.row
         let column = cell.column
-        const verticalLabels = document.getElementsByClassName('verticalLabels')[0].childNodes
-        const horizontalLabels = Array.from(document.getElementsByClassName('horizontal-label'))
+        const verticalLabels = document.getElementsByClassName('labels-vertical')[0].childNodes
+        const horizontalLabels = Array.from(document.getElementsByClassName('label-horizontal'))
         matrixRef.current.cells.forEach(cell => {
             if (!cell._state.state) {
                 cell.element.children[0].style.fill = "#fff"
@@ -103,10 +103,10 @@ const Matrix = ( { matrixLocationRef } ) => {
   return (
     <div 
     ref={matrixLocationRef} 
-    className='matrixContainer' 
+    className='matrix-container' 
     onMouseOver={(e) => {
-        const verticalLabels = document.getElementsByClassName('verticalLabels')[0].childNodes
-        const horizontalLabels = Array.from(document.getElementsByClassName('horizontal-label'))
+        const verticalLabels = document.getElementsByClassName('labels-vertical')[0].childNodes
+        const horizontalLabels = Array.from(document.getElementsByClassName('label-horizontal'))
         
         if (e.target.nodeName !== "rect") {
         matrixRef.current?.cells.forEach(cell => {
@@ -130,19 +130,19 @@ const Matrix = ( { matrixLocationRef } ) => {
         }
     }}
     >
-        <div className='matrixContainerInner'>
-        <div className="inputsLabel"><p>inputs</p></div>
+        <div className='matrix-container-inner'>
+        <div className="label-inputs"><p>inputs</p></div>
             <table>
                 <thead>
                 
-                        <tr className="horizontal-labels">
+                        <tr className="labels-horizontal">
                             <th></th> 
                             <th></th>
                             <th style={{display: "flex"}}>
                             {Object.keys(IOs[0]).map((input, i) => {
                                 const name = IOs[0][input].name
                                 return (
-                                        <div key={i} className="horizontal-label" style={{"width": `${sqSize}px`}}><span className="horizontal-span" style={{fontSize: `${0.025*sqSize}rem`}}>{name}</span></div>
+                                        <div key={i} className="label-horizontal" style={{"width": `${sqSize}px`}}><span className="span-horizontal" style={{fontSize: `${0.025*sqSize}rem`}}>{name}</span></div>
                                 )
                             })
                             }
@@ -152,13 +152,13 @@ const Matrix = ( { matrixLocationRef } ) => {
                 </thead>
                 <tbody>
                     <tr>
-                        <td className="outputsLabel"><p>outputs</p></td>
+                        <td className="label-outputs"><p>outputs</p></td>
                             
-                        <td className='verticalLabels' style={{"height": `${height}px`}}>
+                        <td className='labels-vertical' style={{"height": `${height}px`}}>
                             {Object.keys(IOs[1]).map((output, i) => {
                                 const name = IOs[1][output].name
                                 return (
-                                    <div key={i} className="vertical-label" style={{height: sqSize}}><span className="vertical-span" style={{fontSize: `${0.025*sqSize}rem`}}>{name}</span></div> 
+                                    <div key={i} className="label-vertical" style={{height: sqSize}}><span className="span-vertical" style={{fontSize: `${0.025*sqSize}rem`}}>{name}</span></div> 
                                 )
                             })
                             }

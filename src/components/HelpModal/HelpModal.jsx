@@ -17,7 +17,7 @@ const HelpModal = ({showModal, setShowModal}) => {
             "backgroundColor": "rgb(57, 57, 57)"
         }}
         >
-            <div className="modalContainer">
+            <div className="modal-container">
                 <h2>How to use the synth</h2>
                 <h3>Turn the synth on</h3>
                 <p>(click on here)</p>

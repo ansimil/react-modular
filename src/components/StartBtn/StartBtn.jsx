@@ -26,21 +26,21 @@ const StartBtn = () => {
     }
 
   return (
-    <div className="startBtnContainer">
+    <div className="start-btn-container">
     
-        <div className={transportState.synthState.start ? "startBtnInner started" : "startBtnInner"}>
-            <div className="startBtnDiv">
+        <div className={transportState.synthState.start ? "start-btn-inner started" : "start-btn-inner"}>
+            <div className="start-btn">
               <button
               id="start"
               title="on/off"
               onClick={change}
-              className={transportState.synthState.start ? "startBtn activeBtn endBtnRight": "startBtn endBtnLeft"}
+              className={transportState.synthState.start ? "btn-start btn-active btn-right-end": "btn-start btn-left-end"}
               >
-              <img src={transportState.synthState.start ? powerOn : powerOff} alt="power-icon" /> 
+                <img src={transportState.synthState.start ? powerOn : powerOff} alt="power-icon" /> 
               </button>
             </div>
             
-            <div className={transportState.synthState.start ? "startBtnOn" : "startBtnOff"}>
+            <div className={transportState.synthState.start ? "start-indicator start-indicator-on" : "start-indicator start-indicator-off"}>
             r
             </div>
         </div>

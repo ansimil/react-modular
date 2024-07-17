@@ -38,31 +38,31 @@ const TimeComp = () => {
     }
 
   return (
-    <div className="timeCompContainer">
+    <div className="time-comp-container">
         <p style={{"color": "rgb(222, 222, 222)", "marginRight": "2rem"}}>BPM</p>
         <input id="bpm" onChange={handleChange} value={appState.synthSettings.bpm} type="number"/>
-        <div className="bpmIncDecContainer">
+        <div className="bpm-incdec-container">
             <button 
-            className="bpmBtn bpmTopBtn" id="bpm" 
+            className="btn-bpm btn-bpm-top" id="bpm" 
             onClick={handleInc}
             onMouseDown={
-                () => handleMouseEvent("bpmTopBtn", true)
+                () => handleMouseEvent("btn-bpm-top", true)
             }
             onMouseUp={
-                () => handleMouseEvent("bpmTopBtn", false)
+                () => handleMouseEvent("btn-bpm-top", false)
             }
             >
             +
             </button>
             <button 
-            className="bpmBtn bpmBtmBtn" 
+            className="btn-bpm btn-bpm-btm" 
             id="bpm" 
             onClick={handleDec}
             onMouseDown={
-                () => handleMouseEvent("bpmBtmBtn", true)
+                () => handleMouseEvent("btn-bpm-btm", true)
             }
             onMouseUp={
-                () => handleMouseEvent("bpmBtmBtn", false)
+                () => handleMouseEvent("btn-bpm-btm", false)
             }
             >
             -

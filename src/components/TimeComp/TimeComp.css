@@ -1,4 +1,4 @@
-.timeCompContainer {
+.time-comp-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,8 +11,7 @@
   border-radius: 3px;
   box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
-
-.timeCompContainer input {
+.time-comp-container input {
   width: 40px;
   height: 25px;
   text-align: center;
@@ -21,25 +20,20 @@
   border: none;
   background-color: rgb(222, 222, 222);
 }
-
-.timeCompContainer input::-webkit-outer-spin-button,
-.timeCompContainer input::-webkit-inner-spin-button {
+.time-comp-container input::-webkit-outer-spin-button, .time-comp-container input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
-.timeCompContainer input[type=number] {
+.time-comp-container input[type=number] {
   -moz-appearance: textfield;
 }
-
-.bpmIncDecContainer {
+.time-comp-container .bpm-incdec-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-
-.bpmBtn {
+.time-comp-container .bpm-incdec-container .btn-bpm {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -49,20 +43,16 @@
   width: 20px;
   padding: 0;
   cursor: pointer;
-}
-
-.bpmTopBtn {
   border-left: solid black 1px;
   border-right: solid black 1px;
+}
+.time-comp-container .bpm-incdec-container .btn-bpm-top {
   border-top: solid black 1px;
   border-bottom: solid black 0.5px;
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
 }
-
-.bpmBtmBtn {
-  border-left: solid black 1px;
-  border-right: solid black 1px;
+.time-comp-container .bpm-incdec-container .btn-bpm-btm {
   border-top: solid black 0.5px;
   border-bottom: solid black 1px;
   border-bottom-right-radius: 3px;

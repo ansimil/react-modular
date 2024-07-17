@@ -1,0 +1,52 @@
+.btn {
+    cursor: pointer;
+    padding: 0.7rem 0.4rem;
+    min-width: 50px;
+    text-align: center;
+    border-radius: 3px;
+
+    // Color options
+    // Dark
+    &-dark {
+        background-color: $btn-dark-bg;
+        color: $btn-dark-color;
+        box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.4), inset 1px 1px 3px rgba(115, 115, 115,0.2);
+        transform: translate(-1px, -1px);
+        border: $btn-dark-border;
+    }
+    // Light
+    &-light {
+        background-color: $light-background;
+        border: $btn-light-border;
+    }
+
+    // Default hover state
+    &:hover {
+        background-color: $btn-hover-bg;
+        box-shadow: $btn-hover-box-shadow;
+    }
+
+    //Active
+    &-active {
+        background-color: #1e1e1e !important;
+        color: rgb(179, 227, 252) !important;
+        box-shadow: inset -1px -1px 3px rgba(115, 115, 115,0.1), inset 1px 1px 3px rgba(0, 0, 0, 0.4) !important;
+        transform: translate(0, 0) !important;
+    }
+
+    //Disabled
+    &-disabled {
+        background-color: $light-background;
+    }
+}
+
+.settings-container {
+    border: solid black 1px;
+    border-radius: 3px;
+    &-dark {
+        background-color: $dark-background;
+        &-inlay {
+            box-shadow: inset 0px 0px 10px rgba(0,0,0,0.5);
+        }
+    }
+}

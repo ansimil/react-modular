@@ -10,11 +10,11 @@ const IncDec = ({value, label, moduleName, i, type}) => {
 
     return (
         <div className="inc-dec-inner">
-            {label && <p className="inc-dec-label sliderLabel">{label.toUpperCase()}</p>}
+            {label && <p className="inc-dec-label slider-label">{label.toUpperCase()}</p>}
             <div className="inc-dec-btns-container">
             <button
             id={label} 
-            className={`inc-dec-btn dec-btn dec-btn${moduleName}${label} btn`}
+            className={`inc-dec-btn dec-btn dec-btn${moduleName}${label} btn btn-light`}
             onClick={(e)=> updateState({type: ACTIONS.osc.offset, payload: {value: "dec", id:e.target.id, i, moduleName, type}})}
             onMouseDown={
                 () => handleMouseEvent(`dec-btn${moduleName}${label}`, true)
@@ -28,7 +28,7 @@ const IncDec = ({value, label, moduleName, i, type}) => {
             <p className="inc-dec-indicator">{value}</p>
             <button
             id={label}
-            className={`inc-dec-btn inc-btn inc-btn${moduleName}${label} btn`}
+            className={`inc-dec-btn inc-btn inc-btn${moduleName}${label} btn btn-light`}
             onClick={(e)=> updateState({type: ACTIONS.osc.offset, payload: {value: "inc", id:e.target.id, i, moduleName}})}
             onMouseDown={
                 () => handleMouseEvent(`inc-btn${moduleName}${label}`, true)

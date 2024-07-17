@@ -1,4 +1,4 @@
-.controlBarContainer {
+.controlbar {
   position: fixed;
   top: 0;
   width: inherit;
@@ -9,34 +9,19 @@
   background-color: rgb(44, 44, 44);
   z-index: 9999;
 }
-
 .controlbar-middle-container {
   flex: 2;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
 }
-
 .controlbar-end-container {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   flex: 1;
 }
-
-.helpIcon {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-}
-
-.save-preset-icon {
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-}
-
-.controlBarContainer .oscilloscopeContainer {
+.controlbar .oscilloscope {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -46,30 +31,15 @@
   box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
   height: 40px;
 }
-
-#smalloscilloscope {
+.controlbar .oscilloscope #smalloscilloscope {
   margin-left: 1rem;
   margin-right: 1rem;
 }
 
-.bpmIndicatorContainer {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 1rem;
-}
-
-.bpmIndicator {
-  width: 40%;
-  height: 40%;
-  background-color: white;
-  border-radius: 100%;
-}
-
-.activeBpmIndicator {
-  background-color: rgb(1, 169, 13);
+.help-icon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
 }
 
 .save-preset-container {
@@ -78,8 +48,13 @@
   align-items: center;
   gap: 0.5rem;
 }
+.save-preset-icon {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
 
-.currentPatchIndicator {
+.current-patch-indicator {
   display: block;
   text-align: center;
   overflow: hidden;
@@ -90,7 +65,6 @@
   justify-content: flex-start;
   padding-top: 0.55rem;
 }
-
 .current-patch-title {
   font-family: mainFont;
   font-size: 0.7rem;

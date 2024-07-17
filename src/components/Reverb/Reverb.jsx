@@ -13,16 +13,16 @@ const Reverb = () => {
     }
 
   return (
-    <div className='modulesContainer reverbContainer'>
-    <div className="moduleInfo">
-        <div className="moduleInfoInner">
+    <div className='module-container reverb-container'>
+    <div className="module-info">
+        <div className="module-info-inner">
             <p>{`reverb`}</p>
         </div>
     </div>
 
-    <div className="moduleSettingsContainer">
-        <div className="moduleSettingsInner">
-            <div className="slidersContainer">
+    <div className="module-settings-container">
+        <div className="module-settings-inner">
+            <div className="sliders">
               <Slider module={"reverb"} label={"DECAY"} valueLabel={(appState.effectsSettings.reverb.decay).toFixed(2)} unit={"s"} min={0} max={5} step={0.001} values={appState.effectsSettings.reverb.decay} sliderRef={reverbRef} id={"decay"} changeFunction={change}/>
               <Slider module={"reverb"} label={"DELAY"} valueLabel={(appState.effectsSettings.reverb.preDelay).toFixed(2)} unit={"s"} min={0} max={2} step={0.0001} values={appState.effectsSettings.reverb.preDelay} sliderRef={reverbRef} id={"preDelay"} changeFunction={change}/>
               <Slider module={"reverb"} label={"WET"} valueLabel={(appState.effectsSettings.reverb.wet*100).toFixed(2)} unit={"%"} min={0} max={1} step={0.0001} values={appState.effectsSettings.reverb.wet} sliderRef={reverbRef} id={"wet"} changeFunction={change}/>

@@ -1,34 +1,82 @@
-.sliderInnerContainer {
-  border: black solid 0.5px;
+.slider {
+  transform: rotate(270deg);
+  max-width: 125px;
+  margin-bottom: 40px;
+  background-color: rgb(222, 222, 222);
+  flex: 1;
 }
-
-.slider-outer-container {
+.slider-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
-}
-
-.slider-lines-left, .slider-lines-right {
-  display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  border: none !important;
+  width: 15%;
+  min-width: 70px;
+  border: solid black 1px;
+  background-color: rgb(222, 222, 222);
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
-
-.slider-lines-left {
-  align-items: flex-end;
+.slider-container p {
+  flex: 1;
+  margin-top: 6px;
 }
-
-.slider-lines-right {
-  align-items: flex-start;
-}
-
 .slider-line {
   background-color: rgb(73, 73, 73);
   height: 1px;
   border: none !important;
 }
+.slider-lines {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  border: none !important;
+}
+.slider-lines-left {
+  align-items: flex-end;
+}
+.slider-lines-right {
+  align-items: flex-start;
+}
+.slider-label {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+  text-align: center;
+  max-height: 25px;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(117, 117, 117);
+  border-radius: 3px;
+  border: solid black 0.5px;
+  box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.5);
+}
+.slider-label p {
+  margin: 7px 0px;
+  font-size: 80%;
+}
+.slider-outer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.slider-inner {
+  border: black solid 0.5px;
+}
 
-div[id*=slider] svg:hover, div[class*=sliderHover] svg:hover {
+.slider::-webkit-slider-runnable-track, .slider::-moz-range-track {
+  background-color: black;
+}
+
+.slider::-webkit-slider-thumb, .slider::-moz-range-thumb {
+  background: black;
+  width: 6px;
+  height: 18px;
+  border-radius: 0;
+}
+
+div[id*=slider] svg:hover, div[class*=slider-hover] svg:hover {
   background-color: rgb(71, 71, 71) !important;
 }/*# sourceMappingURL=Slider.css.map */

@@ -9,7 +9,7 @@ const IncDec = ({value, incDecClass, label, updateState, oscNum}) => {
     
     return (
         <div className="inc-dec-inner">
-            {label && <p className="inc-dec-label sliderLabel">{label.toUpperCase()}</p>}
+            {label && <p className="inc-dec-label slider-label">{label.toUpperCase()}</p>}
             <div className="inc-dec-btns-container">
             <button
             id={label} 
@@ -65,16 +65,16 @@ const Oscillator = ({ oscNum }) => {
     }
 
     return (
-        <div className={`modulesContainer oscillatorContainer${oscNum}`}>
-            <div className="moduleInfo">
-                <div className="moduleInfoInner">
+        <div className={`module-container oscillatorContainer${oscNum}`}>
+            <div className="module-info">
+                <div className="module-info-inner">
                     <p>{`osc_${oscNum}`}</p>
                 </div>
             </div>
 
-            <div className="moduleSettingsContainer">
-                <div className="moduleSettingsInner">
-                <div className="slidersContainer">
+            <div className="module-settings-container">
+                <div className="module-settings-inner">
+                <div className="sliders">
                 <Slider module={selectedOscAction} label={"FINE"} valueLabel={(oscSettings[selectedOscSettings].detune).toFixed(2)} unit={"cts"} min={0} max={100} step={0.001} values={oscSettings[selectedOscSettings].detune} sliderRef={oscRef} id={"detune"} changeFunction={change}/>
                 <Slider module={selectedOscAction} label={"PWM"} valueLabel={(oscSettings[selectedOscSettings].pwm).toFixed(2)} unit={"Hz"} min={0} max={40} step={0.001} values={oscSettings[selectedOscSettings].pwm} sliderRef={oscRef} id={"pwm"} changeFunction={change}/>
                 <Slider module={selectedOscAction} label={"GLIDE"} valueLabel={(oscSettings[selectedOscSettings].glide).toFixed(2)} unit={"s"} min={0.0001} max={2} step={0.001} values={oscSettings[selectedOscSettings].glide} sliderRef={oscRef} id={"glide"} changeFunction={change}/>
@@ -82,10 +82,10 @@ const Oscillator = ({ oscNum }) => {
                 </div>
                 <div className="rightSideContainer">
                     
-                    <div className="waveSelectContainer">
+                    <div className="waveform-selectors selectors">
                         <button 
                         id="sine"
-                        className={activeType === 'sine' ? "btn waveselect-btn activeBtn": "btn waveselect-btn"}
+                        className={activeType === 'sine' ? "btn btn-dark waveform-selector btn-active": "btn btn-dark waveform-selector"}
                         onClick={changeType}
                         >
                         SINE
@@ -93,7 +93,7 @@ const Oscillator = ({ oscNum }) => {
 
                         <button 
                         id="triangle"
-                        className={activeType === 'triangle' ? "btn waveselect-btn activeBtn": "btn waveselect-btn"}
+                        className={activeType === 'triangle' ? "btn btn-dark waveform-selector btn-active": "btn btn-dark waveform-selector"}
                         onClick={changeType}
                         >
                         TRI
@@ -101,7 +101,7 @@ const Oscillator = ({ oscNum }) => {
 
                         <button
                         id="pwm"
-                        className={activeType === 'pwm' ? "btn waveselect-btn activeBtn": "btn waveselect-btn"}
+                        className={activeType === 'pwm' ? "btn btn-dark waveform-selector btn-active": "btn btn-dark waveform-selector"}
                         onClick={changeType}
                         >
                         PULS
@@ -109,7 +109,7 @@ const Oscillator = ({ oscNum }) => {
 
                         <button 
                         id="sawtooth"
-                        className={activeType === 'sawtooth' ? "btn waveselect-btn activeBtn": "btn waveselect-btn"}
+                        className={activeType === 'sawtooth' ? "btn btn-dark waveform-selector btn-active": "btn btn-dark waveform-selector"}
                         onClick={changeType}
                         >
                         SAW
