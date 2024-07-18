@@ -1,10 +1,4 @@
 
-const makeOsc = (Oscillator, oscArr) => {
-    const osc = new Oscillator(440, `osc${oscArr.length+1}`)
-    oscArr.push(osc)
-    return osc
-}
-
 const updateOscFrequency = (osc, state, timeNow, midiToFreqArr, note, moduleName) => {
     let glide = timeNow + state.oscSettings[moduleName].glide
     let newNote = note + state.oscSettings[moduleName].semitone + (state.oscSettings[moduleName].octave * 12)
@@ -23,6 +17,5 @@ const updateOscFrequency = (osc, state, timeNow, midiToFreqArr, note, moduleName
 
 
 export {
-    makeOsc,
     updateOscFrequency
 }

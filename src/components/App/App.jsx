@@ -27,8 +27,6 @@ function App() {
   let matrixLocationRef = useRef(null)
   let effectsLocationRef = useRef(null)
 
-
-
   return (
     <div className="App">
       <Toaster 
