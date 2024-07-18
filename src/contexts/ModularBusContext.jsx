@@ -50,7 +50,7 @@ import * as Tone from 'tone'
 
 const ModularBusContext = createContext()
 
-let midiToFreqArr = {}
+let midiToFreq = {}
 let smoothing = 1.0
 
 const actx = new Tone.Context() 
@@ -310,7 +310,7 @@ console.log(checkedState)
 const midiToFreqConverter = () => {
     for (let i = 0; i < 106; i++){
         let freq = (Math.pow(2, (i-69)/12)*440)
-        midiToFreqArr = {...midiToFreqArr, [i]: freq}
+        midiToFreq = {...midiToFreq, [i]: freq}
     }
 }
 
@@ -426,7 +426,7 @@ export function reducer(state, action){
                     count = Math.min(...availableSlots)
                     keyAdsrAssignation = {...keyAdsrAssignation, [note]: count}
                     adsrArr[count].updateADSRGain(stateKey, actx.currentTime, state)
-                    updateOscFrequency(oscillatorsArr[count].osc, state, actx.currentTime, midiToFreqArr, note, oscillatorsArr[count].name)
+                    updateOscFrequency(oscillatorsArr[count].osc, state, actx.currentTime, midiToFreq, note, oscillatorsArr[count].name)
                 }
             }
             else if (!stateKey) {
@@ -462,7 +462,7 @@ export function reducer(state, action){
             return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], [id]: Number(value)}}};
 
         case ACTIONS.osc.frequency:
-            let newFreq = updateOscFrequency(oscillatorsArr[i].osc, state, actx.currentTime, midiToFreqArr, note, moduleName)
+            let newFreq = updateOscFrequency(oscillatorsArr[i].osc, state, actx.currentTime, midiToFreq, note, moduleName)
             return {...state, oscSettings: {...state.oscSettings, [moduleName]: {...state.oscSettings[moduleName], frequency: newFreq}}};
             
         case ACTIONS.osc.offset:
@@ -647,12 +647,12 @@ export function reducer(state, action){
             const bpmForClockWidth = (60 / state.synthSettings.bpm) / 16
             highSteps.forEach((track, i) => {
                 if (track) {
-                    step(oscillatorsArr, adsrArr, time, state, midiToFreqArr, value, bpmForClockWidth, i+1)
+                    step(oscillatorsArr, adsrArr, time, state, midiToFreq, value, bpmForClockWidth, i+1)
                 }
             })
 
             return {...state, oscSettings: {...state.oscSettings, 
-                osc1: {...state.oscSettings.osc1, frequency: midiToFreqArr[note]}},
+                osc1: {...state.oscSettings.osc1, frequency: midiToFreq[note]}},
             vcaSettings: {...state.vcaSettings, vca1: {...state.vcaSettings.vca1, gain: vca1.vca.gain.value}}
             };
         
@@ -737,7 +737,7 @@ function ModularBus (props) {
 
 
     return (
-        <ModularBusContext.Provider value={{oscillatorsArr, filtersArr, lfosArr, adsrArr, vcasArr, effectsArr, stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreqArr, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr1, oscRef, lfoRef, filterRef, vcaRef, effectsRef, IOs, initialConnection}}>
+        <ModularBusContext.Provider value={{oscillatorsArr, filtersArr, lfosArr, adsrArr, vcasArr, effectsArr, stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreq, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr1, oscRef, lfoRef, filterRef, vcaRef, effectsRef, IOs, initialConnection}}>
         {props.children}
         </ModularBusContext.Provider>
     )
