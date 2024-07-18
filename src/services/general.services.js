@@ -8,10 +8,6 @@ const handleMouseEvent = (classname, down) => {
         }
 }
 
-const addModules = (modulesArr, moduleArr) => {
-    modulesArr.push(moduleArr)
-}
-
 const setModuleInitialState = (modulesArr) => {
     let modules = {}
     modulesArr.forEach(module => {
@@ -24,5 +20,4 @@ const setModuleInitialState = (modulesArr) => {
 export {
     handleMouseEvent,
     setModuleInitialState,
-    addModules
 }

@@ -11,9 +11,13 @@ import {
 } from "../services/matrix.services";
 
 import { 
-    makeOsc,
     updateOscFrequency
 } from "../services/oscillator.services";
+
+import {
+    makeModule,
+    addModules
+} from "../services/module.services"
 
 import { 
     step,
@@ -25,7 +29,6 @@ import {
 
 import {
     setModuleInitialState,
-    addModules
 } from "../services/general.services"
 
 import { 
@@ -73,34 +76,34 @@ const checkForPreset = () => {
 
 let modulesArr = []
 let oscillatorsArr = []
-let lfosArr = []
-let filtersArr = []
-let adsrArr = []
-let vcasArr = []
-let effectsArr = []
-let outputsArr = []
-
-
-makeOsc(Oscillator, oscillatorsArr)
-makeOsc(Oscillator, oscillatorsArr)
 addModules(modulesArr, oscillatorsArr)
+let lfosArr = []
+addModules(modulesArr, lfosArr)
+let filtersArr = []
+addModules(modulesArr, filtersArr)
+let adsrArr = []
+addModules(modulesArr, adsrArr)
+let vcasArr = []
+addModules(modulesArr, vcasArr)
+let effectsArr = []
+addModules(modulesArr, effectsArr)
+let outputsArr = []
+addModules(modulesArr, outputsArr)
 
-let lfo1 = new LFO(2, `lfo${lfosArr.length+1}`)
-lfosArr.push(lfo1)
-let lfo2 = new LFO(2, `lfo${lfosArr.length+1}`)
-lfosArr.push(lfo2)
-modulesArr.push(lfosArr)
 
+makeModule(Oscillator, oscillatorsArr, 440)
+makeModule(Oscillator, oscillatorsArr, 440)
+makeModule(LFO, lfosArr, 2)
+makeModule(LFO, lfosArr, 2)
+makeModule(Filter, filtersArr)
 
-let filter1 = new Filter(`filter${filtersArr.length+1}`)
-filtersArr.push(filter1)
-modulesArr.push(filtersArr)
+// let filter1 = new Filter(`filter${filtersArr.length+1}`)
+// filtersArr.push(filter1)
 
 let adsr1 = new ADSR(`adsr${adsrArr.length+1}`)
 adsrArr.push(adsr1)
 let adsr2 = new ADSR(`adsr${adsrArr.length+1}`)
 adsrArr.push(adsr2)
-modulesArr.push(adsrArr)
 
 let vca1 = new VCA(`vca${vcasArr.length+1}`)
 vcasArr.push(vca1)
@@ -110,7 +113,7 @@ let vca3 = new VCA(`vca${vcasArr.length+1}`)
 vcasArr.push(vca3)
 let vca4 = new VCA(`vca${vcasArr.length+1}`)
 vcasArr.push(vca4)
-modulesArr.push(vcasArr)
+
 
 let count = 0
 let keyAdsrAssignation = {}
@@ -131,11 +134,9 @@ function counter(){
 }
 let reverb1 = new Reverb(2, `reverb${counter()}`)
 effectsArr.push(reverb1)
-modulesArr.push(effectsArr)
 
 let output1 = new Output(`output${outputsArr.length+1}`)
 outputsArr.push(output1)
-modulesArr.push(outputsArr)
 
 output1.output.connect(out)
 

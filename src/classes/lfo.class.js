@@ -2,7 +2,7 @@ import * as Tone from 'tone'
 import { Slider, Selector } from './classes'
 
 export class LFO {
-    constructor(initFreq, actionsSelector){
+    constructor(actionsSelector, initFreq){
         this.type = "lfo"
         this.name = actionsSelector
         this.osc = new Tone.OmniOscillator({
