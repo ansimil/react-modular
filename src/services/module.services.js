@@ -1,10 +1,10 @@
-const makeModule = (Module, moduleArr, additionalSetting) => {
+const makeModule = (Module, moduleArr, name, additionalSetting) => {
     let module
     if (additionalSetting) {
-        module = new Module(`osc${moduleArr.length+1}`, additionalSetting)
+        module = new Module(`${name}${moduleArr.length+1}`, additionalSetting)
     }
     else {
-        module = new Module(`osc${moduleArr.length+1}`) 
+        module = new Module(`${name}${moduleArr.length+1}`) 
     }
     moduleArr.push(module)
     return module

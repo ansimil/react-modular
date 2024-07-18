@@ -90,30 +90,20 @@ addModules(modulesArr, effectsArr)
 let outputsArr = []
 addModules(modulesArr, outputsArr)
 
+makeModule(Oscillator, oscillatorsArr, "osc", 440)
+makeModule(Oscillator, oscillatorsArr, "osc", 440)
+makeModule(LFO, lfosArr, "lfo", 2)
+makeModule(LFO, lfosArr, "lfo", 2)
+makeModule(Filter, filtersArr, "filter")
+makeModule(ADSR, adsrArr, "adsr")
+makeModule(ADSR, adsrArr, "adsr")
+makeModule(VCA, vcasArr, "vca")
+makeModule(VCA, vcasArr, "vca")
+makeModule(VCA, vcasArr, "vca")
+makeModule(VCA, vcasArr, "vca")
+makeModule(Output, outputsArr, "output")
 
-makeModule(Oscillator, oscillatorsArr, 440)
-makeModule(Oscillator, oscillatorsArr, 440)
-makeModule(LFO, lfosArr, 2)
-makeModule(LFO, lfosArr, 2)
-makeModule(Filter, filtersArr)
-
-// let filter1 = new Filter(`filter${filtersArr.length+1}`)
-// filtersArr.push(filter1)
-
-let adsr1 = new ADSR(`adsr${adsrArr.length+1}`)
-adsrArr.push(adsr1)
-let adsr2 = new ADSR(`adsr${adsrArr.length+1}`)
-adsrArr.push(adsr2)
-
-let vca1 = new VCA(`vca${vcasArr.length+1}`)
-vcasArr.push(vca1)
-let vca2 = new VCA(`vca${vcasArr.length+1}`)
-vcasArr.push(vca2)
-let vca3 = new VCA(`vca${vcasArr.length+1}`)
-vcasArr.push(vca3)
-let vca4 = new VCA(`vca${vcasArr.length+1}`)
-vcasArr.push(vca4)
-
+outputsArr[0].output.connect(out)
 
 let count = 0
 let keyAdsrAssignation = {}
@@ -135,10 +125,6 @@ function counter(){
 let reverb1 = new Reverb(2, `reverb${counter()}`)
 effectsArr.push(reverb1)
 
-let output1 = new Output(`output${outputsArr.length+1}`)
-outputsArr.push(output1)
-
-output1.output.connect(out)
 
 const IOs = setInitialIOState(modulesArr)
 
@@ -174,7 +160,6 @@ if (checkForPreset()){
     })
 }
 
-
 // Connection chain //
 const initialConnection = [
     [7,0],
@@ -192,16 +177,13 @@ const initialConnection = [
 let connectionChain = []
 
 oscillatorsArr[0].initialState = {...oscillatorsArr[0].initialState, frequency: 5000,
-    detune: 20,
+    detune: 0,
     type: "triangle",
-    oscFMDepth: 200,
+    oscFMDepth: 0,
     glide: 0.00,
     pwm: 0,
     octave: 0,
     semitone: 0}
-
-console.log(oscillatorsArr)
-
 
 
 const initialOscState = { oscSettings: setModuleInitialState(oscillatorsArr) }
@@ -213,8 +195,6 @@ const initialAdsrState = { adsrSettings: setModuleInitialState(adsrArr) }
 const initialSynthSettings = { synthSettings: {
     bpm: 120
 }}
-
-
 
 const initialKeyboardSettings = {
     keyboardSettings: {
@@ -300,12 +280,7 @@ const initialState = {
     ...initialMatrixSettings
 }
 
-
-
-
 const checkedState = checkForPreset() ? checkForPreset() : initialState
-
-console.log(checkedState)
 
 const midiToFreqConverter = () => {
     for (let i = 0; i < 106; i++){
@@ -330,17 +305,17 @@ export function reducer(state, action){
                 filter.QDepth.gain.rampTo(0,0,0);
             })
             startContext(oscillatorsArr, lfosArr)
-            output1.output.gain.setValueAtTime(output1.output.gain.value, actx.currentTime)
-            output1.output.gain.linearRampToValueAtTime(1, actx.currentTime + smoothing)
+            outputsArr[0].output.gain.setValueAtTime(outputsArr[0].output.gain.value, actx.currentTime)
+            outputsArr[0].output.gain.linearRampToValueAtTime(1, actx.currentTime + smoothing)
             return {...state}
 
         case ACTIONS.SYNTH.stop:
-            output1.output.gain.setValueAtTime(output1.output.gain.value, actx.currentTime)
-            output1.output.gain.linearRampToValueAtTime(0.0001, actx.currentTime + smoothing)
+            outputsArr[0].output.gain.setValueAtTime(outputsArr[0].output.gain.value, actx.currentTime)
+            outputsArr[0].output.gain.linearRampToValueAtTime(0.0001, actx.currentTime + smoothing)
             return {...state}
         
         case ACTIONS.SYNTH.outputGain:
-            output1.gain.linearRampToValueAtTime(value, actx.currentTime + 0.005)
+            outputsArr[0].gain.linearRampToValueAtTime(value, actx.currentTime + 0.005)
             return {...state}
 
         case ACTIONS.SYNTH.bpm:
@@ -653,7 +628,7 @@ export function reducer(state, action){
 
             return {...state, oscSettings: {...state.oscSettings, 
                 osc1: {...state.oscSettings.osc1, frequency: midiToFreq[note]}},
-            vcaSettings: {...state.vcaSettings, vca1: {...state.vcaSettings.vca1, gain: vca1.vca.gain.value}}
+            vcaSettings: {...state.vcaSettings, vca1: {...state.vcaSettings.vca1, gain: vcasArr[0].vca.gain.value}}
             };
         
         case ACTIONS.SEQUENCER.length:
@@ -730,14 +705,14 @@ function ModularBus (props) {
     midiToFreqConverter()
 
     const connectToOscilloscope = () => {
-        oscilloscopeRef.current.connect(output1.output)
+        oscilloscopeRef.current.connect(outputsArr[0].output)
     }
 
     const stateHook = useReducer(reducer, checkedState)
 
 
     return (
-        <ModularBusContext.Provider value={{oscillatorsArr, filtersArr, lfosArr, adsrArr, vcasArr, effectsArr, stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreq, oscilloscopeRef, connectToOscilloscope, matrixRef, adsr1, oscRef, lfoRef, filterRef, vcaRef, effectsRef, IOs, initialConnection}}>
+        <ModularBusContext.Provider value={{oscillatorsArr, filtersArr, lfosArr, adsrArr, vcasArr, effectsArr, stateHook, sequencerRef, seqSlidersRef, keyboardRef, adsrRef, midiToFreq, oscilloscopeRef, connectToOscilloscope, matrixRef, oscRef, lfoRef, filterRef, vcaRef, effectsRef, IOs, initialConnection}}>
         {props.children}
         </ModularBusContext.Provider>
     )
